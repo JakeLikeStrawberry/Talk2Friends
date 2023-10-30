@@ -21,14 +21,8 @@
             android:layout_height="175dp"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView" />
-
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/logoImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:srcCompat="@tools:sample/backgrounds/scenic" />
@@ -41,27 +35,27 @@
             android:orientation="vertical">
 
             <EditText
-                android:id="@+id/editTextTextPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPassword" />
-
-            <EditText
-                android:id="@+id/editTextTextEmailAddress"
+                android:id="@+id/emailInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textEmailAddress" />
 
+            <EditText
+                android:id="@+id/passwordInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPassword" />
+
             <Button
-                android:id="@+id/button"
+                android:id="@+id/loginButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Button" />
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/signUpButton"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:text="Button" />
