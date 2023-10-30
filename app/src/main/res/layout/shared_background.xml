@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@drawable/radial_gradient_background"
+    <!-- Common background image or color -->
+
+    <!-- Other common UI elements can be added here with ConstraintLayout constraints -->
+
+</androidx.constraintlayout.widget.ConstraintLayout>
