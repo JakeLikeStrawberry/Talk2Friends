@@ -4,7 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context=".LoginActivity"
+    android:background="@drawable/radial_gradient_background">
+
+    <ImageView
+        android:id="@+id/backgroundSpeechBubble1"
+        android:layout_width="258dp"
+        android:layout_height="243dp"
+        android:layout_marginTop="16dp"
+        android:alpha="0.6"
+        android:scaleX="-1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/speech_bubble_icon"
+        tools:layout_editor_absoluteX="282dp" />
+
+    <ImageView
+        android:id="@+id/backgroundSpeechBubble2"
+        android:layout_width="249dp"
+        android:layout_height="267dp"
+        android:alpha="0.6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:srcCompat="@drawable/speech_bubble_icon" />
 
     <LinearLayout
         android:layout_width="232dp"
@@ -24,8 +44,18 @@
             <ImageView
                 android:id="@+id/logoImage"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="128dp"
                 tools:srcCompat="@drawable/logo_icon" />
+
+            <TextView
+                android:id="@+id/appName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Talk2Friends"
+                android:textColor="@color/white"
+                android:textSize="30sp"
+                android:gravity="center"
+                />
 
         </LinearLayout>
 
@@ -39,22 +69,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:background="@color/white"
-                android:inputType="textEmailAddress" />
+                android:background="@drawable/rounded_inputfield"
+                android:inputType="textEmailAddress"
+                android:radius="10"/>
 
             <EditText
                 android:id="@+id/passwordInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:background="@color/white"
+                android:background="@drawable/rounded_inputfield"
                 android:inputType="textPassword" />
 
             <Button
                 android:id="@+id/loginButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/teal_200"
+                android:backgroundTint="@drawable/radial_gradient_background"
                 android:text="Button" />
 
             <Button
