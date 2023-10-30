@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity"
+    android:background="@drawable/radial_gradient_background">
+
+    <ImageView
+        android:id="@+id/backgroundSpeechBubble1"
+        android:layout_width="258dp"
+        android:layout_height="243dp"
+        android:layout_marginStart="280dp"
+        android:layout_marginTop="16dp"
+        android:alpha="0.6"
+        android:scaleX="-1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/speech_bubble_icon" />
+
+    <ImageView
+        android:id="@+id/backgroundSpeechBubble2"
+        android:layout_width="249dp"
+        android:layout_height="267dp"
+        android:alpha="0.6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/speech_bubble_icon" />
+
+    <LinearLayout
+        android:layout_width="235dp"
+        android:layout_height="208dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/instructions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Input the validation code sent to your email:"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/validationInput"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@null"
+                android:ems="10"
+                android:inputType="number"
+                android:letterSpacing="2.23"
+                android:maxLength="4"
+                android:paddingLeft="17dp"
+                android:editTextColor="@color/black"
+                android:text="1234"
+                android:elevation="2dp"
+                app:layout_constraintEnd_toEndOf="@+id/linearLayout2"
+                app:layout_constraintStart_toStartOf="@+id/linearLayout2"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="62dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toTopOf="@+id/validationInput"
+                tools:layout_editor_absoluteX="0dp">
+
+
+                <TextView
+                    android:id="@+id/whiteBox1"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/rounded_inputfield"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/whiteBox2"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/rounded_inputfield"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/whiteBox3"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/rounded_inputfield"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/whiteBox4"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/rounded_inputfield"
+                    android:text="" />
+
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/confirmButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/linear_gradient_background"
+                android:gravity="center"
+                android:text="Confirm"
+                app:backgroundTint="@null"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+                tools:layout_editor_absoluteX="-2dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

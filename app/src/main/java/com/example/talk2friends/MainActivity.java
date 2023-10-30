@@ -12,6 +12,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        System.out.println("You are in Main Activity! Now switching activities...");
+        System.out.println("Switching activity to login...");
+
         Intent myIntent = new Intent(this, LoginActivity.class);
         startActivity(myIntent);
     }
