@@ -25,7 +25,7 @@
                 android:id="@+id/logoImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+                tools:srcCompat="@drawable/logo_icon" />
 
         </LinearLayout>
 
@@ -39,6 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:background="@color/white"
                 android:inputType="textEmailAddress" />
 
             <EditText
@@ -46,18 +47,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:background="@color/white"
                 android:inputType="textPassword" />
 
             <Button
                 android:id="@+id/loginButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/teal_200"
                 android:text="Button" />
 
             <Button
                 android:id="@+id/signUpButton"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
+                android:backgroundTint="@color/teal_200"
                 android:text="Button" />
 
         </LinearLayout>
