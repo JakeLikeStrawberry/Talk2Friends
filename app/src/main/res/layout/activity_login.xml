@@ -11,12 +11,13 @@
         android:id="@+id/backgroundSpeechBubble1"
         android:layout_width="258dp"
         android:layout_height="243dp"
+        android:layout_marginStart="280dp"
         android:layout_marginTop="16dp"
         android:alpha="0.6"
         android:scaleX="-1"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/speech_bubble_icon"
-        tools:layout_editor_absoluteX="282dp" />
+        app:srcCompat="@drawable/speech_bubble_icon" />
 
     <ImageView
         android:id="@+id/backgroundSpeechBubble2"
@@ -24,6 +25,7 @@
         android:layout_height="267dp"
         android:alpha="0.6"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/speech_bubble_icon" />
 
     <LinearLayout
@@ -62,38 +64,56 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="219dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20" />
 
             <EditText
                 android:id="@+id/emailInput"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40"
                 android:ems="10"
                 android:background="@drawable/rounded_inputfield"
-                android:inputType="textEmailAddress"
-                android:radius="10"/>
+                android:inputType="textEmailAddress"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="15" />
 
             <EditText
                 android:id="@+id/passwordInput"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40"
                 android:ems="10"
                 android:background="@drawable/rounded_inputfield"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20" />
 
             <Button
                 android:id="@+id/loginButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@drawable/radial_gradient_background"
-                android:text="Button" />
+                android:gravity="center"
+                app:backgroundTint="@null"
+                android:background="@drawable/linear_gradient_background"
+                android:text="Log In" />
 
             <Button
                 android:id="@+id/signUpButton"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:backgroundTint="@color/teal_200"
-                android:text="Button" />
+                android:layout_width="80"
+                android:layout_height="40"
+                app:backgroundTint="@null"
+                android:textSize="10sp"
+                android:background="@drawable/linear_gradient_background"
+                android:text="Sign Up"
+                android:gravity="center"/>
 
         </LinearLayout>
 
