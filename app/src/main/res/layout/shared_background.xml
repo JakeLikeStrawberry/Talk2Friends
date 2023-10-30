@@ -4,8 +4,5 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     android:background="@drawable/radial_gradient_background"
-    <!-- Common background image or color -->
-
-    <!-- Other common UI elements can be added here with ConstraintLayout constraints -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
