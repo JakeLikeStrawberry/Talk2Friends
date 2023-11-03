@@ -42,7 +42,9 @@ public class SignUpActivity extends AppCompatActivity {
         emailInputField = (EditText) findViewById(R.id.emailInput);
         passwordInputField = (EditText) findViewById(R.id.passwordInput);
 
-
+        // TODO: modify activity_sign_up.xml to look different from login.xml
+            // TODO: add a "Welcome to Talk2Friends!" TextView
+            // TODO: add a "Please enter your USC email and password to sign up" TextView
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override

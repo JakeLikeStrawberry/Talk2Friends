@@ -47,7 +47,7 @@
                 android:id="@+id/logoImage"
                 android:layout_width="match_parent"
                 android:layout_height="128dp"
-                tools:src="@drawable/logo_icon" />
+                android:src="@drawable/logo_icon" />
 
             <TextView
                 android:id="@+id/appName"
