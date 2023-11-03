@@ -85,7 +85,8 @@ public class LoginActivity extends AppCompatActivity {
                 for(DataSnapshot data: dataSnapshot.getChildren()){
                     if (data.child("email").exists()) {
                         if (data.child("email").getValue().toString().equals(emailInputField.getText().toString())) {
-                            if (data.child("password").getValue().toString().equals(passwordInputField.getText().toString())) {
+                            String tempHash = Utils.getHash(passwordInputField.getText().toString());
+                            if (data.child("password").getValue().toString().equals(tempHash)) {
                                 System.out.println("Login successful!");
                                 // switch to meetings activity
                                 switchActivityMeetings();

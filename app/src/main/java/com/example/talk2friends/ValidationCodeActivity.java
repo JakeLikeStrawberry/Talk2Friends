@@ -23,7 +23,7 @@ public class ValidationCodeActivity extends AppCompatActivity {
 
     // registering account username and password
     String username;
-    String password;
+    String hash;
 
     String validationCode;
 
@@ -44,7 +44,7 @@ public class ValidationCodeActivity extends AppCompatActivity {
 
         // get previously inputted username and password
         username = getIntent().getStringExtra("username");
-        password = getIntent().getStringExtra("password");
+        hash = getIntent().getStringExtra("hash");
 
         validationCode = getIntent().getStringExtra("validationCode");
 
@@ -96,7 +96,7 @@ public class ValidationCodeActivity extends AppCompatActivity {
         // example of adding user instance to database
         database = FirebaseDatabase.getInstance("https://talk2friends-78719-default-rtdb.firebaseio.com/");
         myRef = database.getReference("users");
-        User user = new User(username, password);
+        User user = new User(username, hash);
         myRef.push().setValue(user);
 
     }

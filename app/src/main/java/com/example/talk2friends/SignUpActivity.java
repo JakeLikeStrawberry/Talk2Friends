@@ -29,6 +29,8 @@ public class SignUpActivity extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference usersRef;
 
+    String hash;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +85,18 @@ public class SignUpActivity extends AppCompatActivity {
                         }
                         System.out.println("Your email: " + emailInputField.getText().toString() + " does not exist! Go ahead and register!");
 
+                        hash = Utils.getHash(passwordInputField.getText().toString());
+                        if (hash.equals("")) {
+                            System.out.println("Error: unable to create hash!");
+                            // TODO: UI error message
+                            return;
+                        }
+                        if (passwordInputField.getText().toString().equals("")) {
+                            System.out.println("Error: password cannot be empty!");
+                            // TODO: UI error message
+                            return;
+                        }
+
                         String mEmail = emailInputField.getText().toString();
                         String mSubject = getString(R.string.SignUpEmailSubject);
                         String mMessage = getString(R.string.SignUpEmailMessage);
@@ -126,7 +140,7 @@ public class SignUpActivity extends AppCompatActivity {
         // switch activity to ValidationCodeActivity
         Intent intent = new Intent(this, ValidationCodeActivity.class);
         intent.putExtra("username",emailInputField.getText().toString());
-        intent.putExtra("password",passwordInputField.getText().toString());
+        intent.putExtra("hash",hash);
         intent.putExtra("validationCode",validationCode);
         startActivity(intent);
     }
