@@ -8,6 +8,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class SignUpActivity extends AppCompatActivity {
     private Button loginButton;
     private Button signUpButton;
@@ -15,9 +18,16 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText emailInputField;
     private EditText passwordInputField;
 
+    FirebaseDatabase database;
+    DatabaseReference myRef;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_sign_up);
 
         loginButton = (Button) findViewById(R.id.loginButton);
@@ -45,12 +55,27 @@ public class SignUpActivity extends AppCompatActivity {
                 mMessage += validationCode;
                 mMessage += "\n";
 
+                /* ******* Firebase example ******* */
+
+
+                // example of adding user instance to database
+                database = FirebaseDatabase.getInstance();
+                myRef = database.getReference("users");
+                User user = new User(mEmail, "password_test");
+                myRef.push().setValue(user);
+
+
+
+
                 // send email
                 JavaMailAPI javaMailAPI = new JavaMailAPI(SignUpActivity.this, mEmail, mSubject, mMessage);
                 javaMailAPI.execute();
 
                 // switch activity to ValidationCodeActivity
                 switchActivityValidationCode();
+
+
+
             }
         });
     }

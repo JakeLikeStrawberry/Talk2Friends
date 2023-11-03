@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "446836696869",
+    "project_id": "talk2friends-78719",
+    "storage_bucket": "talk2friends-78719.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:446836696869:android:304435d60d0934c5dedccc",
+        "android_client_info": {
+          "package_name": "com.example.talk2friends"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0ITUCgl1_JHKH1W3dvQTwISCjDLTHRO4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
