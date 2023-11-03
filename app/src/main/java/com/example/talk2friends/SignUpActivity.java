@@ -1,5 +1,7 @@
 package com.example.talk2friends;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -8,8 +10,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.ValueEventListener;
+
 
 public class SignUpActivity extends AppCompatActivity {
     private Button loginButton;
@@ -18,10 +25,9 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText emailInputField;
     private EditText passwordInputField;
 
+    // firebase
     FirebaseDatabase database;
-    DatabaseReference myRef;
-
-
+    DatabaseReference usersRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +42,8 @@ public class SignUpActivity extends AppCompatActivity {
         emailInputField = (EditText) findViewById(R.id.emailInput);
         passwordInputField = (EditText) findViewById(R.id.passwordInput);
 
+
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -46,35 +54,55 @@ public class SignUpActivity extends AppCompatActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String mEmail = emailInputField.getText().toString();
-                String mSubject = getString(R.string.SignUpEmailSubject);
-                String mMessage = getString(R.string.SignUpEmailMessage);
+                // check that it's a USC email!
+                if (!emailInputField.getText().toString().contains("@usc.edu")) {
+                    // TODO: display error message
+                    System.out.println("Not a USC email!");
+                    return;
+                }
 
-                // append validation code
-                String validationCode = generateValidationCode();
-                mMessage += validationCode;
-                mMessage += "\n";
+                // check that email is not already in database
+                // for checking if email is already in database
+                database = FirebaseDatabase.getInstance("https://talk2friends-78719-default-rtdb.firebaseio.com/");
+                usersRef = database.getReference("users");
+                usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for(DataSnapshot data: dataSnapshot.getChildren()){
+                            if (data.child("email").exists()) {
+                                if (data.child("email").getValue().toString().equals(emailInputField.getText().toString())) {
+                                    System.out.println("Email already exists!");
+                                    // TODO: display error message
+                                    System.out.println("Display UI error message that email already exists!");
+                                    return;
+                                }
 
-                /* ******* Firebase example ******* */
+                            }
+                        }
+                        System.out.println("Your email: " + emailInputField.getText().toString() + " does not exist! Go ahead and register!");
 
+                        String mEmail = emailInputField.getText().toString();
+                        String mSubject = getString(R.string.SignUpEmailSubject);
+                        String mMessage = getString(R.string.SignUpEmailMessage);
 
-                // example of adding user instance to database
-                database = FirebaseDatabase.getInstance();
-                myRef = database.getReference("users");
-                User user = new User(mEmail, "password_test");
-                myRef.push().setValue(user);
+                        // append validation code
+                        String validationCode = generateValidationCode();
+                        mMessage += validationCode;
+                        mMessage += "\n";
 
+                        // send email
+                        JavaMailAPI javaMailAPI = new JavaMailAPI(SignUpActivity.this, mEmail, mSubject, mMessage);
+                        javaMailAPI.execute();
 
+                        // switch activity to ValidationCodeActivity
+                        switchActivityValidationCode(validationCode);
+                    }
 
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                // send email
-                JavaMailAPI javaMailAPI = new JavaMailAPI(SignUpActivity.this, mEmail, mSubject, mMessage);
-                javaMailAPI.execute();
-
-                // switch activity to ValidationCodeActivity
-                switchActivityValidationCode();
-
-
+                    }
+                });
 
             }
         });
@@ -89,14 +117,15 @@ public class SignUpActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void switchActivityValidationCode() {
+    private void switchActivityValidationCode(String validationCode) {
         // print to console
         System.out.println("Switching activity to ValidationCode...");
 
         // switch activity to ValidationCodeActivity
-        Intent intent = new Intent(this, ValidationCode.class);
+        Intent intent = new Intent(this, ValidationCodeActivity.class);
         intent.putExtra("username",emailInputField.getText().toString());
         intent.putExtra("password",passwordInputField.getText().toString());
+        intent.putExtra("validationCode",validationCode);
         startActivity(intent);
     }
 
@@ -118,9 +147,20 @@ public class SignUpActivity extends AppCompatActivity {
 
         // TODO: check if code is already in database
 
+
+
         // TODO: store code in database
 
 
         return code;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        // destroy firebase
+        usersRef = null;
+        database = null;
     }
 }

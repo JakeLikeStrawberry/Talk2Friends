@@ -60,7 +60,7 @@
                 android:layout_height="40dp"
                 android:background="@null"
                 android:ems="10"
-                android:inputType="number"
+                android:inputType="text"
                 android:letterSpacing="2.23"
                 android:maxLength="4"
                 android:paddingLeft="17dp"

@@ -23,6 +23,8 @@
         android:id="@+id/backgroundSpeechBubble2"
         android:layout_width="249dp"
         android:layout_height="267dp"
+        android:translationX = "-40dp"
+        android:translationY = "30dp"
         android:alpha="0.6"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,7 +49,7 @@
                 android:id="@+id/logoImage"
                 android:layout_width="match_parent"
                 android:layout_height="128dp"
-                tools:srcCompat="@drawable/logo_icon" />
+                tools:src="@drawable/logo_icon" />
 
             <TextView
                 android:id="@+id/appName"
@@ -92,9 +94,18 @@
                 android:inputType="textPassword"
                 android:padding="8dp" />
 
+            <TextView
+                android:id="@+id/incorrectLoginText"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/orange"
+                android:textSize="12sp" />
+
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="20dp" />
+                android:layout_height="5dp" />
 
             <Button
                 android:id="@+id/loginButton"

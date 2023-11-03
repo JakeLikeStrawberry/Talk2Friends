@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Talk2Friends</string>
     <string name="SignUpEmailSubject">Welcome to Talk2Friends!</string>
-    <string name="SignUpEmailMessage">Thank you for signing up to Talk2Friends! We hope you enjoy using our app :)\nThis is your validation code:\n</string>
+    <string name="SignUpEmailMessage">Thank you for signing up to Talk2Friends! \nWe hope you enjoy using our app :)\Please enter this validation code in the app to complete your registrtation:\n</string>
+    <string name="IncorrectLogin">Incorrect password or email!\nPlease try again.</string>
 </resources>

@@ -38,13 +38,13 @@ public class JavaMailAPI extends AsyncTask<Void, Void, Void> {
 
         session = Session.getDefaultInstance(properties, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(MailUtils.EMAIL, MailUtils.PASSWORD);
+                return new PasswordAuthentication(Utils.OUR_EMAIL, Utils.OUR_EMAIL_PASSWORD);
             }
         });
 
         MimeMessage mimeMessage = new MimeMessage(session);
         try {
-            mimeMessage.setFrom(new InternetAddress(MailUtils.EMAIL));
+            mimeMessage.setFrom(new InternetAddress(Utils.OUR_EMAIL));
             mimeMessage.addRecipients(Message.RecipientType.TO, String.valueOf(new InternetAddress(email)));
             mimeMessage.setSubject(subject);
             mimeMessage.setText(message);
