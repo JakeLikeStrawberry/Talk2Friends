@@ -4,7 +4,7 @@
     package="com.example.talk2friends">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -16,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Talk2Friends"
         tools:targetApi="31">
+        <activity
+            android:name=".MeetingsActivity"
+            android:exported="false" />
         <activity
             android:name=".ValidationCodeActivity"
             android:exported="false" />
