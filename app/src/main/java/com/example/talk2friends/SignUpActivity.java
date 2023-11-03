@@ -40,8 +40,8 @@ public class SignUpActivity extends AppCompatActivity {
                 String mSubject = getString(R.string.SignUpEmailSubject);
                 String mMessage = getString(R.string.SignUpEmailMessage);
 
-                // TODO: create validation code
-                String validationCode = "1234";
+                // append validation code
+                String validationCode = generateValidationCode();
                 mMessage += validationCode;
                 mMessage += "\n";
 
@@ -60,8 +60,8 @@ public class SignUpActivity extends AppCompatActivity {
         System.out.println("Switching activity to Login...");
 
         // switch activity to SignUpActivity
-        Intent myIntent = new Intent(this, LoginActivity.class);
-        startActivity(myIntent);
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 
     private void switchActivityValidationCode() {
@@ -69,7 +69,33 @@ public class SignUpActivity extends AppCompatActivity {
         System.out.println("Switching activity to ValidationCode...");
 
         // switch activity to ValidationCodeActivity
-        Intent myIntent = new Intent(this, ValidationCode.class);
-        startActivity(myIntent);
+        Intent intent = new Intent(this, ValidationCode.class);
+        intent.putExtra("username",emailInputField.getText().toString());
+        intent.putExtra("password",passwordInputField.getText().toString());
+        startActivity(intent);
+    }
+
+    private String generateValidationCode() {
+        // generate 4-character alphanumeric code to send
+            // 48 ~ 57: ASCII digits
+            // 65 ~ 90: ASCII uppercase letters
+        String code = "";
+        for (int i = 0; i < 4; i++) {
+            int random = (int) (Math.random() * 36);
+            if (random < 10) {
+                // random is a digit
+                code += (char) (random + 48);
+            } else {
+                // random is a letter
+                code += (char) (random + 55);
+            }
+        }
+
+        // TODO: check if code is already in database
+
+        // TODO: store code in database
+
+
+        return code;
     }
 }
