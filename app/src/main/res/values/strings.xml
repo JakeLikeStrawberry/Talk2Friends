@@ -3,4 +3,7 @@
     <string name="SignUpEmailSubject">Welcome to Talk2Friends!</string>
     <string name="SignUpEmailMessage">Thank you for signing up to Talk2Friends! \nWe hope you enjoy using our app :)\Please enter this validation code in the app to complete your registrtation:\n</string>
     <string name="IncorrectLogin">Incorrect password or email!\nPlease try again.</string>
+    <string name="IncorrectSignUpUSCEmail">Please use a USC email!\nPlease try again.</string>
+    <string name="IncorrectSignUpEmailExists">Email already registered!\nPlease log in.</string>
+    <string name="IncorrectSignUpPassword">Please add a password!\nPlease try again.</string>
 </resources>

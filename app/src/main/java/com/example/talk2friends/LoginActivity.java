@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -74,37 +75,37 @@ public class LoginActivity extends AppCompatActivity {
         System.out.println("Email: " + emailInput);
         System.out.println("Password: " + passwordInput);
 
-        // TODO: validate login:
-        // TODO: make SHA2 hash of password
+        // validate login:
             // check email and sha2 hash of password against firebase
-        database = FirebaseDatabase.getInstance(Utils.FIREBASE_URL);
-        usersRef = database.getReference("users");
-        usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot data: dataSnapshot.getChildren()){
-                    if (data.child("email").exists()) {
-                        if (data.child("email").getValue().toString().equals(emailInputField.getText().toString())) {
-                            String tempHash = Utils.getHash(passwordInputField.getText().toString());
-                            if (data.child("password").getValue().toString().equals(tempHash)) {
-                                System.out.println("Login successful!");
-                                // switch to meetings activity
-                                switchActivityMeetings();
-                                return;
-                            }
-                        }
-
-                    }
-                }
-                System.out.println("Login failed. Either email or password is incorrect.");
-                displayIncorrectLoginMessage();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        validateLogin();
+//        database = FirebaseDatabase.getInstance(Utils.FIREBASE_URL);
+//        usersRef = database.getReference("users");
+//        usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                for(DataSnapshot data: dataSnapshot.getChildren()){
+//                    if (data.child("email").exists()) {
+//                        if (data.child("email").getValue().toString().equals(emailInputField.getText().toString())) {
+//                            String tempHash = Utils.getHash(passwordInputField.getText().toString());
+//                            if (data.child("password").getValue().toString().equals(tempHash)) {
+//                                System.out.println("Login successful!");
+//                                // switch to meetings activity
+//                                switchActivityMeetings();
+//                                return;
+//                            }
+//                        }
+//
+//                    }
+//                }
+//                System.out.println("Login failed. Either email or password is incorrect.");
+//                displayIncorrectLoginMessage();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
 
     }
@@ -113,15 +114,38 @@ public class LoginActivity extends AppCompatActivity {
         // print to console
         System.out.println("Switching activity to meetings...");
 
-        // switch activity to SignUpActivity
-        // TODO: change to MeetingsActivity or whatever it would be called
-        Intent myIntent = new Intent(this, MainActivity.class);
+        // switch activity to MeetingsActivity
+        Intent myIntent = new Intent(this, MeetingsActivity.class);
         startActivity(myIntent);
     }
 
     private void displayIncorrectLoginMessage() {
         TextView incorrectLoginText = (TextView) findViewById(R.id.incorrectLoginText);
         incorrectLoginText.setText(getResources().getString(R.string.IncorrectLogin));
+    }
+
+    private void validateLogin() {
+        // get email
+        DatabaseHandler.getValue("users", "email", emailInputField.getText().toString(), new DataSnapshotCallback() {
+            @Override
+            public void onCallback(DataSnapshot data) {
+                if (data != null) {
+                    // if not null...found email
+                    String tempHash = Utils.getHash(passwordInputField.getText().toString());
+                    if (data.child("password").getValue().toString().equals(tempHash)) {
+                        System.out.println("Login successful!");
+                        // switch to meetings activity
+                        switchActivityMeetings();
+                        return;
+                    }
+
+                }
+                // if null or password wrong
+                System.out.println("Login failed. Either email or password is incorrect.");
+                displayIncorrectLoginMessage();
+            }
+        });
+
     }
 
 

@@ -7,4 +7,6 @@
     tools:context=".MeetingsActivity">
     android:background="@drawable/radial_gradient_background">
 
+
+<!--    TODO: add top bar, copy from profile.xml , or shared_background.xml? -->
 </androidx.constraintlayout.widget.ConstraintLayout>

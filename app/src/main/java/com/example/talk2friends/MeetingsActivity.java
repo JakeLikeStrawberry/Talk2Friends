@@ -10,5 +10,7 @@ public class MeetingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meetings);
+
+        System.out.println("Switched activity to meetings.");
     }
 }

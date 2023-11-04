@@ -94,9 +94,18 @@
                 android:inputType="textPassword"
                 android:padding="8dp" />
 
+            <TextView
+                android:id="@+id/incorrectSignUpText"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/orange"
+                android:textSize="12sp" />
+
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="20dp" />
+                android:layout_height="5dp" />
 
             <Button
                 android:id="@+id/signUpButton"

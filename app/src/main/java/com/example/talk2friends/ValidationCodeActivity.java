@@ -52,14 +52,15 @@ public class ValidationCodeActivity extends AppCompatActivity {
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: check if validation code correct
+                // check if validation code correct
                 if (checkValidationCode()) {
                     registerAccount();
 
-                    // TODO: switch activity to Meetings page
-                    switchActivityLogin();
+                    // switch activity to Meetings page
+                    switchActivityMeetings();
                 } else {
                     // TODO: change color in UI to red
+                    // TODO: add back button UI to go back to login / signUp
 
                 }
 
@@ -68,12 +69,12 @@ public class ValidationCodeActivity extends AppCompatActivity {
         });
     }
 
-    private void switchActivityLogin() {
+    private void switchActivityMeetings() {
         // print to console
-        System.out.println("Switching activity to Login...");
+        System.out.println("Switching activity to Meetings...");
 
-        // switch activity to SignUpActivity
-        Intent intent = new Intent(this, LoginActivity.class);
+        // switch activity to Meetings
+        Intent intent = new Intent(this, MeetingsActivity.class);
         startActivity(intent);
     }
 
@@ -92,13 +93,10 @@ public class ValidationCodeActivity extends AppCompatActivity {
         // print to console
         System.out.println("Registering account...");
 
-        // TODO: register account in database
-        // example of adding user instance to database
-        database = FirebaseDatabase.getInstance("https://talk2friends-78719-default-rtdb.firebaseio.com/");
-        myRef = database.getReference("users");
+        // add user instance to database
+        // push to database
         User user = new User(username, hash);
-        myRef.push().setValue(user);
-
+        DatabaseHandler.pushToDatabase("users", user);
     }
 
     @Override
