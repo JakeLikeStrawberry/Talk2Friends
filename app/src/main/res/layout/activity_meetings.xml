@@ -5,7 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MeetingsActivity">
-    android:background="@drawable/radial_gradient_background">
+
+    <include
+        android:id="@+id/includeSharedBackground"
+        layout="@layout/shared_background"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
 <!--    TODO: add top bar, copy from profile.xml , or shared_background.xml? -->
