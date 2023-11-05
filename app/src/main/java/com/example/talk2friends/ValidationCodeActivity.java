@@ -61,6 +61,7 @@ public class ValidationCodeActivity extends AppCompatActivity {
                 } else {
                     // TODO: change color in UI to red
                     // TODO: add back button UI to go back to login / signUp
+                    System.out.println("Validation code incorrect! Please try again");
 
                 }
 

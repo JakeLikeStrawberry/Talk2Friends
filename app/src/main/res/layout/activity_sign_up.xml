@@ -112,9 +112,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/linear_gradient_background"
+                app:backgroundTint="@null"
                 android:gravity="center"
                 android:text="Sign Up"
-                app:backgroundTint="@null" />
+                 />
 
             <Space
                 android:layout_width="match_parent"

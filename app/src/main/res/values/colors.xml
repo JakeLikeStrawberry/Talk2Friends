@@ -10,4 +10,6 @@
     <color name="greenStart">#2D452D</color>
     <color name="blueEnd">#071C2F</color>
     <color name="orange">#FF5722</color>
+    <color name="lightGreenStart">#537853</color>
+    <color name="lightBlueEnd">#133049</color>
 </resources>

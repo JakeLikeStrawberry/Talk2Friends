@@ -15,78 +15,68 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="141dp"
-        android:layout_height="58dp"
-        android:layout_marginTop="100dp"
-        android:gravity="center"
-        android:text="Profile"
-        android:textColor="#FFFFFF"
-        android:textSize="24sp"
-        android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/includeSharedBackground"
-        tools:ignore="MissingConstraints" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="100dp">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="302dp"
-        android:layout_height="126dp"
-        android:background="@drawable/linear_gradient_background"
-        android:text=""
-        tools:layout_editor_absoluteX="54dp"
-        tools:layout_editor_absoluteY="158dp"
-        tools:ignore="MissingConstraints" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="personal"
-        android:textColor="#FFFFFF"
-        tools:layout_editor_absoluteX="67dp"
-        tools:layout_editor_absoluteY="164dp"
-        tools:ignore="MissingConstraints" />
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:gravity="center"
+                android:text="Profile"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp"
+                android:textStyle="italic"/>
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="301dp"
-        android:layout_height="113dp"
-        android:background="@drawable/linear_gradient_background"
-        android:text=""
-        tools:layout_editor_absoluteX="54dp"
-        tools:layout_editor_absoluteY="299dp"
-        tools:ignore="MissingConstraints" />
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/linear_gradient_background"
+                android:textColor="@color/white"
+                android:padding="10dp"
+                android:text="personal\n\nthis is due monday???"
+                android:margin="20dp"/>
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="friends"
-        android:textColor="#FFFFFF"
-        tools:layout_editor_absoluteX="67dp"
-        tools:layout_editor_absoluteY="311dp"
-        tools:ignore="MissingConstraints" />
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="friends"
+                android:textColor="#FFFFFF"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="67dp"
+                tools:layout_editor_absoluteY="311dp" />
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="297dp"
-        android:layout_height="112dp"
-        android:background="@drawable/linear_gradient_background"
-        android:text=""
-        tools:layout_editor_absoluteX="57dp"
-        tools:layout_editor_absoluteY="430dp"
-        tools:ignore="MissingConstraints" />
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="297dp"
+                android:layout_height="112dp"
+                android:background="@drawable/linear_gradient_background"
+                android:text=""
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="57dp"
+                tools:layout_editor_absoluteY="430dp" />
 
-    <TextView
-        android:id="@+id/textView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="meetings"
-        android:textColor="#FFFFFF"
-        tools:layout_editor_absoluteX="69dp"
-        tools:layout_editor_absoluteY="435dp"
-        tools:ignore="MissingConstraints" />
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="meetings"
+                android:textColor="#FFFFFF"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="69dp"
+                tools:layout_editor_absoluteY="435dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
