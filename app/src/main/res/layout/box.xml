@@ -102,7 +102,7 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/participantsTitle"
@@ -116,22 +116,42 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:gravity="start"
                     android:layout_weight="1">
 
                     <Button
-                        android:id="@+id/nameButton"
+                        android:id="@+id/nameButton1"
                         android:textAllCaps="false"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:minHeight="0dp"
+                        android:minWidth="0dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
                         android:background="@drawable/linear_gradient_background"
                         android:gravity="center"
-                        android:padding="5dp"
-                        android:text="<Let's chat about AI!>"
+                        android:text="miru"
                         android:textSize="15dp"
-                        app:backgroundTint="@null" />
+                        app:backgroundTint="@null"
+                        android:layout_marginBottom="5dp"/>
+
+                    <Button
+                    android:id="@+id/nameButton2"
+                    android:textAllCaps="false"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:background="@drawable/linear_gradient_background"
+                    android:gravity="center"
+                    android:text="miru"
+                    android:textSize="15dp"
+                    app:backgroundTint="@null"
+                    android:layout_marginBottom="5dp"/>
 
                 </LinearLayout>
 
