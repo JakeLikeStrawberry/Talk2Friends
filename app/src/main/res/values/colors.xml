@@ -12,4 +12,5 @@
     <color name="orange">#FF5722</color>
     <color name="lightGreenStart">#537853</color>
     <color name="lightBlueEnd">#133049</color>
+    <color name="transparentGray">#CC000000</color>
 </resources>

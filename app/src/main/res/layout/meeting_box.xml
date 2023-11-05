@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/linear_gradient_background"
             android:gravity="center"
-            android:text="<Let's chat about AI!>"
+            android:text="Let's chat about AI!"
             android:textSize="18dp"
             app:backgroundTint="@null" />
 

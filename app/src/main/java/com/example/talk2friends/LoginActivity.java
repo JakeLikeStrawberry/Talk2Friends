@@ -119,6 +119,15 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(myIntent);
     }
 
+    private void switchActivityProfile() {
+        // print to console
+        System.out.println("Switching activity to Profile...");
+
+        // switch activity to ProfileAtivity
+        Intent myIntent = new Intent(this, ProfileActivity.class);
+        startActivity(myIntent);
+    }
+
     private void displayIncorrectLoginMessage() {
         TextView incorrectLoginText = (TextView) findViewById(R.id.incorrectLoginText);
         incorrectLoginText.setText(getResources().getString(R.string.IncorrectLogin));
@@ -135,7 +144,8 @@ public class LoginActivity extends AppCompatActivity {
                     if (data.child("password").getValue().toString().equals(tempHash)) {
                         System.out.println("Login successful!");
                         // switch to meetings activity
-                        switchActivityMeetings();
+//                        switchActivityMeetings();
+                        switchActivityProfile();
                         return;
                     }
 

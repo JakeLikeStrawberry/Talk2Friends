@@ -37,14 +37,39 @@
                 android:textStyle="italic"/>
 
             <include
-                android:id="@+id/box"
+                android:id="@+id/personal_box"
                 layout="@layout/profile_personal_box" />
 
+<!--            TODO: make friends_box-->
             <include
-                android:id="@+id/box"
+                android:id="@+id/friends_box"
+                layout="@layout/profile_personal_box" />
+
+<!--            TODO: make Meetings_box -->
+            <include
+                android:id="@+id/meetings_box"
                 layout="@layout/profile_personal_box" />
 
         </LinearLayout>
     </ScrollView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text=""
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/transparentGray"/>
+
+    <include
+        android:id="@+id/edit_personal_box"
+        layout="@layout/edit_personal_box"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="20dp"
+        android:gravity="center"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -40,6 +40,7 @@ public class ValidationCodeActivity extends AppCompatActivity {
         confirmButton = (Button) findViewById(R.id.confirmButton);
 
         // input fields for every validation number
+        // TODO: automatically change lowercase input to uppercase! (or accept both; case-insensitive)
         validationInputField = (EditText) findViewById(R.id.validationInput);
 
         // get previously inputted username and password
