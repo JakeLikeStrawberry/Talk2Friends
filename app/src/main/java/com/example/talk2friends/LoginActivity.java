@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switchActivitySignUp();
+                Utils.switchActivitySignUp(LoginActivity.this);
             }
         });
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -52,15 +52,6 @@ public class LoginActivity extends AppCompatActivity {
                 tryLogin();
             }
         });
-    }
-
-    private void switchActivitySignUp() {
-        // print to console
-        System.out.println("Switching activity to signUp...");
-
-        // switch activity to SignUpActivity
-        Intent myIntent = new Intent(this, SignUpActivity.class);
-        startActivity(myIntent);
     }
 
     private void tryLogin() {
@@ -116,6 +107,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // switch activity to MeetingsActivity
         Intent myIntent = new Intent(this, MeetingsActivity.class);
+        myIntent.putExtra("email", emailInputField.getText().toString());
         startActivity(myIntent);
     }
 
@@ -144,8 +136,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (data.child("password").getValue().toString().equals(tempHash)) {
                         System.out.println("Login successful!");
                         // switch to meetings activity
-//                        switchActivityMeetings();
-                        switchActivityProfile();
+                        switchActivityMeetings();
                         return;
                     }
 

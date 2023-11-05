@@ -1,5 +1,8 @@
 package com.example.talk2friends;
 
+import android.content.Context;
+import android.content.Intent;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -30,6 +33,47 @@ public class Utils {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public static void switchActivityMeetings(Context context, String email) {
+        System.out.println("Switching activity to Meetings...");
+        Intent intent = new Intent(context, MeetingsActivity.class);
+        intent.putExtra("email", email);
+        context.startActivity(intent);
+    }
+
+    public static void switchActivityProfile( Context context, String email) {
+        System.out.println("Switching activity to Profile...");
+        Intent intent = new Intent(context, ProfileActivity.class);
+        intent.putExtra("email", email);
+        context.startActivity(intent);
+    }
+
+    public static void switchActivitySignUp(Context context) {
+        System.out.println("Switching activity to Sign Up...");
+        Intent intent = new Intent(context, SignUpActivity.class);
+        context.startActivity(intent);
+    }
+
+    public static void switchActivityLogin(Context context) {
+        // print to console
+        System.out.println("Switching activity to Login...");
+
+        // switch activity to SignUpActivity
+        Intent intent = new Intent(context, LoginActivity.class);
+        context.startActivity(intent);
+    }
+
+    public static void switchActivityValidationCode(Context context, String username, String hash, String validationCode) {
+        // print to console
+        System.out.println("Switching activity to ValidationCode...");
+
+        // switch activity to ValidationCodeActivity
+        Intent intent = new Intent(context, ValidationCodeActivity.class);
+        intent.putExtra("username",username);
+        intent.putExtra("hash",hash);
+        intent.putExtra("validationCode",validationCode);
+        context.startActivity(intent);
     }
 }
 

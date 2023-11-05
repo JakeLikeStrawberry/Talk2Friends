@@ -31,6 +31,7 @@ public class DatabaseHandler {
                     if (data.child(thirdLayer).exists()) {
                         if (data.child(thirdLayer).getValue().toString().equals(matchValue)) {
                             callback.onCallback(data);
+                            return;
                         }
 
                     }
@@ -41,6 +42,24 @@ public class DatabaseHandler {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+    }
+
+    /**
+     * This method retrieves User object based on email, and puts in callback function
+     * @param email the email of the user to retrieve
+     * @param callback the callback function, use "user" to get User object
+     */
+    public static void getUser(String email, UserCallback callback) {
+        getValue("users", "email", email, new DataSnapshotCallback() {
+            @Override
+            public void onCallback(DataSnapshot data) {
+                if (data == null) {
+                    System.out.println("ERROR: User not found!!!!");
+                    return;
+                }
+                callback.onCallback(data.getValue(User.class));
             }
         });
     }
@@ -61,6 +80,7 @@ public class DatabaseHandler {
         firstLayerRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 for(DataSnapshot data: dataSnapshot.getChildren()){
                     if (data.child(thirdLayer).exists()) {
                         if (data.child(thirdLayer).getValue().toString().equals(value)) {
@@ -89,15 +109,43 @@ public class DatabaseHandler {
      * @param value the value to push to database
      * @return nothing
      */
-    public static void pushToDatabase(String firstLayer, Object value) {
+    public static void pushNewValue(String firstLayer, Object value) {
         // push to database
         FirebaseDatabase database = FirebaseDatabase.getInstance(Utils.FIREBASE_URL);
         DatabaseReference firstLayerRef = database.getReference(firstLayer);
         firstLayerRef.push().setValue(value);
     }
 
-    public static void doUntilUnique(String firstLayer, String thirdLayer, Callback callback) {
+    /**
+     * This method updates value in database
+     * @param firstLayer the first layer of firebase path (e.g., "users")
+     * @param thirdLayer the third layer of firebase path (e.g., "email")
+     * @param matchValue the value to match in thirdLayer={(email = matchValue), etc.}
+     * @param targetField the third layer of firebase path to change to newValue (e.g., "age")
+     * @param newValue the new value to update targetField to
+     */
+    public static void updateValue(String firstLayer, String thirdLayer, String matchValue, String targetField, String newValue) {
+        // push to database
+        FirebaseDatabase database = FirebaseDatabase.getInstance(Utils.FIREBASE_URL);
+        DatabaseReference firstLayerRef = database.getReference(firstLayer);
+        firstLayerRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot data: dataSnapshot.getChildren()){
+                    if (data.child(thirdLayer).exists()) {
+                        if (data.child(thirdLayer).getValue().toString().equals(matchValue)) {
+                            data.child(targetField).getRef().setValue(newValue);
+                            return;
+                        }
+                    }
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 

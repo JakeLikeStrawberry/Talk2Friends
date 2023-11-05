@@ -4,8 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,6 +28,8 @@ public class ValidationCodeActivity extends AppCompatActivity {
     // firebase
     FirebaseDatabase database;
     DatabaseReference myRef;
+
+    User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +58,7 @@ public class ValidationCodeActivity extends AppCompatActivity {
                     registerAccount();
 
                     // switch activity to Meetings page
-                    switchActivityMeetings();
+                    Utils.switchActivityMeetings(ValidationCodeActivity.this, currentUser.getEmail());
                 } else {
                     // TODO: change color in UI to red
                     // TODO: add back button UI to go back to login / signUp
@@ -69,15 +69,6 @@ public class ValidationCodeActivity extends AppCompatActivity {
 
             }
         });
-    }
-
-    private void switchActivityMeetings() {
-        // print to console
-        System.out.println("Switching activity to Meetings...");
-
-        // switch activity to Meetings
-        Intent intent = new Intent(this, MeetingsActivity.class);
-        startActivity(intent);
     }
 
     private boolean checkValidationCode() {
@@ -97,8 +88,8 @@ public class ValidationCodeActivity extends AppCompatActivity {
 
         // add user instance to database
         // push to database
-        User user = new User(username, hash);
-        DatabaseHandler.pushToDatabase("users", user);
+        currentUser = new User(username, hash);
+        DatabaseHandler.pushNewValue("users", currentUser);
     }
 
     @Override

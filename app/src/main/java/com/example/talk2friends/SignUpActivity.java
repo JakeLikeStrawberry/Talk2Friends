@@ -64,7 +64,7 @@ public class SignUpActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switchActivityLogin();
+                Utils.switchActivityLogin(SignUpActivity.this);
             }
         });
 
@@ -99,26 +99,6 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    private void switchActivityLogin() {
-        // print to console
-        System.out.println("Switching activity to Login...");
-
-        // switch activity to SignUpActivity
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-    }
-
-    private void switchActivityValidationCode(String validationCode) {
-        // print to console
-        System.out.println("Switching activity to ValidationCode...");
-
-        // switch activity to ValidationCodeActivity
-        Intent intent = new Intent(this, ValidationCodeActivity.class);
-        intent.putExtra("username",emailInputField.getText().toString());
-        intent.putExtra("hash",hash);
-        intent.putExtra("validationCode",validationCode);
-        startActivity(intent);
-    }
 
     private String generateValidationCode() {
         // generate 4-character alphanumeric code to send
@@ -204,7 +184,7 @@ public class SignUpActivity extends AppCompatActivity {
                     javaMailAPI.execute();
 
                     // switch to validation code activity
-                    switchActivityValidationCode(value);
+                    Utils.switchActivityValidationCode(SignUpActivity.this, emailInputField.getText().toString(), hash, value);
                 }
             });
         } else {

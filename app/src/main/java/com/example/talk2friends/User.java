@@ -1,8 +1,12 @@
 package com.example.talk2friends;
 
 public class User {
-    private String email;
-    private String password;
+    private String email = "";
+    private String password = "";
+    private String name = "";
+    private String age = "";
+    private String affiliation = "";
+    private String type = "";
 
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
