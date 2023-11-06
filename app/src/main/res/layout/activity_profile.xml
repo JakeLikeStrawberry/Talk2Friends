@@ -43,12 +43,12 @@
 <!--            TODO: make friends_box-->
             <include
                 android:id="@+id/friends_box"
-                layout="@layout/profile_personal_box" />
+                layout="@layout/profile_friends_box" />
 
 <!--            TODO: make Meetings_box -->
             <include
                 android:id="@+id/meetings_box"
-                layout="@layout/profile_personal_box" />
+                layout="@layout/profile_meetings_box" />
 
         </LinearLayout>
     </ScrollView>

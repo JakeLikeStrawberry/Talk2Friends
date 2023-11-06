@@ -68,6 +68,10 @@ public class ProfileActivity extends AppCompatActivity {
         edit_personal_affiliation = (EditText) findViewById(R.id.edit_personal_box).findViewById(R.id.affiliationField);
         edit_personal_typeDropdown = (Spinner) findViewById(R.id.edit_personal_box).findViewById(R.id.typeDropdown);
 
+        // edit friends
+//        edit_friends_box = (View) findViewById(R.id.edit+)
+
+
 
 //        profileButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -95,6 +99,9 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
         // TODO: make editButton_friends and editButton_meetings do something
+
+        
+
 
         // set dropdown items
         String[] types = new String[]{"international student", "native speaker"};
@@ -133,6 +140,12 @@ public class ProfileActivity extends AppCompatActivity {
         DatabaseHandler.updateValue("user", "email", currentUser.getEmail(), "age", newAge);
         DatabaseHandler.updateValue("user", "email", currentUser.getEmail(), "affiliation", newAffiliation);
         DatabaseHandler.updateValue("user", "email", currentUser.getEmail(), "type", newType);
+    }
+    private void saveFriends() {
+
+    }
+    private void saveMeetings(){
+
     }
 
 
