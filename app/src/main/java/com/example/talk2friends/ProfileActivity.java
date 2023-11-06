@@ -34,6 +34,10 @@ public class ProfileActivity extends AppCompatActivity {
     private Spinner edit_personal_typeDropdown;
     private ImageButton edit_personal_saveButton;
 
+    // edit friends
+    private View edit_friends_box;
+    private ImageButton edit_friends_saveButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +73,8 @@ public class ProfileActivity extends AppCompatActivity {
         edit_personal_typeDropdown = (Spinner) findViewById(R.id.edit_personal_box).findViewById(R.id.typeDropdown);
 
         // edit friends
-//        edit_friends_box = (View) findViewById(R.id.edit+)
+        edit_friends_box = (View) findViewById(R.id.edit_friends_box);
+        edit_friends_saveButton = (ImageButton) findViewById(R.id.edit_friends_box).findViewById(R.id.saveButton);
 
 
 
@@ -99,6 +104,19 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
         // TODO: make editButton_friends and editButton_meetings do something
+
+        editButton_friends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { toggleEditPersonal(); }
+        });
+
+        edit_friends_saveButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                saveFriends();
+                toggleEditPersonal();
+            }
+        });
 
         
 
@@ -142,10 +160,11 @@ public class ProfileActivity extends AppCompatActivity {
         DatabaseHandler.updateValue("user", "email", currentUser.getEmail(), "type", newType);
     }
     private void saveFriends() {
+        //saving friends to database
 
     }
     private void saveMeetings(){
-
+        //saving meetings to database
     }
 
 
