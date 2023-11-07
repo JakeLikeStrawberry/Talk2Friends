@@ -180,6 +180,7 @@ public class ProfileActivity extends AppCompatActivity {
                 toggleEditAddFriends();
             }
         });
+
         editButton_meetings.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
