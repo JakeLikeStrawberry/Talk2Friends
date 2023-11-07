@@ -128,6 +128,30 @@
                 android:textColor="@color/white"
                 android:textSize="18dp"
                 app:backgroundTint="@null" />
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/addInterests"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/linear_gradient_background"
+                android:gravity="center"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:text="Add Interests"
+                android:textAllCaps="false"
+                android:textSize="12dp"
+                app:backgroundTint="@null"
+                tools:ignore="HardcodedText"
+                android:layout_gravity="right"
+                tools:layout_editor_absoluteX="100dp"
+                tools:layout_editor_absoluteY="277dp"/>
         </LinearLayout>
 
         <LinearLayout
