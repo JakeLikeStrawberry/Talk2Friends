@@ -10,6 +10,8 @@ public class User {
     private String affiliation = "";
     private String type = "";
     private ArrayList<String> friendsList = new ArrayList<String>();
+    private ArrayList<String> interests = new ArrayList<>();
+
 
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
@@ -34,6 +36,7 @@ public class User {
     public ArrayList<String> getFriends() {
         return friendsList;
     }
+    public ArrayList<String> getInterests() {return interests; }
 }
 
 
