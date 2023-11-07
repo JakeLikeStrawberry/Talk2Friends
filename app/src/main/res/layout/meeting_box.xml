@@ -116,43 +116,16 @@
 
 
                 <LinearLayout
+                    android:id="@+id/participantsLinearLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:gravity="start"
                     android:layout_weight="1">
 
-                    <Button
-                        android:id="@+id/nameButton1"
-                        android:textAllCaps="false"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:minHeight="0dp"
-                        android:minWidth="0dp"
-                        android:insetTop="0dp"
-                        android:insetBottom="0dp"
-                        android:background="@drawable/linear_gradient_background"
-                        android:gravity="center"
-                        android:text="miru"
-                        android:textSize="15dp"
-                        app:backgroundTint="@null"
-                        android:layout_marginBottom="5dp"/>
-
-                    <Button
-                    android:id="@+id/nameButton2"
-                    android:textAllCaps="false"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minHeight="0dp"
-                    android:minWidth="0dp"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    android:background="@drawable/linear_gradient_background"
-                    android:gravity="center"
-                    android:text="miru"
-                    android:textSize="15dp"
-                    app:backgroundTint="@null"
-                    android:layout_marginBottom="5dp"/>
+                    <include
+                        android:id="@+id/participant1"
+                        layout="@layout/name_button" />
 
                 </LinearLayout>
 
