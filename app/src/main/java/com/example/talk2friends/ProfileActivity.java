@@ -201,8 +201,10 @@ public class ProfileActivity extends AppCompatActivity {
         add_interests_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                loadInterests();
                 toggleEditAddFriends();
                 toggleEditAddInterests();
+
             }
         });
         add_interests_saveButton.setOnClickListener(new View.OnClickListener() {
@@ -306,6 +308,7 @@ public class ProfileActivity extends AppCompatActivity {
         DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "affiliation", newAffiliation);
         DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "type", newType);
     }
+
     private void saveFriends() {
         //saving friends to database
 
@@ -316,6 +319,32 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void saveInterests() {
 
+    }
+
+    private void loadInterests(){
+        DatabaseHandler.getValue("users", "interests", currentUser.getInterests(), new DataSnapshotCallback() {
+
+            View data = findViewById(R.id.personal_box);
+            TextView sports = data.findViewById(R.id.nameField);
+            TextView music = data.findViewById(R.id.ageField);
+            TextView reading = data.findViewById(R.id.affiliationField);
+            TextView exercise = data.findViewById(R.id.typeField);
+            TextView email = data.findViewById(R.id.emailField);
+
+            View editable_data = findViewById(R.id.edit_personal_box);
+            TextView edit_name = editable_data.findViewById(R.id.nameField);
+            TextView edit_age = editable_data.findViewById(R.id.ageField);
+            TextView edit_affiliation = editable_data.findViewById(R.id.affiliationField);
+            TextView edit_email = editable_data.findViewById(R.id.emailField);
+
+
+
+
+            @Override
+            public void onCallback(DataSnapshot data) {
+
+            }
+        })
     }
 
     private void loadPersonal() {
