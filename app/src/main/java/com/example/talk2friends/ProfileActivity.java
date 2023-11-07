@@ -66,6 +66,8 @@ public class ProfileActivity extends AppCompatActivity {
     private Spinner reading_dropdown;
     private Spinner exercise_dropdown;
     private Spinner movies_dropdown;
+    private Button add_interests_button;
+    private ImageButton add_interests_saveButton;
 
     //edit meetings
     private View edit_meetings_box;
@@ -107,7 +109,7 @@ public class ProfileActivity extends AppCompatActivity {
         search_friends_box = (View) findViewById(R.id.add_friends_page).findViewById(R.id.findFriends);
         recommend_friends_box = (View) findViewById(R.id.add_friends_page).findViewById(R.id.recommendFriends);
         enter_friend_email = (EditText) findViewById(R.id.add_friends_page).findViewById(R.id.emailField);
-
+        add_interests_button = (Button) findViewById(R.id.add_friends_page).findViewById(R.id.addInterests);
 
         // edit personal
         transparentGray = (TextView) findViewById(R.id.transparentGray);
@@ -133,7 +135,7 @@ public class ProfileActivity extends AppCompatActivity {
         reading_dropdown = (Spinner) findViewById(R.id.add_interests_box).findViewById(R.id.readingDropdown);
         exercise_dropdown = (Spinner) findViewById(R.id.add_interests_box).findViewById(R.id.exerciseDropdown);
         movies_dropdown = (Spinner) findViewById(R.id.add_interests_box).findViewById(R.id.moviesDropdown);
-
+        add_interests_saveButton = (ImageButton) findViewById(R.id.add_interests_box).findViewById(R.id.saveButton);
 
 //        profileButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -196,6 +198,22 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        add_interests_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleEditAddFriends();
+                toggleEditAddInterests();
+            }
+        });
+        add_interests_saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleEditAddInterests();
+                saveInterests();
+            }
+        });
+
+
         // set dropdown items
         String[] types = new String[]{"international student", "native speaker"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, types);
@@ -222,6 +240,16 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
     }
+
+    private void toggleEditAddInterests() {
+        if (transparentGray.getVisibility() == View.GONE) {
+            transparentGray.setVisibility(View.VISIBLE);
+            add_interests_box.setVisibility(View.VISIBLE);
+        } else if (transparentGray.getVisibility() == View.VISIBLE) {
+            transparentGray.setVisibility(View.GONE);
+            add_interests_box.setVisibility(View.GONE);
+        }
+    }
     private void toggleEditFriends () {
 
         if (transparentGray.getVisibility() == View.GONE) {
@@ -242,7 +270,6 @@ public class ProfileActivity extends AppCompatActivity {
             transparentGray.setVisibility(View.GONE);
             add_friends_page.setVisibility(View.GONE);
         }
-
     }
     private void toggleEditMeetings () {
         if (transparentGray.getVisibility() == View.GONE) {
@@ -285,6 +312,10 @@ public class ProfileActivity extends AppCompatActivity {
     }
     private void saveMeetings(){
         //saving meetings to database
+    }
+
+    private void saveInterests() {
+
     }
 
     private void loadPersonal() {
