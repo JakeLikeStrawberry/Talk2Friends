@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -86,6 +87,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                 loadPersonal();
                 loadFriends();
+                loadRecommendedFriends();
             }
         });
 
@@ -326,29 +328,78 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void loadInterests(){
-        DatabaseHandler.getValue("users", "interests", currentUser.getInterests(), new DataSnapshotCallback() {
-
-            View data = findViewById(R.id.personal_box);
-            TextView sports = data.findViewById(R.id.nameField);
-            TextView music = data.findViewById(R.id.ageField);
-            TextView reading = data.findViewById(R.id.affiliationField);
-            TextView exercise = data.findViewById(R.id.typeField);
-            TextView email = data.findViewById(R.id.emailField);
-
-            View editable_data = findViewById(R.id.edit_personal_box);
-            TextView edit_name = editable_data.findViewById(R.id.nameField);
-            TextView edit_age = editable_data.findViewById(R.id.ageField);
-            TextView edit_affiliation = editable_data.findViewById(R.id.affiliationField);
-            TextView edit_email = editable_data.findViewById(R.id.emailField);
-
-
-
+        DatabaseHandler.getValue("users", "email", currentUser.getEmail(), new DataSnapshotCallback() {
 
             @Override
             public void onCallback(DataSnapshot data) {
+                View personalBox = findViewById(R.id.add_friends_page);
+                Spinner sports = personalBox.findViewById(R.id.sportsDropdown);
+                Spinner music = personalBox.findViewById(R.id.musicDropdown);
+                Spinner reading = personalBox.findViewById(R.id.readingDropdown);
+                Spinner exercise = personalBox.findViewById(R.id.exerciseDropdown);
+                Spinner movies = personalBox.findViewById(R.id.moviesDropdown);
+
+                String[] answers = new String[]{"yes", "no"};
+                ArrayAdapter<String> adapterSports = new ArrayAdapter<String>(ProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, answers);
+                adapterSports.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                sports.setAdapter(adapterSports);
+                if (data.child("sports").getValue() != null) {
+                    String compareValueSports = data.child("sports").getValue().toString();
+                    if (compareValueSports != null) {
+                        int spinnerPosition = adapterSports.getPosition(compareValueSports);
+                        sports.setSelection(spinnerPosition);
+                    }
+                }
+
+                ArrayAdapter<String> adapterMusic = new ArrayAdapter<String>(ProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, answers);
+                adapterMusic.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                music.setAdapter(adapterMusic);
+                if (data.child("music").getValue() != null) {
+                    String compareValueMusic = data.child("music").getValue().toString();
+                    if (compareValueMusic != null) {
+                        int spinnerPosition = adapterMusic.getPosition(compareValueMusic);
+                        music.setSelection(spinnerPosition);
+                    }
+                }
+
+                ArrayAdapter<String> adapterReading = new ArrayAdapter<String>(ProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, answers);
+                adapterReading.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                reading.setAdapter(adapterReading);
+                if (data.child("reading").getValue() != null) {
+                    String compareValueReading = data.child("reading").getValue().toString();
+                    if (compareValueReading != null) {
+                        int spinnerPosition = adapterReading.getPosition(compareValueReading);
+                        reading.setSelection(spinnerPosition);
+                    }
+                }
+
+                ArrayAdapter<String> adapterExercise = new ArrayAdapter<String>(ProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, answers);
+                adapterExercise.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                exercise.setAdapter(adapterExercise);
+                if (data.child("exercise").getValue() != null) {
+                    String compareValueExercise = data.child("exercise").getValue().toString();
+                    if (compareValueExercise != null) {
+                        int spinnerPosition = adapterExercise.getPosition(compareValueExercise);
+                        exercise.setSelection(spinnerPosition);
+                    }
+                }
+
+                ArrayAdapter<String> adapterMovies = new ArrayAdapter<String>(ProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, answers);
+                adapterMovies.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                movies.setAdapter(adapterMovies);
+                if (data.child("movies").getValue() != null) {
+                    String compareValueMovies = data.child("movies").getValue().toString();
+                    if (compareValueMovies != null) {
+                        int spinnerPosition = adapterMovies.getPosition(compareValueMovies);
+                        movies.setSelection(spinnerPosition);
+                    }
+                }
+
+
+
 
             }
-        })
+        });
     }
 
     private void loadPersonal() {
@@ -554,6 +605,45 @@ public class ProfileActivity extends AppCompatActivity {
         // toast
         Toast.makeText(this, "Invitation sent!", Toast.LENGTH_SHORT).show();
 
+    }
+
+    private void loadRecommendedFriends() {
+        String recFriend = recommendFriends(currentUser);
+        Button recFriendText = recommend_friends_box.findViewById(R.id.recFriend);
+        recFriendText.setText(recFriend);
+    }
+
+    /**
+     * Recommends one friend based on interest list
+     * @param user user to recommend friends to
+     * @return
+     */
+    public static String recommendFriends(User user) {
+        ArrayList<String> myInterests = user.getInterests();
+        String recommendedFriend = "";
+
+        // TODO: get all users from database
+        ArrayList<User> allUsers = new ArrayList<User>();
+
+
+        int numUsers = 0;
+        int numSharedInterests = 0;
+        int maxSharedInterests = 0;
+
+        for (int i = 0; i < numUsers; i++) {
+            ArrayList<String> tempInterests = myInterests;
+            tempInterests.retainAll(allUsers.get(i).getInterests());
+
+            numSharedInterests = tempInterests.size();
+
+            if (numSharedInterests > maxSharedInterests) {
+                maxSharedInterests = numSharedInterests;
+                recommendedFriend = allUsers.get(i).getEmail();
+            }
+        }
+
+        recommendedFriend = "mdjun@usc.edu";
+        return recommendedFriend;
     }
 
 

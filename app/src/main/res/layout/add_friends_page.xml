@@ -193,43 +193,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageButton
-                android:id="@+id/cross2"
-                android:layout_width="21dp"
-                android:layout_height="18dp"
-                android:layout_gravity="center"
-                android:background="@drawable/linear_gradient_background"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                android:padding="5dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/cross_icon"
-                app:backgroundTint="@null"
-                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
             <Button
-                android:id="@+id/nameButton1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/linear_gradient_background"
-                android:gravity="center"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                android:text="miru"
-                android:textAllCaps="false"
-                android:textSize="15dp"
-                app:backgroundTint="@null"
-                tools:ignore="HardcodedText"
-                tools:layout_editor_absoluteX="100dp"
-                tools:layout_editor_absoluteY="277dp" />
-
-            <Button
-                android:id="@+id/nameButton2"
+                android:id="@+id/recFriend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -247,21 +212,6 @@
                 tools:layout_editor_absoluteX="70dp"
                 tools:layout_editor_absoluteY="138dp" />
 
-            <ImageButton
-                android:id="@+id/cross1"
-                android:layout_width="21dp"
-                android:layout_height="18dp"
-                android:layout_gravity="center"
-                android:background="@drawable/linear_gradient_background"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                android:padding="5dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/cross_icon"
-                app:backgroundTint="@null"
-                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
         </LinearLayout>
 
     </LinearLayout>
