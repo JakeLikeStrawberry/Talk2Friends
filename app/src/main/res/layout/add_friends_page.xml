@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="22dp">
+
+    <LinearLayout
+        android:id="@+id/findFriends"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/box_linear_gradient_background"
+        android:orientation="vertical"
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/recommendFriends"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".92"
+        tools:layout_editor_absoluteX="0dp"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            tools:layout_editor_absoluteX="20dp"
+            tools:layout_editor_absoluteY="432dp">
+
+            <TextView
+                android:id="@+id/title1Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:text="find friends by email"
+                android:textColor="@color/white"
+                android:textSize="18dp"
+                app:backgroundTint="@null" />
+        </LinearLayout>
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="20dp"
+            tools:layout_editor_absoluteX="20dp"
+            tools:layout_editor_absoluteY="456dp">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp">
+
+                <EditText
+                    android:id="@+id/emailField"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/rounded_inputfield"
+                    android:paddingLeft="8dp"
+                    android:paddingBottom="2dp"
+                    android:text=""
+                    android:textColor="@color/black"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/emailEnd"
+                    android:layout_width="115dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="  @usc.edu"
+                    android:textColor="@color/white"
+                    android:textSize="15dp"
+                    tools:layout_editor_absoluteX="152dp"
+                    tools:layout_editor_absoluteY="476dp" />
+
+
+            </TableRow>
+
+        </TableLayout>
+
+        <ImageButton
+            android:id="@+id/sendEmailButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:background="@drawable/linear_gradient_background"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="15dp"
+            android:scaleType="fitCenter"
+
+            android:src="@drawable/mail_icon"
+            app:backgroundTint="@null"
+            tools:layout_editor_absoluteX="181dp"
+            tools:layout_editor_absoluteY="529dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/recommendFriends"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/box_linear_gradient_background"
+        android:orientation="vertical"
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.7"
+        tools:layout_editor_absoluteX="0dp">
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/titleButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:text="Recommended Friends"
+                android:textColor="@color/white"
+                android:textSize="18dp"
+                app:backgroundTint="@null" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/likes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:text="likes"
+                android:textColor="@color/white"
+                android:textSize="15dp"
+                app:backgroundTint="@null"></TextView>
+        </LinearLayout>
+
+
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/similarLikes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:text="people with similar likes"
+                android:textColor="@color/white"
+                android:textSize="15dp"
+                app:backgroundTint="@null">
+            </TextView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageButton
+                android:id="@+id/cross2"
+                android:layout_width="21dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center"
+                android:background="@drawable/linear_gradient_background"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="5dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cross_icon"
+                app:backgroundTint="@null"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            <Button
+                android:id="@+id/nameButton1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/linear_gradient_background"
+                android:gravity="center"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:text="miru"
+                android:textAllCaps="false"
+                android:textSize="15dp"
+                app:backgroundTint="@null"
+                tools:ignore="HardcodedText"
+                tools:layout_editor_absoluteX="100dp"
+                tools:layout_editor_absoluteY="277dp" />
+
+            <Button
+                android:id="@+id/nameButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/linear_gradient_background"
+                android:gravity="center"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:text="jake"
+                android:textAllCaps="false"
+                android:textSize="15dp"
+                app:backgroundTint="@null"
+                tools:ignore="TouchTargetSizeCheck"
+                tools:layout_editor_absoluteX="70dp"
+                tools:layout_editor_absoluteY="138dp" />
+
+            <ImageButton
+                android:id="@+id/cross1"
+                android:layout_width="21dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center"
+                android:background="@drawable/linear_gradient_background"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="5dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cross_icon"
+                app:backgroundTint="@null"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

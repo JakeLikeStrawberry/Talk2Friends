@@ -11,6 +11,8 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+
 public class ProfileActivity extends AppCompatActivity {
 
     // current User
@@ -25,6 +27,9 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageButton editButton_friends;
     private ImageButton editButton_meetings;
 
+    //search button
+    private ImageButton searchButton_friends;
+
     // edit personal
     private TextView transparentGray;
     private View edit_personal_box;
@@ -37,6 +42,14 @@ public class ProfileActivity extends AppCompatActivity {
     // edit friends
     private View edit_friends_box;
     private ImageButton edit_friends_saveButton;
+
+    //add Friends page
+    private View add_friends_page;
+    private View search_friends_box;
+    private ImageButton send_email_invite;
+    private EditText enter_friend_email;
+    private View recommend_friends_box;
+
 
 
     @Override
@@ -51,6 +64,8 @@ public class ProfileActivity extends AppCompatActivity {
             public void onCallback(User user) {
                 currentUser = user;
                 System.out.println("Current user: " + currentUser.getEmail() + ", " + currentUser.getPassword());
+
+                loadPersonal();
             }
         });
 
@@ -62,6 +77,16 @@ public class ProfileActivity extends AppCompatActivity {
         editButton_personal = (ImageButton) findViewById(R.id.personal_box).findViewById(R.id.editButton);
         editButton_friends = (ImageButton) findViewById(R.id.friends_box).findViewById(R.id.editButton);
         editButton_meetings = (ImageButton) findViewById(R.id.meetings_box).findViewById(R.id.editButton);
+
+        //search button for friends
+        searchButton_friends = (ImageButton) findViewById(R.id.friends_box).findViewById(R.id.searchButton);
+
+        //add friends page
+        add_friends_page = (View) findViewById(R.id.add_friends_page);
+        search_friends_box = (View) findViewById(R.id.add_friends_page).findViewById(R.id.findFriends);
+        recommend_friends_box = (View) findViewById(R.id.add_friends_page).findViewById(R.id.recommendFriends);
+        enter_friend_email = (EditText) findViewById(R.id.add_friends_page).findViewById(R.id.emailField);
+
 
         // edit personal
         transparentGray = (TextView) findViewById(R.id.transparentGray);
@@ -107,14 +132,20 @@ public class ProfileActivity extends AppCompatActivity {
 
         editButton_friends.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) { toggleEditPersonal(); }
+            public void onClick(View view) { toggleEditFriends(); }
         });
 
         edit_friends_saveButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 saveFriends();
-                toggleEditPersonal();
+                toggleEditFriends();
+            }
+        });
+        searchButton_friends.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                toggleEditAddFriends();
             }
         });
 
@@ -142,22 +173,63 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
     }
+    private void toggleEditFriends () {
+
+        if (transparentGray.getVisibility() == View.GONE) {
+            transparentGray.setVisibility(View.VISIBLE);
+            edit_friends_box.setVisibility(View.VISIBLE);
+        } else if (transparentGray.getVisibility() == View.VISIBLE) {
+            transparentGray.setVisibility(View.GONE);
+            edit_friends_box.setVisibility(View.GONE);
+        }
+
+    }
+    private void toggleEditAddFriends () {
+
+        if (transparentGray.getVisibility() == View.GONE) {
+            transparentGray.setVisibility(View.VISIBLE);
+            add_friends_page.setVisibility(View.VISIBLE);
+        } else if (transparentGray.getVisibility() == View.VISIBLE) {
+            transparentGray.setVisibility(View.GONE);
+            add_friends_page.setVisibility(View.GONE);
+        }
+
+    }
+//    private void toggleEditMeetings () {
+//        if (transparentGray.getVisibility() == View.GONE) {
+//            transparentGray.setVisibility(View.VISIBLE);
+//            edit_personal_box.setVisibility(View.VISIBLE);
+//        } else if (transparentGray.getVisibility() == View.VISIBLE) {
+//            transparentGray.setVisibility(View.GONE);
+//            edit_personal_box.setVisibility(View.GONE);
+//        }
+//
+//    }
 
     private void savePersonal() {
         // save personal info to database
         System.out.println("Saving personal info...");
 
+        // get the editable view
+        View editable_data = findViewById(R.id.edit_personal_box);
+        TextView edit_name = editable_data.findViewById(R.id.nameField);
+        TextView edit_age = editable_data.findViewById(R.id.ageField);
+        TextView edit_affiliation = editable_data.findViewById(R.id.affiliationField);
+        Spinner edit_type = editable_data.findViewById(R.id.typeDropdown);
+
         // get new values
-        String newName = edit_personal_name.getText().toString();
-        String newAge = edit_personal_age.getText().toString();
-        String newAffiliation = edit_personal_affiliation.getText().toString();
-        String newType = edit_personal_typeDropdown.getSelectedItem().toString();
+        String newName = edit_name.getText().toString();
+        String newAge = edit_age.getText().toString();
+        String newAffiliation = edit_affiliation.getText().toString();
+        String newType = edit_type.getSelectedItem().toString();
+
+        System.out.println("testing program");
 
         // update values in database
-        DatabaseHandler.updateValue("user", "email", currentUser.getEmail(), "name", newName);
-        DatabaseHandler.updateValue("user", "email", currentUser.getEmail(), "age", newAge);
-        DatabaseHandler.updateValue("user", "email", currentUser.getEmail(), "affiliation", newAffiliation);
-        DatabaseHandler.updateValue("user", "email", currentUser.getEmail(), "type", newType);
+        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "name", newName);
+        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "age", newAge);
+        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "affiliation", newAffiliation);
+        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "type", newType);
     }
     private void saveFriends() {
         //saving friends to database
@@ -167,6 +239,93 @@ public class ProfileActivity extends AppCompatActivity {
         //saving meetings to database
     }
 
+    private void loadPersonal() {
+        // get email
+        DatabaseHandler.getValue("users", "email", currentUser.getEmail(), new DataSnapshotCallback() {
+
+            View data = findViewById(R.id.personal_box);
+            TextView name = data.findViewById(R.id.nameField);
+            TextView age = data.findViewById(R.id.ageField);
+            TextView affiliation = data.findViewById(R.id.affiliationField);
+            TextView type = data.findViewById(R.id.typeField);
+            TextView email = data.findViewById(R.id.emailField);
+
+            View editable_data = findViewById(R.id.edit_personal_box);
+            TextView edit_name = editable_data.findViewById(R.id.nameField);
+            TextView edit_age = editable_data.findViewById(R.id.ageField);
+            TextView edit_affiliation = editable_data.findViewById(R.id.affiliationField);
+            TextView edit_email = editable_data.findViewById(R.id.emailField);
+
+
+            @Override
+            public void onCallback(DataSnapshot data) {
+                if (data != null) {
+                    name.setText("Data recieved");
+                    // set name equal to the user name
+                    Object nameValue = data.child("name").getValue();
+                    Object ageValue = data.child("age").getValue();
+                    Object affiliationValue = data.child("affiliation").getValue();
+                    Object typeValue = data.child("type").getValue();
+
+                    // set name
+                    if (nameValue != null) {
+                        name.setText(nameValue.toString());
+                        edit_name.setText(nameValue.toString());
+                    } else {
+                        name.setText("");
+                        edit_name.setText("");
+                    }
+
+                    // set age
+                    if (ageValue != null) {
+                        age.setText(ageValue.toString());
+                        edit_age.setText(ageValue.toString());
+                    } else {
+                        age.setText("");
+                        edit_age.setText("");
+                    }
+
+
+                    // set affiliation
+                    if (affiliationValue != null) {
+                        affiliation.setText(affiliationValue.toString());
+                        edit_affiliation.setText(affiliationValue.toString());
+                    } else {
+                        affiliation.setText("");
+                        edit_affiliation.setText("");
+                    }
+
+
+                    // set type
+                    if (typeValue != null) {
+                        type.setText(typeValue.toString());
+
+                    } else {
+                        type.setText("");
+
+                    }
+
+                    if(currentUser.getEmail() != null)
+                    {
+
+                        email.setText(currentUser.getEmail());
+                        edit_email.setText(currentUser.getEmail());
+                    }
+
+                    return;
+                }
+
+                name.setText("error loading name");
+
+                // if null or password wrong
+                System.out.println("Login failed. Either email or password is incorrect.");
+
+
+
+            }
+        });
+
+    }
 
 
 

@@ -48,7 +48,7 @@
                 android:minHeight="0dp"
                 android:padding="15dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/magnifyingglass_icon"
+                android:src="@drawable/edit_icon"
                 app:backgroundTint="@null"
                 tools:ignore="SpeakableTextPresentCheck" />
 
@@ -64,7 +64,7 @@
                 android:minHeight="0dp"
                 android:padding="15dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/edit_icon"
+                android:src="@drawable/magnifyingglass_icon"
                 app:backgroundTint="@null"
                 tools:ignore="SpeakableTextPresentCheck" />
 

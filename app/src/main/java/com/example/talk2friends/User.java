@@ -1,5 +1,7 @@
 package com.example.talk2friends;
 
+import java.util.ArrayList;
+
 public class User {
     private String email = "";
     private String password = "";
@@ -7,6 +9,7 @@ public class User {
     private String age = "";
     private String affiliation = "";
     private String type = "";
+    private ArrayList<String> friendsList = new ArrayList<String>();
 
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
@@ -24,5 +27,13 @@ public class User {
     public String getPassword() {
         return password;
     }
+
+    public String getName() {
+        return name;
+    }
+    public ArrayList<String> getFriends() {
+        return friendsList;
+    }
 }
+
 
