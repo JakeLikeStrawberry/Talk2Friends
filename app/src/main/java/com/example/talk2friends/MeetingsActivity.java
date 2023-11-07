@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,8 +32,6 @@ public class MeetingsActivity extends AppCompatActivity {
 
     // create meeting
     private TextView transparentGray;
-    private View create_meeting_box;
-    private ImageButton saveButton;
 
     // create meeting fields
     private EditText nameField;
@@ -43,6 +42,9 @@ public class MeetingsActivity extends AppCompatActivity {
     // all meetings to display
     private LinearLayout meetingsLinearLayout;
     private ArrayList<Meeting> meetings = new ArrayList<Meeting>();
+
+    // all current popups
+    private ArrayList<View> popups = new ArrayList<View>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,14 +72,6 @@ public class MeetingsActivity extends AppCompatActivity {
 
         // create meeting
         transparentGray = (TextView) findViewById(R.id.transparentGray);
-        create_meeting_box = (View) findViewById(R.id.create_meeting_box);
-        saveButton = (ImageButton) findViewById(R.id.create_meeting_box).findViewById(R.id.saveButton);
-
-        // create meeting fields
-        nameField = (EditText) findViewById(R.id.create_meeting_box).findViewById(R.id.nameField);
-        topicField = (EditText) findViewById(R.id.create_meeting_box).findViewById(R.id.topicField);
-        timeField = (EditText) findViewById(R.id.create_meeting_box).findViewById(R.id.timeField);
-        locationField = (EditText) findViewById(R.id.create_meeting_box).findViewById(R.id.locationField);
 
         // display meetings
         meetingsLinearLayout = (LinearLayout) findViewById(R.id.meetingsLinearLayout);
@@ -98,44 +92,30 @@ public class MeetingsActivity extends AppCompatActivity {
         createMeetingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toggleEditPersonal();
+                showCreate();
             }
         });
         transparentGray.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toggleEditPersonal();
+                toggleCreateMeeting();
+                deleteAllPopBoxes();
             }
         });
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (saveMeeting()) {
-                    toggleEditPersonal();
-                } else {
-                    // TODO: display error message in UI saying that all fields must be filled
-                    displayIncorrectCreateMessage();
-                    System.out.println("All fields must be filled!");
-                }
 
-            }
-        });
 
 
     }
 
     // toggle visibility of create meeting box
-    private void toggleEditPersonal () {
+    private void toggleCreateMeeting () {
         loadMeetings();
-
+        System.out.println("Toggling create meeting box visibility.");
         if (transparentGray.getVisibility() == View.GONE) {
             transparentGray.setVisibility(View.VISIBLE);
-            create_meeting_box.setVisibility(View.VISIBLE);
         } else if (transparentGray.getVisibility() == View.VISIBLE) {
             transparentGray.setVisibility(View.GONE);
-            create_meeting_box.setVisibility(View.GONE);
         }
-
     }
 
     // save meeting to database
@@ -146,11 +126,12 @@ public class MeetingsActivity extends AppCompatActivity {
         DatabaseHandler.pushNewValue("meetings", new Meeting(nameField.getText().toString(), topicField.getText().toString(), timeField.getText().toString(), locationField.getText().toString(), currentUser.getEmail()));
         Toast toast = Toast.makeText(this, "Successfully saved meeting!", Toast.LENGTH_SHORT);
         toast.show();
+
         return true;
     }
 
-    private void displayIncorrectCreateMessage() {
-        TextView incorrectCreateText = (TextView) findViewById(R.id.create_meeting_box).findViewById(R.id.incorrectCreateMeetingText);
+    private void displayIncorrectCreateMessage(View view) {
+        TextView incorrectCreateText = (TextView) view.findViewById(R.id.incorrectCreateMeetingText);
         incorrectCreateText.setText("All fields must be filled!");
     }
 
@@ -168,6 +149,8 @@ public class MeetingsActivity extends AppCompatActivity {
                     Meeting tempMeeting = meetings.get(i);
                     View tempMeetingBox = makeMeetingBox(inflater, tempMeeting, i);
 
+                    popups.add(tempMeetingBox);
+
                     // add meeting box to linear layout
                     meetingsLinearLayout.addView(tempMeetingBox);
                 }
@@ -176,6 +159,67 @@ public class MeetingsActivity extends AppCompatActivity {
                 System.out.println("Successfully (re)loaded meetings.");
             }
         });
+    }
+
+    private View makeCreateBox(LayoutInflater inflater) {
+        // create create meeting box
+        View tempMeetingBox = inflater.inflate(R.layout.create_meeting_box, null);
+        nameField = (EditText) tempMeetingBox.findViewById(R.id.nameField);
+        topicField = (EditText) tempMeetingBox.findViewById(R.id.topicField);
+        timeField = (EditText) tempMeetingBox.findViewById(R.id.timeField);
+        locationField = (EditText) tempMeetingBox.findViewById(R.id.locationField);
+
+        // set on click listener for create button
+        ImageButton createButton = (ImageButton) tempMeetingBox.findViewById(R.id.saveButton);
+        createButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (saveMeeting()) {
+                    // delete rsvp box if rsvp button clicked
+                    deleteAllPopBoxes();
+
+                    // hide transparent gray
+                    transparentGray.setVisibility(View.GONE);
+
+                    // reload meetings
+                    loadMeetings();
+                } else {
+                    // display error message in UI saying that all fields must be filled
+                    displayIncorrectCreateMessage(tempMeetingBox);
+                    System.out.println("All fields must be filled!");
+                }
+
+            }
+        });
+
+
+        return tempMeetingBox;
+
+    }
+
+    private void showCreate() {
+        // modify create popup box to have same information
+        LayoutInflater inflater = LayoutInflater.from(MeetingsActivity.this);
+        View createBox = makeCreateBox(inflater);
+
+        // add layout params
+        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(
+                ConstraintLayout.LayoutParams.MATCH_PARENT,
+                ConstraintLayout.LayoutParams.MATCH_PARENT
+        );
+        createBox.setLayoutParams(params);
+//        RSVPbox.gravity = Gravity.CENTER;
+
+//        android:layout_width="match_parent"
+//        android:layout_height="match_parent"
+//        android:layout_margin="20dp"
+//        android:gravity="center"
+
+        ConstraintLayout parent = (ConstraintLayout) findViewById(R.id.parent);
+
+        transparentGray.setVisibility(View.VISIBLE);
+        parent.addView(createBox);
+        popups.add(createBox);
     }
 
     private View makeMeetingBox(LayoutInflater inflater, Meeting tempMeeting, int i) {
@@ -248,14 +292,10 @@ public class MeetingsActivity extends AppCompatActivity {
                 rsvpToMeeting(i);
 
                 // delete rsvp box if rsvp button clicked
-                transparentGray.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        ConstraintLayout parent = (ConstraintLayout) findViewById(R.id.parent);
-                        parent.removeView(tempMeetingBox);
-                        transparentGray.setVisibility(View.GONE);
-                    }
-                });
+                deleteAllPopBoxes();
+
+                // hide transparent gray
+                transparentGray.setVisibility(View.GONE);
 
                 // refresh meetings
                 loadMeetings();
@@ -272,6 +312,8 @@ public class MeetingsActivity extends AppCompatActivity {
         // modify RSVP popup box to have same information
         LayoutInflater inflater = LayoutInflater.from(MeetingsActivity.this);
         View RSVPbox = makeRSVPBox(inflater, meetings.get(i), i);
+
+        popups.add(RSVPbox);
 
         // add layout params
         ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(
@@ -295,6 +337,7 @@ public class MeetingsActivity extends AppCompatActivity {
         transparentGray.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                System.out.println("Clicked transparent gray, removing rsvp box");
                 parent.removeView(RSVPbox);
                 transparentGray.setVisibility(View.GONE);
             }
@@ -307,6 +350,15 @@ public class MeetingsActivity extends AppCompatActivity {
         // toast
         Toast toast = Toast.makeText(this, "Successfully RSVP'd!", Toast.LENGTH_SHORT);
         toast.show();
+
+    }
+
+    private void deleteAllPopBoxes() {
+        System.out.println("Deleting all popup boxes");
+        ConstraintLayout parent = (ConstraintLayout) findViewById(R.id.parent);
+        for(int i = 0; i < popups.size(); i++) {
+            parent.removeView(popups.get(i));
+        }
 
     }
 

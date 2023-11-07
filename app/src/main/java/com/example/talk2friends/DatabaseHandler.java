@@ -15,9 +15,10 @@ public class DatabaseHandler {
 
     /**
      * This method creates firebase instance and references, then checks if thirdLayer is unique,
+     *
      * @param firstLayer the first layer of firebase path (e.g., "users")
      * @param thirdLayer the third layer of firebase path (e.g., "email")
-     * @param callback the callback function, use "data" to get data from DataSnapshot
+     * @param callback   the callback function, use "data" to get data from DataSnapshot
      * @param matchValue the value to match in thirdLayer={(email = matchValue), etc.}
      * @param callback
      * @return nothing, but callback data is the DataSnapshot where data.child(thirdLayer) value == matchValue
@@ -30,7 +31,7 @@ public class DatabaseHandler {
         firstLayerRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot data: dataSnapshot.getChildren()){
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
                     if (data.child(thirdLayer).exists()) {
                         if (data.child(thirdLayer).getValue().toString().equals(matchValue)) {
                             callback.onCallback(data);
@@ -51,7 +52,8 @@ public class DatabaseHandler {
 
     /**
      * This method retrieves User object based on email, and puts in callback function
-     * @param email the email of the user to retrieve
+     *
+     * @param email    the email of the user to retrieve
      * @param callback the callback function, use "user" to get User object
      */
     public static void getUser(String email, UserCallback callback) {
@@ -72,7 +74,7 @@ public class DatabaseHandler {
      *
      * @param firstLayer the first layer of firebase path (e.g., "users")
      * @param thirdLayer the third layer of firebase path (e.g., "email")
-     * @param callback the callback function, use "value" to perform actions
+     * @param callback   the callback function, use "value" to perform actions
      * @return nothing, callback value is "true" if unique, "false" if not unique
      */
     public static void checkIsUnique(String firstLayer, String thirdLayer, String value, Callback callback) {
@@ -84,7 +86,7 @@ public class DatabaseHandler {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                for(DataSnapshot data: dataSnapshot.getChildren()){
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
                     if (data.child(thirdLayer).exists()) {
                         if (data.child(thirdLayer).getValue().toString().equals(value)) {
                             // found duplicate
@@ -108,8 +110,9 @@ public class DatabaseHandler {
 
     /**
      * This method pushes Object value to database
+     *
      * @param firstLayer the first layer of firebase path (e.g., "users")
-     * @param value the value to push to database
+     * @param value      the value to push to database
      * @return nothing
      */
     public static void pushNewValue(String firstLayer, Object value) {
@@ -131,11 +134,12 @@ public class DatabaseHandler {
 
     /**
      * This method updates value in database
-     * @param firstLayer the first layer of firebase path (e.g., "users")
-     * @param thirdLayer the third layer of firebase path (e.g., "email")
-     * @param matchValue the value to match in thirdLayer={(email = matchValue), etc.}
+     *
+     * @param firstLayer  the first layer of firebase path (e.g., "users")
+     * @param thirdLayer  the third layer of firebase path (e.g., "email")
+     * @param matchValue  the value to match in thirdLayer={(email = matchValue), etc.}
      * @param targetField the third layer of firebase path to change to newValue (e.g., "age")
-     * @param newValue the new value to update targetField to
+     * @param newValue    the new value to update targetField to
      */
     public static <T> void updateValue(String firstLayer, String thirdLayer, String matchValue, String targetField, T newValue) {
         // push to database
@@ -144,7 +148,7 @@ public class DatabaseHandler {
         firstLayerRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot data: dataSnapshot.getChildren()){
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
                     if (data.child(thirdLayer).exists()) {
                         if (data.child(thirdLayer).getValue().toString().equals(matchValue)) {
                             data.child(targetField).getRef().setValue(newValue);
@@ -168,9 +172,10 @@ public class DatabaseHandler {
         firstLayerRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                GenericTypeIndicator<ArrayList<Meeting>> t = new GenericTypeIndicator<ArrayList<Meeting>>() {};
+                GenericTypeIndicator<ArrayList<Meeting>> t = new GenericTypeIndicator<ArrayList<Meeting>>() {
+                };
                 ArrayList<Meeting> meetings = new ArrayList<>();
-                for(DataSnapshot data: dataSnapshot.getChildren()){
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
                     //    private String name = "";
                     //    private String topic = "";
                     //    private String time = "";
@@ -183,7 +188,7 @@ public class DatabaseHandler {
                     String tempLocation = data.child("location").getValue(String.class);
                     String tempKey = data.child("key").getValue(String.class);
                     ArrayList<String> tempParticipants = new ArrayList<>();
-                    for (DataSnapshot participant: data.child("participants").getChildren()) {
+                    for (DataSnapshot participant : data.child("participants").getChildren()) {
                         tempParticipants.add(participant.getValue(String.class));
                     }
 
@@ -203,6 +208,48 @@ public class DatabaseHandler {
         });
     }
 
+    public static void getInterests(InterestsCallback callback) {
+        // get meetings from database
+        FirebaseDatabase database = FirebaseDatabase.getInstance(Utils.FIREBASE_URL);
+        DatabaseReference firstLayerRef = database.getReference("users");
+        DatabaseReference secondLayerRef = database.getReference("interests");
+        firstLayerRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                GenericTypeIndicator<ArrayList<Meeting>> t = new GenericTypeIndicator<ArrayList<Meeting>>() {
+                };
+                ArrayList<Meeting> meetings = new ArrayList<>();
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    //    private String name = "";
+                    //    private String topic = "";
+                    //    private String time = "";
+                    //    private String location = "";
+                    //    private ArrayList<String> participants = new ArrayList<String>();
+                    //    private String key = "";
+                    String tempName = data.child("name").getValue(String.class);
+                    String tempTopic = data.child("topic").getValue(String.class);
+                    String tempTime = data.child("time").getValue(String.class);
+                    String tempLocation = data.child("location").getValue(String.class);
+                    String tempKey = data.child("key").getValue(String.class);
+                    ArrayList<String> tempParticipants = new ArrayList<>();
+                    for (DataSnapshot participant : data.child("participants").getChildren()) {
+                        tempParticipants.add(participant.getValue(String.class));
+                    }
 
+                    Meeting tempMeeting = new Meeting(tempName, tempTopic, tempTime, tempLocation, tempParticipants, tempKey);
+                    meetings.add(tempMeeting);
+                }
 
+                callback.onCallback(meetings);
+                return;
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
 }
