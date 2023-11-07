@@ -1,17 +1,26 @@
 package com.example.talk2friends;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -66,6 +75,7 @@ public class ProfileActivity extends AppCompatActivity {
                 System.out.println("Current user: " + currentUser.getEmail() + ", " + currentUser.getPassword());
 
                 loadPersonal();
+                loadFriends();
             }
         });
 
@@ -324,6 +334,75 @@ public class ProfileActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    private void loadFriends()
+    {
+
+        // get email
+        DatabaseHandler.getValue("users", "email", currentUser.getEmail(), new DataSnapshotCallback() {
+
+            View data = findViewById(R.id.friends_box);
+
+
+            View editable_data = findViewById(R.id.edit_friends_box);
+
+
+
+            @Override
+            public void onCallback(DataSnapshot data) {
+                if (data != null) {
+                    Object friendsData = data.child("friends").getValue();
+
+                    Map<String, String> friendsList;
+
+                    if (friendsData == null) {
+                        friendsList = new HashMap<>(); // Create an empty dictionary
+                        friendsList.put("Jake", "jmart@usc.edu");
+                        System.out.print("map initializer ran");
+                    } else {
+                        // Assuming friendsData is in a format that can be converted to a Map<String, String>
+                        friendsList = (Map<String, String>) friendsData;
+                    }
+
+                    System.out.println(friendsList);
+
+                    ConstraintLayout parentLayout = findViewById(R.id.friends_box);
+                    LinearLayout childLayout = findViewById(R.id.friends_lin_box);
+
+                    ConstraintLayout parentLayout2 = findViewById(R.id.edit_friends_box);
+                    LinearLayout childLayout2 = findViewById(R.id.friends_lin_box_2);
+
+                    for (Map.Entry<String, String> entry : friendsList.entrySet()) {
+                        String friendName = entry.getKey();
+                        String friendEmail = entry.getValue();
+
+                        // Create a new instance of the layout for each friend
+                        View dynamicLayout = getLayoutInflater().inflate(R.layout.dynamic_button_no_x, null);
+                        View dynamicLayout2 = getLayoutInflater().inflate(R.layout.dynamic_button, null);
+
+                        // Set Button text
+                        Button nameButton = dynamicLayout.findViewById(R.id.nameButton);
+                        nameButton.setText(friendName);
+
+                        Button nameButton2 = dynamicLayout2.findViewById(R.id.nameButton);
+                        nameButton2.setText(friendName);
+
+                        // Add the dynamic layout to the parent layout
+                        childLayout.addView(dynamicLayout);
+                        childLayout2.addView(dynamicLayout2);
+                    }
+
+
+                    return;
+                }
+
+            }
+
+        });
+
+
 
     }
 
