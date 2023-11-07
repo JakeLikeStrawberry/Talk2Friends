@@ -124,7 +124,7 @@ public class DatabaseHandler {
      * @param targetField the third layer of firebase path to change to newValue (e.g., "age")
      * @param newValue the new value to update targetField to
      */
-    public static void updateValue(String firstLayer, String thirdLayer, String matchValue, String targetField, String newValue) {
+    public static <T> void updateValue(String firstLayer, String thirdLayer, String matchValue, String targetField, T newValue) {
         // push to database
         FirebaseDatabase database = FirebaseDatabase.getInstance(Utils.FIREBASE_URL);
         DatabaseReference firstLayerRef = database.getReference(firstLayer);
