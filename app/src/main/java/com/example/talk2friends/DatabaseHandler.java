@@ -70,6 +70,62 @@ public class DatabaseHandler {
     }
 
     /**
+     * This method retrieves User object based on email, and puts in callback function
+     *
+     * @param email    the email of the user to retrieve
+     * @param callback the callback function, use "user" to get User object
+     */
+    public static void getUsers(UsersCallback callback) {
+        // get all users from database
+        FirebaseDatabase database = FirebaseDatabase.getInstance(Utils.FIREBASE_URL);
+        DatabaseReference firstLayerRef = database.getReference("users");
+        firstLayerRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<User> users = new ArrayList<>();
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    //    private String email = "";
+                    //    private String password = "";
+                    //    private String name = "";
+                    //    private String age = "";
+                    //    private String affiliation = "";
+                    //    private String type = "";
+                    //    private ArrayList<String> friendsList = new ArrayList<String>();
+                    //    private ArrayList<String> interests = new ArrayList<>();
+                    //    private String key = "";
+                    String tempEmail = data.child("email").getValue(String.class);
+                    String tempPassword = data.child("password").getValue(String.class);
+                    String tempName = data.child("name").getValue(String.class);
+                    String tempAge = data.child("age").getValue(String.class);
+                    String tempAffiliation = data.child("affiliation").getValue(String.class);
+                    String tempType = data.child("type").getValue(String.class);
+                    String tempKey = data.child("key").getValue(String.class);
+                    ArrayList<String> tempFriends = new ArrayList<>();
+                    for (DataSnapshot friend : data.child("friendsList").getChildren()) {
+                        tempFriends.add(friend.getValue(String.class));
+                    }
+                    ArrayList<String> tempInterests = new ArrayList<>();
+                    for (DataSnapshot interest : data.child("interests").getChildren()) {
+                        tempInterests.add(interest.getValue(String.class));
+                    }
+
+                    User tempUser = new User(tempEmail, tempPassword, tempName, tempAge, tempAffiliation, tempType, tempFriends, tempInterests);
+                    users.add(tempUser);
+                }
+
+                callback.onCallback(users);
+                return;
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    /**
      * This method creates firebase instance and references, then checks if thirdLayer is unique,
      *
      * @param firstLayer the first layer of firebase path (e.g., "users")
@@ -208,48 +264,4 @@ public class DatabaseHandler {
         });
     }
 
-    public static void getInterests(InterestsCallback callback) {
-        // get meetings from database
-        FirebaseDatabase database = FirebaseDatabase.getInstance(Utils.FIREBASE_URL);
-        DatabaseReference firstLayerRef = database.getReference("users");
-        DatabaseReference secondLayerRef = database.getReference("interests");
-        firstLayerRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                GenericTypeIndicator<ArrayList<Meeting>> t = new GenericTypeIndicator<ArrayList<Meeting>>() {
-                };
-                ArrayList<Meeting> meetings = new ArrayList<>();
-                for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    //    private String name = "";
-                    //    private String topic = "";
-                    //    private String time = "";
-                    //    private String location = "";
-                    //    private ArrayList<String> participants = new ArrayList<String>();
-                    //    private String key = "";
-                    String tempName = data.child("name").getValue(String.class);
-                    String tempTopic = data.child("topic").getValue(String.class);
-                    String tempTime = data.child("time").getValue(String.class);
-                    String tempLocation = data.child("location").getValue(String.class);
-                    String tempKey = data.child("key").getValue(String.class);
-                    ArrayList<String> tempParticipants = new ArrayList<>();
-                    for (DataSnapshot participant : data.child("participants").getChildren()) {
-                        tempParticipants.add(participant.getValue(String.class));
-                    }
-
-                    Meeting tempMeeting = new Meeting(tempName, tempTopic, tempTime, tempLocation, tempParticipants, tempKey);
-                    meetings.add(tempMeeting);
-                }
-
-                callback.onCallback(meetings);
-                return;
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-    }
 }

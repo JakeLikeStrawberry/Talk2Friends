@@ -23,6 +23,17 @@ public class User {
         this.password = password;
     }
 
+    public User (String tempEmail, String tempPassword, String tempName, String tempAge, String tempAffiliation, String tempType, ArrayList<String> tempFriends, ArrayList<String> tempInterests) {
+        this.email = tempEmail;
+        this.password = tempPassword;
+        this.name = tempName;
+        this.age = tempAge;
+        this.affiliation = tempAffiliation;
+        this.type = tempType;
+        this.friendsList = tempFriends;
+        this.interests = tempInterests;
+    }
+
     public String getEmail() {
         return email;
     }

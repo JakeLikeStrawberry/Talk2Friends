@@ -324,20 +324,43 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void saveInterests() {
+        // save interests to database
+        System.out.println("Saving interests...");
 
+        // get the dropdowns view
+        View editable_data = findViewById(R.id.add_interests_box);
+        Spinner sports = editable_data.findViewById(R.id.sportsDropdown);
+        Spinner music = editable_data.findViewById(R.id.musicDropdown);
+        Spinner reading = editable_data.findViewById(R.id.readingDropdown);
+        Spinner exercise = editable_data.findViewById(R.id.exerciseDropdown);
+        Spinner movies = editable_data.findViewById(R.id.moviesDropdown);
+
+        // get new values
+        String newSports = sports.getSelectedItem().toString();
+        String newMusic = music.getSelectedItem().toString();
+        String newReading = reading.getSelectedItem().toString();
+        String newExercise = exercise.getSelectedItem().toString();
+        String newMovies = movies.getSelectedItem().toString();
+
+        // update values in database
+        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "sports", newSports);
+        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "music", newMusic);
+        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "reading", newReading);
+        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "exercise", newExercise);
+        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "movies", newMovies);
     }
 
     private void loadInterests(){
+        System.out.println("Loading interests...");
         DatabaseHandler.getValue("users", "email", currentUser.getEmail(), new DataSnapshotCallback() {
 
             @Override
             public void onCallback(DataSnapshot data) {
-                View personalBox = findViewById(R.id.add_friends_page);
-                Spinner sports = personalBox.findViewById(R.id.sportsDropdown);
-                Spinner music = personalBox.findViewById(R.id.musicDropdown);
-                Spinner reading = personalBox.findViewById(R.id.readingDropdown);
-                Spinner exercise = personalBox.findViewById(R.id.exerciseDropdown);
-                Spinner movies = personalBox.findViewById(R.id.moviesDropdown);
+                Spinner sports = add_interests_box.findViewById(R.id.sportsDropdown);
+                Spinner music = add_interests_box.findViewById(R.id.musicDropdown);
+                Spinner reading = add_interests_box.findViewById(R.id.readingDropdown);
+                Spinner exercise = add_interests_box.findViewById(R.id.exerciseDropdown);
+                Spinner movies = add_interests_box.findViewById(R.id.moviesDropdown);
 
                 String[] answers = new String[]{"yes", "no"};
                 ArrayAdapter<String> adapterSports = new ArrayAdapter<String>(ProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, answers);
@@ -345,6 +368,7 @@ public class ProfileActivity extends AppCompatActivity {
                 sports.setAdapter(adapterSports);
                 if (data.child("sports").getValue() != null) {
                     String compareValueSports = data.child("sports").getValue().toString();
+                    System.out.println("compareValueSports: " + compareValueSports);
                     if (compareValueSports != null) {
                         int spinnerPosition = adapterSports.getPosition(compareValueSports);
                         sports.setSelection(spinnerPosition);
@@ -356,6 +380,7 @@ public class ProfileActivity extends AppCompatActivity {
                 music.setAdapter(adapterMusic);
                 if (data.child("music").getValue() != null) {
                     String compareValueMusic = data.child("music").getValue().toString();
+                    System.out.println("compareValueMusic: " + compareValueMusic);
                     if (compareValueMusic != null) {
                         int spinnerPosition = adapterMusic.getPosition(compareValueMusic);
                         music.setSelection(spinnerPosition);
@@ -367,6 +392,7 @@ public class ProfileActivity extends AppCompatActivity {
                 reading.setAdapter(adapterReading);
                 if (data.child("reading").getValue() != null) {
                     String compareValueReading = data.child("reading").getValue().toString();
+                    System.out.println("compareValueReading: " + compareValueReading);
                     if (compareValueReading != null) {
                         int spinnerPosition = adapterReading.getPosition(compareValueReading);
                         reading.setSelection(spinnerPosition);
@@ -378,6 +404,7 @@ public class ProfileActivity extends AppCompatActivity {
                 exercise.setAdapter(adapterExercise);
                 if (data.child("exercise").getValue() != null) {
                     String compareValueExercise = data.child("exercise").getValue().toString();
+                    System.out.println("compareValueExercise: " + compareValueExercise);
                     if (compareValueExercise != null) {
                         int spinnerPosition = adapterExercise.getPosition(compareValueExercise);
                         exercise.setSelection(spinnerPosition);
@@ -389,6 +416,7 @@ public class ProfileActivity extends AppCompatActivity {
                 movies.setAdapter(adapterMovies);
                 if (data.child("movies").getValue() != null) {
                     String compareValueMovies = data.child("movies").getValue().toString();
+                    System.out.println("compareValueMovies: " + compareValueMovies);
                     if (compareValueMovies != null) {
                         int spinnerPosition = adapterMovies.getPosition(compareValueMovies);
                         movies.setSelection(spinnerPosition);
@@ -624,6 +652,12 @@ public class ProfileActivity extends AppCompatActivity {
 
         // TODO: get all users from database
         ArrayList<User> allUsers = new ArrayList<User>();
+        DatabaseHandler.getUsers(new UsersCallback() {
+            @Override
+            public void onCallback(ArrayList<User> users) {
+                allUsers.addAll(users);
+            }
+        });
 
 
         int numUsers = 0;
