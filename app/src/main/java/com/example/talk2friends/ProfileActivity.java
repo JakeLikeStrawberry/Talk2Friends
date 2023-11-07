@@ -51,6 +51,7 @@ public class ProfileActivity extends AppCompatActivity {
     // edit friends
     private View edit_friends_box;
     private ImageButton edit_friends_saveButton;
+    private ImageButton edit_friends_deleteFriend;
 
     //add Friends page
     private View add_friends_page;
@@ -58,6 +59,8 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageButton send_email_invite;
     private EditText enter_friend_email;
     private View recommend_friends_box;
+
+
 
 
 
@@ -110,7 +113,7 @@ public class ProfileActivity extends AppCompatActivity {
         // edit friends
         edit_friends_box = (View) findViewById(R.id.edit_friends_box);
         edit_friends_saveButton = (ImageButton) findViewById(R.id.edit_friends_box).findViewById(R.id.saveButton);
-
+        // edit_friends_deleteFriend = (ImageButton) findViewById(R.id.edit_friends_box).findViewById()
 
 
 //        profileButton.setOnClickListener(new View.OnClickListener() {
@@ -152,6 +155,13 @@ public class ProfileActivity extends AppCompatActivity {
                 toggleEditFriends();
             }
         });
+        searchButton_friends.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                toggleEditAddFriends();
+            }
+        });
+
         searchButton_friends.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -359,8 +369,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                     if (friendsData == null) {
                         friendsList = new HashMap<>(); // Create an empty dictionary
-                        friendsList.put("Jake", "jmart@usc.edu");
-                        System.out.print("map initializer ran");
+                        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "friends", friendsList);
                     } else {
                         // Assuming friendsData is in a format that can be converted to a Map<String, String>
                         friendsList = (Map<String, String>) friendsData;
@@ -374,7 +383,8 @@ public class ProfileActivity extends AppCompatActivity {
                     ConstraintLayout parentLayout2 = findViewById(R.id.edit_friends_box);
                     LinearLayout childLayout2 = findViewById(R.id.friends_lin_box_2);
 
-                    for (Map.Entry<String, String> entry : friendsList.entrySet()) {
+                    for (int i = 0; i < friendsList.size(); i++) {
+                        Map.Entry<String, String> entry = (Map.Entry<String, String>) friendsList.entrySet().toArray()[i];
                         String friendName = entry.getKey();
                         String friendEmail = entry.getValue();
 
@@ -389,10 +399,40 @@ public class ProfileActivity extends AppCompatActivity {
                         Button nameButton2 = dynamicLayout2.findViewById(R.id.nameButton);
                         nameButton2.setText(friendName);
 
+                        // Assign unique IDs to the buttons
+                        nameButton.setId(View.generateViewId());
+                        nameButton2.setId(View.generateViewId());
+
                         // Add the dynamic layout to the parent layout
                         childLayout.addView(dynamicLayout);
                         childLayout2.addView(dynamicLayout2);
+
+                        // Store the buttons in a data structure for later access
+                        // Example: List<Button> buttonList = new ArrayList<>();
+                        // buttonList.add(nameButton);
+                        // buttonList.add(nameButton2);
+
+                        ImageButton x = dynamicLayout2.findViewById(R.id.crossButton);
+
+                        x.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                System.out.print("Clickable clicked");
+                                // Handle button click
+                                String friendName = nameButton2.getText().toString();
+
+                                // Assuming friendsList is a Map<String, String>
+                                friendsList.remove(friendName);
+
+                                // Remove the button from the UI
+                                childLayout2.removeView(v);
+
+                                // remove from database
+                                DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "friends", friendsList);                            }
+                        });
                     }
+
 
 
                     return;
