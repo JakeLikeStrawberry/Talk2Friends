@@ -11,6 +11,7 @@ public class User {
     private String type = "";
     private ArrayList<String> friendsList = new ArrayList<String>();
     private ArrayList<String> interests = new ArrayList<>();
+    private String key = "";
 
 
     public User() {
@@ -37,6 +38,14 @@ public class User {
         return friendsList;
     }
     public ArrayList<String> getInterests() {return interests; }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 }
 
 

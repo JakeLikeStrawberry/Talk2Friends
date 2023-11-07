@@ -116,7 +116,17 @@ public class DatabaseHandler {
         // push to database
         FirebaseDatabase database = FirebaseDatabase.getInstance(Utils.FIREBASE_URL);
         DatabaseReference firstLayerRef = database.getReference(firstLayer);
-        firstLayerRef.push().setValue(value);
+
+        DatabaseReference pushRef = firstLayerRef.push();
+        String key = pushRef.getKey();
+        // if value is a User object, set the key
+        if (value instanceof User) {
+            ((User) value).setKey(key);
+        } else if (value instanceof Meeting) {
+            ((Meeting) value).setKey(key);
+        }
+
+        pushRef.setValue(value);
     }
 
     /**
@@ -161,7 +171,24 @@ public class DatabaseHandler {
                 GenericTypeIndicator<ArrayList<Meeting>> t = new GenericTypeIndicator<ArrayList<Meeting>>() {};
                 ArrayList<Meeting> meetings = new ArrayList<>();
                 for(DataSnapshot data: dataSnapshot.getChildren()){
-                    meetings.add(data.getValue(Meeting.class));
+                    //    private String name = "";
+                    //    private String topic = "";
+                    //    private String time = "";
+                    //    private String location = "";
+                    //    private ArrayList<String> participants = new ArrayList<String>();
+                    //    private String key = "";
+                    String tempName = data.child("name").getValue(String.class);
+                    String tempTopic = data.child("topic").getValue(String.class);
+                    String tempTime = data.child("time").getValue(String.class);
+                    String tempLocation = data.child("location").getValue(String.class);
+                    String tempKey = data.child("key").getValue(String.class);
+                    ArrayList<String> tempParticipants = new ArrayList<>();
+                    for (DataSnapshot participant: data.child("participants").getChildren()) {
+                        tempParticipants.add(participant.getValue(String.class));
+                    }
+
+                    Meeting tempMeeting = new Meeting(tempName, tempTopic, tempTime, tempLocation, tempParticipants, tempKey);
+                    meetings.add(tempMeeting);
                 }
 
                 callback.onCallback(meetings);
@@ -175,6 +202,7 @@ public class DatabaseHandler {
             }
         });
     }
+
 
 
 }

@@ -8,6 +8,7 @@ public class Meeting {
     private String time = "";
     private String location = "";
     private ArrayList<String> participants = new ArrayList<String>();
+    private String key = "";
 
     public Meeting() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
@@ -27,6 +28,24 @@ public class Meeting {
         this.time = time;
         this.location = location;
         this.participants.add(creatorEmail);
+    }
+
+    public Meeting(String name, String topic, String time, String location, String creatorEmail, String key) {
+        this.name = name;
+        this.topic = topic;
+        this.time = time;
+        this.location = location;
+        this.participants.add(creatorEmail);
+        this.key = key;
+    }
+
+    public Meeting(String name, String topic, String time, String location, ArrayList<String> participants, String key) {
+        this.name = name;
+        this.topic = topic;
+        this.time = time;
+        this.location = location;
+        this.participants = participants;
+        this.key = key;
     }
 
 
@@ -50,12 +69,20 @@ public class Meeting {
         return participants;
     }
 
+    public String getKey() {
+        return key;
+    }
+
     public void addParticipant(String email) {
         participants.add(email);
     }
 
     public void removeParticipant(String email) {
         participants.remove(email);
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
 }

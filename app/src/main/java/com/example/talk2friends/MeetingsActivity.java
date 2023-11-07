@@ -1,10 +1,12 @@
 package com.example.talk2friends;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -164,31 +166,7 @@ public class MeetingsActivity extends AppCompatActivity {
                 meetingsLinearLayout.removeAllViews();
                 for (int i = 0; i < meetings.size(); i++) {
                     Meeting tempMeeting = meetings.get(i);
-                    // create meeting box
-                    View tempMeetingBox = inflater.inflate(R.layout.meeting_box, null);
-                    Button nameText = (Button) tempMeetingBox.findViewById(R.id.titleButton);
-                    TextView topicText = (TextView) tempMeetingBox.findViewById(R.id.topicField);
-                    TextView timeText = (TextView) tempMeetingBox.findViewById(R.id.timeField);
-                    TextView locationText = (TextView) tempMeetingBox.findViewById(R.id.locationField);
-                    nameText.setText(tempMeeting.getName());
-                    topicText.setText(tempMeeting.getTopic());
-                    timeText.setText(tempMeeting.getTime());
-                    locationText.setText(tempMeeting.getLocation());
-
-                    // get all participants
-                    ArrayList<String> participants = tempMeeting.getParticipants();
-                    LinearLayout tempParticipantsLinearLayout = (LinearLayout) tempMeetingBox.findViewById(R.id.participantsLinearLayout);
-                    tempParticipantsLinearLayout.removeAllViews();
-                    for (int j = 0; j < participants.size(); j++) {
-                        // create name button
-                        View tempNameButton = inflater.inflate(R.layout.name_button, null);
-                        String tempParticipantEmail = participants.get(j);
-                        Button tempNameText = (Button) tempNameButton.findViewById(R.id.nameButton);
-                        tempNameText.setText(tempParticipantEmail);
-
-                        // add name button to linear layout
-                        tempParticipantsLinearLayout.addView(tempNameButton);
-                    }
+                    View tempMeetingBox = makeMeetingBox(inflater, tempMeeting, i);
 
                     // add meeting box to linear layout
                     meetingsLinearLayout.addView(tempMeetingBox);
@@ -198,6 +176,138 @@ public class MeetingsActivity extends AppCompatActivity {
                 System.out.println("Successfully (re)loaded meetings.");
             }
         });
+    }
+
+    private View makeMeetingBox(LayoutInflater inflater, Meeting tempMeeting, int i) {
+        // create meeting box
+        View tempMeetingBox = inflater.inflate(R.layout.meeting_box, null);
+        Button nameText = (Button) tempMeetingBox.findViewById(R.id.titleButton);
+        TextView topicText = (TextView) tempMeetingBox.findViewById(R.id.topicField);
+        TextView timeText = (TextView) tempMeetingBox.findViewById(R.id.timeField);
+        TextView locationText = (TextView) tempMeetingBox.findViewById(R.id.locationField);
+        nameText.setText(tempMeeting.getName());
+        topicText.setText(tempMeeting.getTopic());
+        timeText.setText(tempMeeting.getTime());
+        locationText.setText(tempMeeting.getLocation());
+
+        // set on click listener for name button
+        nameText.setOnClickListener(view -> showRSVP(i));
+
+        // get all participants
+        ArrayList<String> participants = tempMeeting.getParticipants();
+        LinearLayout tempParticipantsLinearLayout = (LinearLayout) tempMeetingBox.findViewById(R.id.participantsLinearLayout);
+        tempParticipantsLinearLayout.removeAllViews();
+        for (int j = 0; j < participants.size(); j++) {
+            // create name button
+            View tempNameButton = inflater.inflate(R.layout.name_button, null);
+            String tempParticipantEmail = participants.get(j);
+            Button tempNameText = (Button) tempNameButton.findViewById(R.id.nameButton);
+            tempNameText.setText(tempParticipantEmail);
+
+            // add name button to linear layout
+            tempParticipantsLinearLayout.addView(tempNameButton);
+        }
+
+        return tempMeetingBox;
+
+    }
+
+    private View makeRSVPBox(LayoutInflater inflater, Meeting tempMeeting, int i) {
+        // create meeting box
+        View tempMeetingBox = inflater.inflate(R.layout.rsvp_box, null);
+        Button nameText = (Button) tempMeetingBox.findViewById(R.id.titleButton);
+        TextView topicText = (TextView) tempMeetingBox.findViewById(R.id.topicField);
+        TextView timeText = (TextView) tempMeetingBox.findViewById(R.id.timeField);
+        TextView locationText = (TextView) tempMeetingBox.findViewById(R.id.locationField);
+        nameText.setText(tempMeeting.getName());
+        topicText.setText(tempMeeting.getTopic());
+        timeText.setText(tempMeeting.getTime());
+        locationText.setText(tempMeeting.getLocation());
+
+        // get all participants
+        ArrayList<String> participants = tempMeeting.getParticipants();
+        LinearLayout tempParticipantsLinearLayout = (LinearLayout) tempMeetingBox.findViewById(R.id.participantsLinearLayout);
+        tempParticipantsLinearLayout.removeAllViews();
+        for (int j = 0; j < participants.size(); j++) {
+            // create name button
+            View tempNameButton = inflater.inflate(R.layout.name_button, null);
+            String tempParticipantEmail = participants.get(j);
+            Button tempNameText = (Button) tempNameButton.findViewById(R.id.nameButton);
+            tempNameText.setText(tempParticipantEmail);
+
+            // add name button to linear layout
+            tempParticipantsLinearLayout.addView(tempNameButton);
+        }
+
+        // set on click listener for rsvp button
+        ImageButton rsvpButton = (ImageButton) tempMeetingBox.findViewById(R.id.rsvpButton);
+        rsvpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // add user to meeting
+                rsvpToMeeting(i);
+
+                // delete rsvp box if rsvp button clicked
+                transparentGray.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ConstraintLayout parent = (ConstraintLayout) findViewById(R.id.parent);
+                        parent.removeView(tempMeetingBox);
+                        transparentGray.setVisibility(View.GONE);
+                    }
+                });
+
+                // refresh meetings
+                loadMeetings();
+            }
+        });
+
+
+        return tempMeetingBox;
+
+    }
+
+
+    private void showRSVP(int i) {
+        // modify RSVP popup box to have same information
+        LayoutInflater inflater = LayoutInflater.from(MeetingsActivity.this);
+        View RSVPbox = makeRSVPBox(inflater, meetings.get(i), i);
+
+        // add layout params
+        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(
+                ConstraintLayout.LayoutParams.MATCH_PARENT,
+                ConstraintLayout.LayoutParams.MATCH_PARENT
+        );
+        RSVPbox.setLayoutParams(params);
+//        RSVPbox.gravity = Gravity.CENTER;
+
+//        android:layout_width="match_parent"
+//        android:layout_height="match_parent"
+//        android:layout_margin="20dp"
+//        android:gravity="center"
+
+        ConstraintLayout parent = (ConstraintLayout) findViewById(R.id.parent);
+
+        transparentGray.setVisibility(View.VISIBLE);
+        parent.addView(RSVPbox);
+
+        // delete rsvp box if transparent gray clicked
+        transparentGray.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                parent.removeView(RSVPbox);
+                transparentGray.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void rsvpToMeeting(int i) {
+        // add user to meeting
+        DatabaseHandler.pushNewValue("meetings/" + meetings.get(i).getKey() + "/participants", currentUser.getEmail());
+        // toast
+        Toast toast = Toast.makeText(this, "Successfully RSVP'd!", Toast.LENGTH_SHORT);
+        toast.show();
+
     }
 
 }

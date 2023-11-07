@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/parent">
 
     <include
         android:id="@+id/includeSharedBackground"
@@ -81,6 +82,16 @@
     <include
         android:id="@+id/create_meeting_box"
         layout="@layout/create_meeting_box"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:visibility="gone"
+        />
+
+    <include
+        android:id="@+id/rsvp_box"
+        layout="@layout/rsvp_box"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="20dp"
