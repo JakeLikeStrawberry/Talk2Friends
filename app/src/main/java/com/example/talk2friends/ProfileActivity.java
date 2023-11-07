@@ -59,6 +59,17 @@ public class ProfileActivity extends AppCompatActivity {
     private EditText enter_friend_email;
     private View recommend_friends_box;
 
+    //add interests
+    private View add_interests_box;
+    private Spinner sports_dropdown;
+    private Spinner music_dropdown;
+    private Spinner reading_dropdown;
+    private Spinner exercise_dropdown;
+    private Spinner movies_dropdown;
+
+    //edit meetings
+    private View edit_meetings_box;
+    private ImageButton edit_meetings_saveButton;
 
 
     @Override
@@ -111,6 +122,17 @@ public class ProfileActivity extends AppCompatActivity {
         edit_friends_box = (View) findViewById(R.id.edit_friends_box);
         edit_friends_saveButton = (ImageButton) findViewById(R.id.edit_friends_box).findViewById(R.id.saveButton);
 
+        //edit meetings
+        edit_meetings_box = (View) findViewById(R.id.edit_meeting_box);
+        edit_meetings_saveButton = (ImageButton) findViewById(R.id.edit_meeting_box).findViewById(R.id.saveButton);
+
+        //add interests
+        add_interests_box = (View) findViewById(R.id.add_interests_box);
+        sports_dropdown = (Spinner) findViewById(R.id.add_interests_box).findViewById(R.id.sportsDropdown);
+        music_dropdown = (Spinner) findViewById(R.id.add_interests_box).findViewById(R.id.musicDropdown);
+        reading_dropdown = (Spinner) findViewById(R.id.add_interests_box).findViewById(R.id.readingDropdown);
+        exercise_dropdown = (Spinner) findViewById(R.id.add_interests_box).findViewById(R.id.exerciseDropdown);
+        movies_dropdown = (Spinner) findViewById(R.id.add_interests_box).findViewById(R.id.moviesDropdown);
 
 
 //        profileButton.setOnClickListener(new View.OnClickListener() {
@@ -158,20 +180,36 @@ public class ProfileActivity extends AppCompatActivity {
                 toggleEditAddFriends();
             }
         });
+        editButton_meetings.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                toggleEditMeetings();
+            }
+        });
 
-        
-
+        edit_meetings_saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleEditMeetings();
+                saveMeetings();
+            }
+        });
 
         // set dropdown items
         String[] types = new String[]{"international student", "native speaker"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, types);
         edit_personal_typeDropdown.setAdapter(adapter);
 
-
-
+        // set more dropdown items
+        String[] answers = new String[]{"yes", "no"};
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, answers);
+        sports_dropdown.setAdapter(adapter2);
+        music_dropdown.setAdapter(adapter2);
+        reading_dropdown.setAdapter(adapter2);
+        exercise_dropdown.setAdapter(adapter2);
+        movies_dropdown.setAdapter(adapter2);
 
     }
-
 
     private void toggleEditPersonal () {
         if (transparentGray.getVisibility() == View.GONE) {
@@ -205,16 +243,15 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
     }
-//    private void toggleEditMeetings () {
-//        if (transparentGray.getVisibility() == View.GONE) {
-//            transparentGray.setVisibility(View.VISIBLE);
-//            edit_personal_box.setVisibility(View.VISIBLE);
-//        } else if (transparentGray.getVisibility() == View.VISIBLE) {
-//            transparentGray.setVisibility(View.GONE);
-//            edit_personal_box.setVisibility(View.GONE);
-//        }
-//
-//    }
+    private void toggleEditMeetings () {
+        if (transparentGray.getVisibility() == View.GONE) {
+            transparentGray.setVisibility(View.VISIBLE);
+            edit_meetings_box.setVisibility(View.VISIBLE);
+        } else if (transparentGray.getVisibility() == View.VISIBLE) {
+            transparentGray.setVisibility(View.GONE);
+            edit_meetings_box.setVisibility(View.GONE);
+        }
+    }
 
     private void savePersonal() {
         // save personal info to database
@@ -359,8 +396,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                     if (friendsData == null) {
                         friendsList = new HashMap<>(); // Create an empty dictionary
-                        friendsList.put("Jake", "jmart@usc.edu");
-                        System.out.print("map initializer ran");
+                        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "friends", friendsList);
                     } else {
                         // Assuming friendsData is in a format that can be converted to a Map<String, String>
                         friendsList = (Map<String, String>) friendsData;
@@ -374,7 +410,8 @@ public class ProfileActivity extends AppCompatActivity {
                     ConstraintLayout parentLayout2 = findViewById(R.id.edit_friends_box);
                     LinearLayout childLayout2 = findViewById(R.id.friends_lin_box_2);
 
-                    for (Map.Entry<String, String> entry : friendsList.entrySet()) {
+                    for (int i = 0; i < friendsList.size(); i++) {
+                        Map.Entry<String, String> entry = (Map.Entry<String, String>) friendsList.entrySet().toArray()[i];
                         String friendName = entry.getKey();
                         String friendEmail = entry.getValue();
 
@@ -389,10 +426,40 @@ public class ProfileActivity extends AppCompatActivity {
                         Button nameButton2 = dynamicLayout2.findViewById(R.id.nameButton);
                         nameButton2.setText(friendName);
 
+                        // Assign unique IDs to the buttons
+                        nameButton.setId(View.generateViewId());
+                        nameButton2.setId(View.generateViewId());
+
                         // Add the dynamic layout to the parent layout
                         childLayout.addView(dynamicLayout);
                         childLayout2.addView(dynamicLayout2);
+
+                        // Store the buttons in a data structure for later access
+                        // Example: List<Button> buttonList = new ArrayList<>();
+                        // buttonList.add(nameButton);
+                        // buttonList.add(nameButton2);
+
+                        ImageButton x = dynamicLayout2.findViewById(R.id.crossButton);
+
+                        x.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                System.out.print("Clickable clicked");
+                                // Handle button click
+                                String friendName = nameButton2.getText().toString();
+
+                                // Assuming friendsList is a Map<String, String>
+                                friendsList.remove(friendName);
+
+                                // Remove the button from the UI
+                                childLayout2.removeView(v);
+
+                                // remove from database
+                                DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "friends", friendsList);                            }
+                        });
                     }
+
 
 
                     return;

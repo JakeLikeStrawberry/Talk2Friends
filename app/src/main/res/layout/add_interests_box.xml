@@ -46,25 +46,24 @@
                 android:layout_marginBottom="10dp">
 
                 <TextView
-                    android:id="@+id/interest1"
+                    android:id="@+id/sports"
                     android:layout_width="115dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Interest #1"
+                    android:text="Sports"
                     android:textColor="@color/white"
                     android:textSize="15dp" />
 
-                <EditText
-                    android:id="@+id/interest1input"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text=""
-                    android:textColor="@color/black"
-                    android:textSize="15dp"
+                <Spinner
+                    android:id="@+id/sportsDropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:background="@android:drawable/btn_dropdown"
                     android:paddingLeft="8dp"
                     android:paddingBottom="2dp"
-                    android:background="@drawable/rounded_inputfield"/>
+                    android:spinnerMode="dropdown"
+                    android:textColor="@color/black"
+                    android:textSize="15dp" />
             </TableRow>
 
             <TableRow
@@ -73,25 +72,24 @@
                 android:layout_marginBottom="10dp">
 
                 <TextView
-                    android:id="@+id/interest2"
+                    android:id="@+id/music"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Interest #2"
+                    android:text="Music"
                     android:textColor="@color/white"
                     android:textSize="15dp" />
 
-                <EditText
-                    android:id="@+id/interest2input"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text=""
-                    android:textColor="@color/black"
-                    android:textSize="15dp"
+                <Spinner
+                    android:id="@+id/musicDropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:background="@android:drawable/btn_dropdown"
                     android:paddingLeft="8dp"
                     android:paddingBottom="2dp"
-                    android:background="@drawable/rounded_inputfield"/>
+                    android:spinnerMode="dropdown"
+                    android:textColor="@color/black"
+                    android:textSize="15dp" />
             </TableRow>
 
             <TableRow
@@ -100,25 +98,24 @@
                 android:layout_marginBottom="10dp">
 
                 <TextView
-                    android:id="@+id/interest3"
+                    android:id="@+id/exercise"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Interest #3"
+                    android:text="Exercise"
                     android:textColor="@color/white"
                     android:textSize="15dp" />
 
-                <EditText
-                    android:id="@+id/interest3input"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text=""
-                    android:textColor="@color/black"
-                    android:textSize="15dp"
+                <Spinner
+                    android:id="@+id/exerciseDropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:background="@android:drawable/btn_dropdown"
                     android:paddingLeft="8dp"
                     android:paddingBottom="2dp"
-                    android:background="@drawable/rounded_inputfield"/>
+                    android:spinnerMode="dropdown"
+                    android:textColor="@color/black"
+                    android:textSize="15dp" />
             </TableRow>
 
             <TableRow
@@ -127,25 +124,24 @@
                 android:layout_marginBottom="10dp">
 
                 <TextView
-                    android:id="@+id/interest4"
+                    android:id="@+id/reading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Interest #4"
+                    android:text="Reading"
                     android:textColor="@color/white"
                     android:textSize="15dp" />
 
-                <EditText
-                    android:id="@+id/interest4input"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text=""
-                    android:textColor="@color/black"
-                    android:textSize="15dp"
+                <Spinner
+                    android:id="@+id/readingDropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:background="@android:drawable/btn_dropdown"
                     android:paddingLeft="8dp"
                     android:paddingBottom="2dp"
-                    android:background="@drawable/rounded_inputfield"/>
+                    android:spinnerMode="dropdown"
+                    android:textColor="@color/black"
+                    android:textSize="15dp" />
             </TableRow>
 
             <TableRow
@@ -154,25 +150,24 @@
                 android:layout_marginBottom="10dp">
 
                 <TextView
-                    android:id="@+id/interest5"
+                    android:id="@+id/movies"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Interest #5"
+                    android:text="Movies"
                     android:textColor="@color/white"
                     android:textSize="15dp" />
 
-                <EditText
-                    android:id="@+id/interest5input"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text=""
-                    android:textColor="@color/black"
-                    android:textSize="15dp"
+                <Spinner
+                    android:id="@+id/moviesDropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:background="@android:drawable/btn_dropdown"
                     android:paddingLeft="8dp"
                     android:paddingBottom="2dp"
-                    android:background="@drawable/rounded_inputfield"/>
+                    android:spinnerMode="dropdown"
+                    android:textColor="@color/black"
+                    android:textSize="15dp" />
             </TableRow>
         </TableLayout>
 
