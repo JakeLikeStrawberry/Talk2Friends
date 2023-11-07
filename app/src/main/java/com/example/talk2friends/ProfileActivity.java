@@ -3,10 +3,7 @@ package com.example.talk2friends;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -55,7 +52,7 @@ public class ProfileActivity extends AppCompatActivity {
     //add Friends page
     private View add_friends_page;
     private View search_friends_box;
-    private ImageButton send_email_invite;
+    private ImageButton send_email_button;
     private EditText enter_friend_email;
     private View recommend_friends_box;
 
@@ -110,6 +107,7 @@ public class ProfileActivity extends AppCompatActivity {
         recommend_friends_box = (View) findViewById(R.id.add_friends_page).findViewById(R.id.recommendFriends);
         enter_friend_email = (EditText) findViewById(R.id.add_friends_page).findViewById(R.id.emailField);
         add_interests_button = (Button) findViewById(R.id.add_friends_page).findViewById(R.id.addInterests);
+        send_email_button = (ImageButton) findViewById(R.id.add_friends_page).findViewById(R.id.sendEmailButton);
 
         // edit personal
         transparentGray = (TextView) findViewById(R.id.transparentGray);
@@ -180,6 +178,12 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 toggleEditAddFriends();
+            }
+        });
+        send_email_button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                sendInvitationEmail();
             }
         });
 
@@ -531,6 +535,24 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
 
+
+    }
+
+    private void sendInvitationEmail() {
+        String mEmail = enter_friend_email.getText().toString() + "@usc.edu";
+        String mSubject = "Talk2Friends Invitation";
+        String mMessage = "Your friend, " + currentUser.getName() + ", has invited you to join Talk2Friends!\n" +
+                "Talk2Friends is a social media app that allows you to set up and RSVP to meetings to practice your English, either as a native speaker or an international student!\n" +
+                "Find the app, Talk2Friends, on the Google Play Store!";
+
+        System.out.println("Sending invitation email to: " + mEmail);
+
+        // send email
+        JavaMailAPI javaMailAPI = new JavaMailAPI(ProfileActivity.this, mEmail, mSubject, mMessage);
+        javaMailAPI.execute();
+
+        // toast
+        Toast.makeText(this, "Invitation sent!", Toast.LENGTH_SHORT).show();
 
     }
 
