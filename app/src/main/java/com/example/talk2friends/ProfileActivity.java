@@ -301,9 +301,20 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void loadRecommendedFriends() {
-        String recFriend = recommendFriends(currentUser);
+        ArrayList<String> recommendedFriends = recommendFriends(currentUser);
+
+        String firstRecommendedFriend = recommendedFriends.isEmpty() ? "" : recommendedFriends.get(0);
         Button recFriendText = recommend_friends_box.findViewById(R.id.recFriend);
-        recFriendText.setText(recFriend);
+        recFriendText.setText(firstRecommendedFriend);
+
+        String secondRecommendedFriend = recommendedFriends.isEmpty() ? "" : recommendedFriends.get(1);
+        Button recFriendText2 = recommend_friends_box.findViewById(R.id.recFriend2);
+        recFriendText2.setText(secondRecommendedFriend);
+
+        String thirdRecommendedFriend = recommendedFriends.isEmpty() ? "" : recommendedFriends.get(2);
+        Button recFriendText3 = recommend_friends_box.findViewById(R.id.recFriend3);
+        recFriendText3.setText(thirdRecommendedFriend);
+
     }
 
     private void toggleEditPersonal () {
@@ -775,9 +786,9 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
-    private String recommendFriends(User user) {
+    private ArrayList<String> recommendFriends(User user) {
         ArrayList<String> myInterests = user.getInterests();
-        String recommendedFriend = "";
+        ArrayList<String> recommendedFriends = new ArrayList<>();
 
         // TODO: get all users from database
         ArrayList<User> allUsers = new ArrayList<User>();
@@ -789,24 +800,35 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
 
-        int numUsers = 0;
-        int numSharedInterests = 0;
-        int maxSharedInterests = 0;
+//        int numUsers = 0;
+//        int numSharedInterests = 0;
+//        int maxSharedInterests = 0;
+//
+//        for (int i = 0; i < numUsers; i++) {
+//            ArrayList<String> tempInterests = myInterests;
+//            tempInterests.retainAll(allUsers.get(i).getInterests());
+//
+//            numSharedInterests = tempInterests.size();
+//
+//            if (numSharedInterests > maxSharedInterests) {
+//                maxSharedInterests = numSharedInterests;
+//                recommendedFriend = allUsers.get(i).getEmail();
+//            }
+//        }
 
-        for (int i = 0; i < numUsers; i++) {
-            ArrayList<String> tempInterests = myInterests;
-            tempInterests.retainAll(allUsers.get(i).getInterests());
+        allUsers.sort((user1, user2) -> {
+            ArrayList<String> interests1 = new ArrayList<>(user1.getInterests());
+            ArrayList<String> interests2 = new ArrayList<>(user2.getInterests());
+            interests1.retainAll(myInterests);
+            interests2.retainAll(myInterests);
+            return Integer.compare(interests2.size(), interests1.size());
+        });
 
-            numSharedInterests = tempInterests.size();
-
-            if (numSharedInterests > maxSharedInterests) {
-                maxSharedInterests = numSharedInterests;
-                recommendedFriend = allUsers.get(i).getEmail();
-            }
+        for (int i = 0; i < Math.min(3, allUsers.size()); i++) {
+            recommendedFriends.add(allUsers.get(i).getEmail());
         }
 
-        recommendedFriend = "mdjun@usc.edu";
-        return recommendedFriend;
+        return recommendedFriends;
     }
 
 
