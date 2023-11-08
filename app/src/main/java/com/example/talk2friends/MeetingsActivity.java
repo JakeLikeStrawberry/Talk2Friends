@@ -347,6 +347,8 @@ public class MeetingsActivity extends AppCompatActivity {
     private void rsvpToMeeting(int i) {
         // add user to meeting
         DatabaseHandler.pushNewValue("meetings/" + meetings.get(i).getKey() + "/participants", currentUser.getEmail());
+        // add meeting to user
+        DatabaseHandler.pushNewValue("users/" + currentUser.getKey() + "/meetings", meetings.get(i));
         // toast
         Toast toast = Toast.makeText(this, "Successfully RSVP'd!", Toast.LENGTH_SHORT);
         toast.show();

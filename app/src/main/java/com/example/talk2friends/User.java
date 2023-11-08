@@ -1,5 +1,8 @@
 package com.example.talk2friends;
 
+import android.provider.ContactsContract;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class User {
@@ -11,6 +14,7 @@ public class User {
     private String type = "";
     private ArrayList<String> friends = new ArrayList<String>();
     private ArrayList<String> interests = new ArrayList<>();
+    private ArrayList<Meeting> meetings = new ArrayList<>();
     private String key = "";
 
 
@@ -23,7 +27,7 @@ public class User {
         this.password = password;
     }
 
-    public User (String tempEmail, String tempPassword, String tempName, String tempAge, String tempAffiliation, String tempType, ArrayList<String> tempFriends, ArrayList<String> tempInterests) {
+    public User (String tempEmail, String tempPassword, String tempName, String tempAge, String tempAffiliation, String tempType, ArrayList<String> tempFriends, ArrayList<String> tempInterests, ArrayList<Meeting> tempMeetings, String tempKey) {
         this.email = tempEmail;
         this.password = tempPassword;
         this.name = tempName;
@@ -32,6 +36,8 @@ public class User {
         this.type = tempType;
         this.friends = tempFriends;
         this.interests = tempInterests;
+        this.meetings = tempMeetings;
+        this.key = tempKey;
     }
 
     public String getEmail() {
@@ -66,6 +72,18 @@ public class User {
 
     public void removeFriend(String friendEmail) {
         this.friends.remove(friendEmail);
+    }
+
+    public ArrayList<Meeting> getMeetings() {
+        return meetings;
+    }
+
+    public void addMeeting(Meeting meeting) {
+        this.meetings.add(meeting);
+    }
+
+    public void removeMeeting(Meeting meeting) {
+        this.meetings.remove(meeting);
     }
 
 }

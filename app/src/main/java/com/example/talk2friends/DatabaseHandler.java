@@ -62,6 +62,7 @@ public class DatabaseHandler {
             public void onCallback(DataSnapshot data) {
                 if (data == null) {
                     System.out.println("ERROR: User not found!!!!");
+                    callback.onCallback(null);
                     return;
                 }
                 //    private String email = "";
@@ -88,8 +89,12 @@ public class DatabaseHandler {
                 for (DataSnapshot interest : data.child("interests").getChildren()) {
                     tempInterests.add(interest.getValue(String.class));
                 }
+                ArrayList<Meeting> tempMeetings = new ArrayList<>();
+                for (DataSnapshot meeting : data.child("meetings").getChildren()) {
+                    tempMeetings.add(meeting.getValue(Meeting.class));
+                }
 
-                User tempUser = new User(tempEmail, tempPassword, tempName, tempAge, tempAffiliation, tempType, tempFriends, tempInterests);
+                User tempUser = new User(tempEmail, tempPassword, tempName, tempAge, tempAffiliation, tempType, tempFriends, tempInterests, tempMeetings, tempKey);
 
                 callback.onCallback(tempUser);
             }
@@ -134,8 +139,12 @@ public class DatabaseHandler {
                     for (DataSnapshot interest : data.child("interests").getChildren()) {
                         tempInterests.add(interest.getValue(String.class));
                     }
+                    ArrayList<Meeting> tempMeetings = new ArrayList<>();
+                    for (DataSnapshot meeting : data.child("meetings").getChildren()) {
+                        tempMeetings.add(meeting.getValue(Meeting.class));
+                    }
 
-                    User tempUser = new User(tempEmail, tempPassword, tempName, tempAge, tempAffiliation, tempType, tempFriends, tempInterests);
+                    User tempUser = new User(tempEmail, tempPassword, tempName, tempAge, tempAffiliation, tempType, tempFriends, tempInterests, tempMeetings, tempKey);
                     users.add(tempUser);
                 }
 

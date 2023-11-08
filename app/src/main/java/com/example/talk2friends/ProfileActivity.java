@@ -18,8 +18,6 @@ import android.widget.Toast;
 import com.google.firebase.database.DataSnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -90,6 +88,7 @@ public class ProfileActivity extends AppCompatActivity {
                 loadPersonal();
                 loadFriends();
                 loadRecommendedFriends();
+                loadMeetings();
             }
         });
 
@@ -145,10 +144,10 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 loadPersonal();
                 loadFriends();
-                // TODO:
-//                loadMeetings();
+                // TODO: loadMeetings();
             }
         });
+
         meetingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -169,6 +168,7 @@ public class ProfileActivity extends AppCompatActivity {
                 toggleEditPersonal();
             }
         });
+
         edit_personal_saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -176,30 +176,33 @@ public class ProfileActivity extends AppCompatActivity {
                 toggleEditPersonal();
             }
         });
+
         editButton_friends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { toggleEditFriends(); }
         });
 
-        edit_friends_saveButton.setOnClickListener(new View.OnClickListener(){
+        edit_friends_saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
-                saveFriends();
-                toggleEditFriends();
+            public void onClick(View view) {
+                closePopups();
             }
         });
-        searchButton_friends.setOnClickListener(new View.OnClickListener(){
+
+        searchButton_friends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 toggleEditAddFriends();
             }
         });
-        send_email_button.setOnClickListener(new View.OnClickListener(){
+
+        send_email_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 trySendInvitationEmail();
             }
         });
+
         add_friend_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -217,8 +220,9 @@ public class ProfileActivity extends AppCompatActivity {
         edit_meetings_saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toggleEditMeetings();
-                saveMeetings();
+                // TODO:
+                loadMeetings();
+                closePopups();
             }
         });
 
@@ -254,6 +258,51 @@ public class ProfileActivity extends AppCompatActivity {
         exercise_dropdown.setAdapter(adapter2);
         movies_dropdown.setAdapter(adapter2);
 
+    }
+
+    private void trySendInvitationEmail() {
+        // check that user exists already
+        DatabaseHandler.getUser(enter_friend_email.getText().toString() + "@usc.edu", new UserCallback() {
+            @Override
+            public void onCallback(User data) {
+                if (data != null) {
+                    // user exists
+                    System.out.println("User exists");
+                    Toast.makeText(ProfileActivity.this, "User already has a registered account! Click the plus icon to follow them instead!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // user does not exist
+                System.out.println("User does not exist");
+                Toast.makeText(ProfileActivity.this, "Invitation email successfully sent to " + enter_friend_email.getText().toString() + "!", Toast.LENGTH_SHORT).show();
+                sendInvitationEmail();
+                enter_friend_email.setText("");
+            }
+        });
+
+    }
+
+    private void sendInvitationEmail() {
+        String mEmail = enter_friend_email.getText().toString() + "@usc.edu";
+        String mSubject = "Talk2Friends Invitation";
+        String mMessage = "Your friend, " + currentUser.getName() + ", has invited you to join Talk2Friends!\n" +
+                "Talk2Friends is a social media app that allows you to set up and RSVP to meetings to practice your English, either as a native speaker or an international student!\n" +
+                "Find the app, Talk2Friends, on the Google Play Store!";
+
+        System.out.println("Sending invitation email to: " + mEmail);
+
+        // send email
+        JavaMailAPI javaMailAPI = new JavaMailAPI(ProfileActivity.this, mEmail, mSubject, mMessage);
+        javaMailAPI.execute();
+
+        // toast
+        Toast.makeText(this, "Invitation sent!", Toast.LENGTH_SHORT).show();
+    }
+
+    private void loadRecommendedFriends() {
+        String recFriend = recommendFriends(currentUser);
+        Button recFriendText = recommend_friends_box.findViewById(R.id.recFriend);
+        recFriendText.setText(recFriend);
     }
 
     private void toggleEditPersonal () {
@@ -337,21 +386,13 @@ public class ProfileActivity extends AppCompatActivity {
         String newAffiliation = edit_affiliation.getText().toString();
         String newType = edit_type.getSelectedItem().toString();
 
-        System.out.println("testing program");
+        System.out.println("newType: " + newType);
 
         // update values in database
         DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "name", newName);
         DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "age", newAge);
         DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "affiliation", newAffiliation);
         DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "type", newType);
-    }
-
-    private void saveFriends() {
-        //saving friends to database
-
-    }
-    private void saveMeetings(){
-        //saving meetings to database
     }
 
     private void saveInterests() {
@@ -507,7 +548,6 @@ public class ProfileActivity extends AppCompatActivity {
                         edit_age.setText("");
                     }
 
-
                     // set affiliation
                     if (affiliationValue != null) {
                         affiliation.setText(affiliationValue.toString());
@@ -517,19 +557,16 @@ public class ProfileActivity extends AppCompatActivity {
                         edit_affiliation.setText("");
                     }
 
-
                     // set type
                     if (typeValue != null) {
+                        System.out.println("typeValue: " + typeValue.toString());
                         type.setText(typeValue.toString());
-
                     } else {
                         type.setText("");
-
                     }
 
                     if(currentUser.getEmail() != null)
                     {
-
                         email.setText(currentUser.getEmail());
                         edit_email.setText(currentUser.getEmail());
                     }
@@ -541,8 +578,6 @@ public class ProfileActivity extends AppCompatActivity {
 
                 // if null or password wrong
                 System.out.println("Login failed. Either email or password is incorrect.");
-
-
 
             }
         });
@@ -620,44 +655,79 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-    private void trySendInvitationEmail() {
-        // check that user exists already
-        DatabaseHandler.getUser(enter_friend_email.getText().toString() + "@usc.edu", new UserCallback() {
+    private void loadMeetings()
+    {
+        DatabaseHandler.getValue("users", "email", currentUser.getEmail(), new DataSnapshotCallback() {
             @Override
-            public void onCallback(User data) {
-                if (data != null) {
-                    // user exists
-                    System.out.println("User exists");
-                    Toast.makeText(ProfileActivity.this, "User already has a registered account! Click the plus icon to follow them instead!", Toast.LENGTH_SHORT).show();
+            public void onCallback(DataSnapshot data) {
+                if (data == null) {
                     return;
                 }
+                // get arraylist of meetings
+                ArrayList<Meeting> tempMeetings = new ArrayList<>();
+                for (DataSnapshot meeting : data.child("meetings").getChildren()) {
+                    tempMeetings.add(meeting.getValue(Meeting.class));
+                }
 
-                // user does not exist
-                System.out.println("User does not exist");
-                Toast.makeText(ProfileActivity.this, "Invitation email successfully sent to " + enter_friend_email.getText().toString() + "!", Toast.LENGTH_SHORT).show();
-                sendInvitationEmail();
-                enter_friend_email.setText("");
+                // display meetings
+                ConstraintLayout meetingsBox = findViewById(R.id.meetings_box);
+                LinearLayout rsvpLinBox = meetingsBox.findViewById(R.id.rsvp_lin_box);
+
+                // display edit meetings
+                ConstraintLayout editMeetingsBox = findViewById(R.id.edit_meeting_box);
+                LinearLayout editRsvpLinBox = editMeetingsBox.findViewById(R.id.edit_rsvp_lin_box);
+
+                // inflate meetings box and edit meetings box
+                rsvpLinBox.removeAllViews();
+                editRsvpLinBox.removeAllViews();
+                LayoutInflater inflater = LayoutInflater.from(ProfileActivity.this);
+                for (int i = 0; i < tempMeetings.size(); i++) {
+                    String tempMeetingName = tempMeetings.get(i).getName();
+
+                    // create name button with no x
+                    View tempNoXView = inflater.inflate(R.layout.dynamic_button_no_x, null);
+                    Button tempNoXButton = tempNoXView.findViewById(R.id.nameButton);
+                    tempNoXButton.setText(tempMeetingName);
+
+                    // create name button with x
+                    View tempXView = inflater.inflate(R.layout.dynamic_button, null);
+                    Button tempXButton = tempXView.findViewById(R.id.nameButton);
+                    tempXButton.setText(tempMeetingName);
+
+                    // add x functionality
+                    ImageButton x = tempXView.findViewById(R.id.crossButton);
+                    x.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String meetingName = tempXButton.getText().toString();
+
+                            // remove meeting from user
+                            for (int j = 0; j < tempMeetings.size(); j++) {
+                                if (tempMeetings.get(j).getName().equals(meetingName)) {
+                                    currentUser.removeMeeting(tempMeetings.get(j));
+                                    break;
+                                }
+                            }
+                            DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "meetings", currentUser.getMeetings());
+
+                            // Remove the button from the UI
+                            editRsvpLinBox.removeView(tempXView);
+                        }
+                    });
+
+                    // Assign unique IDs to the buttons
+                    tempNoXButton.setId(View.generateViewId());
+                    tempXButton.setId(View.generateViewId());
+
+                    // add name button to linear layout
+                    rsvpLinBox.addView(tempNoXView);
+                    editRsvpLinBox.addView(tempXView);
+                }
             }
         });
     }
 
-    private void sendInvitationEmail() {
-        String mEmail = enter_friend_email.getText().toString() + "@usc.edu";
-        String mSubject = "Talk2Friends Invitation";
-        String mMessage = "Your friend, " + currentUser.getName() + ", has invited you to join Talk2Friends!\n" +
-                "Talk2Friends is a social media app that allows you to set up and RSVP to meetings to practice your English, either as a native speaker or an international student!\n" +
-                "Find the app, Talk2Friends, on the Google Play Store!";
 
-        System.out.println("Sending invitation email to: " + mEmail);
-
-        // send email
-        JavaMailAPI javaMailAPI = new JavaMailAPI(ProfileActivity.this, mEmail, mSubject, mMessage);
-        javaMailAPI.execute();
-
-        // toast
-        Toast.makeText(this, "Invitation sent!", Toast.LENGTH_SHORT).show();
-
-    }
 
     private void tryAddFriend() {
         // check that user exists already
@@ -684,18 +754,8 @@ public class ProfileActivity extends AppCompatActivity {
         DatabaseHandler.pushNewFriend(currentUser.getEmail(), email);
     }
 
-    private void loadRecommendedFriends() {
-        String recFriend = recommendFriends(currentUser);
-        Button recFriendText = recommend_friends_box.findViewById(R.id.recFriend);
-        recFriendText.setText(recFriend);
-    }
 
-    /**
-     * Recommends one friend based on interest list
-     * @param user user to recommend friends to
-     * @return
-     */
-    public static String recommendFriends(User user) {
+    private String recommendFriends(User user) {
         ArrayList<String> myInterests = user.getInterests();
         String recommendedFriend = "";
 

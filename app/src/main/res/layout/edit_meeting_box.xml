@@ -34,6 +34,14 @@
         </LinearLayout>
 
 
+        <LinearLayout
+            android:id="@+id/edit_rsvp_lin_box"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        </LinearLayout>
+
         <ImageButton
             android:id="@+id/saveButton"
             android:layout_width="50dp"
