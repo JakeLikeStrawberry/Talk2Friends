@@ -88,6 +88,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                 loadPersonal();
                 loadFriends();
+                System.out.println("loading rec friends");
                 loadRecommendedFriends();
                 loadMeetings();
             }
@@ -799,6 +800,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        System.out.println("All Users in Database: " + allUsers);
 
 //        int numUsers = 0;
 //        int numSharedInterests = 0;
