@@ -121,7 +121,6 @@ public class MeetingsActivity extends AppCompatActivity {
     // save meeting to database
     private boolean saveMeeting() {
         if (nameField.getText().toString().equals("") || topicField.getText().toString().equals("") || timeField.getText().toString().equals("") || locationField.getText().toString().equals("")) {
-            // TODO: display error message in UI saying that all fields must be filled
             return false;
         }
         Meeting newMeeting = new Meeting(nameField.getText().toString(), topicField.getText().toString(), timeField.getText().toString(), locationField.getText().toString(), currentUser.getEmail());
