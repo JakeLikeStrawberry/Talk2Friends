@@ -3,9 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:layout_editor_absoluteX="0dp"
-    tools:layout_editor_absoluteY="22dp">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/findFriends"
@@ -18,15 +16,12 @@
         app:layout_constraintBottom_toTopOf="@id/recommendFriends"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias=".92"
-        tools:layout_editor_absoluteX="0dp"
         >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            tools:layout_editor_absoluteX="20dp"
-            tools:layout_editor_absoluteY="432dp">
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/title1Button"
@@ -38,65 +33,91 @@
                 android:textColor="@color/white"
                 android:textSize="18dp"
                 app:backgroundTint="@null" />
+
         </LinearLayout>
 
-        <TableLayout
+        <TextView
+            android:id="@+id/findFriendsDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:gravity="left"
+            android:text="enter your friend's email to follow them, or invite them by email to join Talk2Friends!"
+            android:textColor="@color/gray"
+            android:textSize="14dp"
+            app:backgroundTint="@null" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <EditText
+                android:id="@+id/emailField"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_inputfield"
+                android:paddingLeft="8dp"
+                android:paddingBottom="2dp"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/emailEnd"
+                android:layout_width="0dp"
+                android:layout_height="55dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="  @usc.edu"
+                android:textColor="@color/white"
+                android:textSize="15dp"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="20dp"
-            tools:layout_editor_absoluteX="20dp"
-            tools:layout_editor_absoluteY="456dp">
+            android:gravity="center"
+            android:orientation="horizontal">
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="10dp">
+            <ImageButton
+                android:id="@+id/sendEmailButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/linear_gradient_background"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="15dp"
+                android:scaleType="fitCenter"
 
-                <EditText
-                    android:id="@+id/emailField"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/rounded_inputfield"
-                    android:paddingLeft="8dp"
-                    android:paddingBottom="2dp"
-                    android:text=""
-                    android:textColor="@color/black"
-                    android:textSize="15dp" />
+                android:src="@drawable/mail_icon"
+                app:backgroundTint="@null"/>
 
-                <TextView
-                    android:id="@+id/emailEnd"
-                    android:layout_width="115dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="  @usc.edu"
-                    android:textColor="@color/white"
-                    android:textSize="15dp"
-                    tools:layout_editor_absoluteX="152dp"
-                    tools:layout_editor_absoluteY="476dp" />
+            <ImageButton
+                android:id="@+id/addFriendButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="@drawable/linear_gradient_background"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="15dp"
+                android:scaleType="fitCenter"
 
-
-            </TableRow>
-
-        </TableLayout>
-
-        <ImageButton
-            android:id="@+id/sendEmailButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:background="@drawable/linear_gradient_background"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:padding="15dp"
-            android:scaleType="fitCenter"
-
-            android:src="@drawable/mail_icon"
-            app:backgroundTint="@null"
-            tools:layout_editor_absoluteX="181dp"
-            tools:layout_editor_absoluteY="529dp" />
+                android:src="@drawable/addperson_icon"
+                app:backgroundTint="@null"/>
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -109,8 +130,7 @@
         android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.7"
-        tools:layout_editor_absoluteX="0dp">
+        app:layout_constraintVertical_bias="0.7">
         >
 
         <LinearLayout
@@ -149,9 +169,7 @@
                 android:textSize="12dp"
                 app:backgroundTint="@null"
                 tools:ignore="HardcodedText"
-                android:layout_gravity="right"
-                tools:layout_editor_absoluteX="100dp"
-                tools:layout_editor_absoluteY="277dp"/>
+                android:layout_gravity="right"/>
         </LinearLayout>
 
         <LinearLayout
@@ -208,9 +226,7 @@
                 android:textAllCaps="false"
                 android:textSize="15dp"
                 app:backgroundTint="@null"
-                tools:ignore="TouchTargetSizeCheck"
-                tools:layout_editor_absoluteX="70dp"
-                tools:layout_editor_absoluteY="138dp" />
+                tools:ignore="TouchTargetSizeCheck" />
 
         </LinearLayout>
 

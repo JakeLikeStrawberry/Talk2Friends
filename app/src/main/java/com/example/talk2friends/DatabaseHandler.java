@@ -64,15 +64,41 @@ public class DatabaseHandler {
                     System.out.println("ERROR: User not found!!!!");
                     return;
                 }
-                callback.onCallback(data.getValue(User.class));
+                //    private String email = "";
+                //    private String password = "";
+                //    private String name = "";
+                //    private String age = "";
+                //    private String affiliation = "";
+                //    private String type = "";
+                //    private ArrayList<String> friendsList = new ArrayList<String>();
+                //    private ArrayList<String> interests = new ArrayList<>();
+                //    private String key = "";
+                String tempEmail = data.child("email").getValue(String.class);
+                String tempPassword = data.child("password").getValue(String.class);
+                String tempName = data.child("name").getValue(String.class);
+                String tempAge = data.child("age").getValue(String.class);
+                String tempAffiliation = data.child("affiliation").getValue(String.class);
+                String tempType = data.child("type").getValue(String.class);
+                String tempKey = data.child("key").getValue(String.class);
+                ArrayList<String> tempFriends = new ArrayList<>();
+                for (DataSnapshot friend : data.child("friends").getChildren()) {
+                    tempFriends.add(friend.getValue(String.class));
+                }
+                ArrayList<String> tempInterests = new ArrayList<>();
+                for (DataSnapshot interest : data.child("interests").getChildren()) {
+                    tempInterests.add(interest.getValue(String.class));
+                }
+
+                User tempUser = new User(tempEmail, tempPassword, tempName, tempAge, tempAffiliation, tempType, tempFriends, tempInterests);
+
+                callback.onCallback(tempUser);
             }
         });
     }
 
     /**
-     * This method retrieves User object based on email, and puts in callback function
+     * This method retrieves all Users in database, and puts in callback function
      *
-     * @param email    the email of the user to retrieve
      * @param callback the callback function, use "user" to get User object
      */
     public static void getUsers(UsersCallback callback) {
@@ -186,6 +212,28 @@ public class DatabaseHandler {
         }
 
         pushRef.setValue(value);
+    }
+
+    /**
+     * This method pushes Object value to database
+     *
+     * @param userEmail the user's email
+     * @param friendEmail the friend's email to add to user's friend list
+     * @return nothing
+     */
+    public static void pushNewFriend(String userEmail, String friendEmail) {
+        // get current friends
+        DatabaseHandler.getUser(userEmail, new UserCallback() {
+            @Override
+            public void onCallback(User user) {
+                user.addFriend(friendEmail);
+
+                // push to database
+                DatabaseHandler.updateValue("users", "email", user.getEmail(), "friends", user.getFriends());
+            }
+        });
+
+        // add friend to hashmap of {Name:email}
     }
 
     /**

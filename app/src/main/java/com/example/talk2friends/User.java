@@ -9,7 +9,7 @@ public class User {
     private String age = "";
     private String affiliation = "";
     private String type = "";
-    private ArrayList<String> friendsList = new ArrayList<String>();
+    private ArrayList<String> friends = new ArrayList<String>();
     private ArrayList<String> interests = new ArrayList<>();
     private String key = "";
 
@@ -30,7 +30,7 @@ public class User {
         this.age = tempAge;
         this.affiliation = tempAffiliation;
         this.type = tempType;
-        this.friendsList = tempFriends;
+        this.friends = tempFriends;
         this.interests = tempInterests;
     }
 
@@ -45,9 +45,11 @@ public class User {
     public String getName() {
         return name;
     }
+
     public ArrayList<String> getFriends() {
-        return friendsList;
+        return friends;
     }
+
     public ArrayList<String> getInterests() {return interests; }
 
     public String getKey() {
@@ -57,6 +59,15 @@ public class User {
     public void setKey(String key) {
         this.key = key;
     }
+
+    public void addFriend(String friendEmail) {
+        this.friends.add(friendEmail);
+    }
+
+    public void removeFriend(String friendEmail) {
+        this.friends.remove(friendEmail);
+    }
+
 }
 
 

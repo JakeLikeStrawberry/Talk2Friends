@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -56,6 +57,7 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageButton send_email_button;
     private EditText enter_friend_email;
     private View recommend_friends_box;
+    private ImageButton add_friend_button;
 
     //add interests
     private View add_interests_box;
@@ -110,6 +112,7 @@ public class ProfileActivity extends AppCompatActivity {
         enter_friend_email = (EditText) findViewById(R.id.add_friends_page).findViewById(R.id.emailField);
         add_interests_button = (Button) findViewById(R.id.add_friends_page).findViewById(R.id.addInterests);
         send_email_button = (ImageButton) findViewById(R.id.add_friends_page).findViewById(R.id.sendEmailButton);
+        add_friend_button = (ImageButton) findViewById(R.id.add_friends_page).findViewById(R.id.addFriendButton);
 
         // edit personal
         transparentGray = (TextView) findViewById(R.id.transparentGray);
@@ -137,18 +140,29 @@ public class ProfileActivity extends AppCompatActivity {
         movies_dropdown = (Spinner) findViewById(R.id.add_interests_box).findViewById(R.id.moviesDropdown);
         add_interests_saveButton = (ImageButton) findViewById(R.id.add_interests_box).findViewById(R.id.saveButton);
 
-//        profileButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Utils.switchActivityProfile(ProfileActivity.this, currentUser.getEmail());
-//            }
-//        });
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadPersonal();
+                loadFriends();
+                // TODO:
+//                loadMeetings();
+            }
+        });
         meetingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Utils.switchActivityMeetings(ProfileActivity.this, currentUser.getEmail());
             }
         });
+
+        transparentGray.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                closePopups();
+            }
+        });
+
         editButton_personal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -162,8 +176,6 @@ public class ProfileActivity extends AppCompatActivity {
                 toggleEditPersonal();
             }
         });
-        // TODO: make editButton_friends and editButton_meetings do something
-
         editButton_friends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { toggleEditFriends(); }
@@ -185,7 +197,13 @@ public class ProfileActivity extends AppCompatActivity {
         send_email_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                sendInvitationEmail();
+                trySendInvitationEmail();
+            }
+        });
+        add_friend_button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                tryAddFriend();
             }
         });
 
@@ -239,6 +257,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void toggleEditPersonal () {
+        loadPersonal();
         if (transparentGray.getVisibility() == View.GONE) {
             transparentGray.setVisibility(View.VISIBLE);
             edit_personal_box.setVisibility(View.VISIBLE);
@@ -250,6 +269,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void toggleEditAddInterests() {
+        loadFriends();
         if (transparentGray.getVisibility() == View.GONE) {
             transparentGray.setVisibility(View.VISIBLE);
             add_interests_box.setVisibility(View.VISIBLE);
@@ -259,7 +279,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
     private void toggleEditFriends () {
-
+        loadFriends();
         if (transparentGray.getVisibility() == View.GONE) {
             transparentGray.setVisibility(View.VISIBLE);
             edit_friends_box.setVisibility(View.VISIBLE);
@@ -270,7 +290,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
     private void toggleEditAddFriends () {
-
+        loadFriends();
         if (transparentGray.getVisibility() == View.GONE) {
             transparentGray.setVisibility(View.VISIBLE);
             add_friends_page.setVisibility(View.VISIBLE);
@@ -280,6 +300,8 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
     private void toggleEditMeetings () {
+        // TODO:
+//        loadMeetings();
         if (transparentGray.getVisibility() == View.GONE) {
             transparentGray.setVisibility(View.VISIBLE);
             edit_meetings_box.setVisibility(View.VISIBLE);
@@ -287,6 +309,15 @@ public class ProfileActivity extends AppCompatActivity {
             transparentGray.setVisibility(View.GONE);
             edit_meetings_box.setVisibility(View.GONE);
         }
+    }
+
+    private void closePopups() {
+        edit_personal_box.setVisibility(View.GONE);
+        edit_friends_box.setVisibility(View.GONE);
+        edit_meetings_box.setVisibility(View.GONE);
+        add_interests_box.setVisibility(View.GONE);
+        add_friends_page.setVisibility(View.GONE);
+        transparentGray.setVisibility(View.GONE);
     }
 
     private void savePersonal() {
@@ -343,11 +374,11 @@ public class ProfileActivity extends AppCompatActivity {
         String newMovies = movies.getSelectedItem().toString();
 
         // update values in database
-        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "sports", newSports);
-        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "music", newMusic);
-        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "reading", newReading);
-        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "exercise", newExercise);
-        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "movies", newMovies);
+        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "interests/sports", newSports);
+        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "interests/music", newMusic);
+        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "interests/reading", newReading);
+        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "interests/exercise", newExercise);
+        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "interests/movies", newMovies);
     }
 
     private void loadInterests(){
@@ -366,8 +397,8 @@ public class ProfileActivity extends AppCompatActivity {
                 ArrayAdapter<String> adapterSports = new ArrayAdapter<String>(ProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, answers);
                 adapterSports.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 sports.setAdapter(adapterSports);
-                if (data.child("sports").getValue() != null) {
-                    String compareValueSports = data.child("sports").getValue().toString();
+                if (data.child("interests/sports").getValue() != null) {
+                    String compareValueSports = data.child("interests/sports").getValue().toString();
                     System.out.println("compareValueSports: " + compareValueSports);
                     if (compareValueSports != null) {
                         int spinnerPosition = adapterSports.getPosition(compareValueSports);
@@ -378,8 +409,8 @@ public class ProfileActivity extends AppCompatActivity {
                 ArrayAdapter<String> adapterMusic = new ArrayAdapter<String>(ProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, answers);
                 adapterMusic.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 music.setAdapter(adapterMusic);
-                if (data.child("music").getValue() != null) {
-                    String compareValueMusic = data.child("music").getValue().toString();
+                if (data.child("interests/music").getValue() != null) {
+                    String compareValueMusic = data.child("interests/music").getValue().toString();
                     System.out.println("compareValueMusic: " + compareValueMusic);
                     if (compareValueMusic != null) {
                         int spinnerPosition = adapterMusic.getPosition(compareValueMusic);
@@ -390,8 +421,8 @@ public class ProfileActivity extends AppCompatActivity {
                 ArrayAdapter<String> adapterReading = new ArrayAdapter<String>(ProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, answers);
                 adapterReading.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 reading.setAdapter(adapterReading);
-                if (data.child("reading").getValue() != null) {
-                    String compareValueReading = data.child("reading").getValue().toString();
+                if (data.child("interests/reading").getValue() != null) {
+                    String compareValueReading = data.child("interests/reading").getValue().toString();
                     System.out.println("compareValueReading: " + compareValueReading);
                     if (compareValueReading != null) {
                         int spinnerPosition = adapterReading.getPosition(compareValueReading);
@@ -402,8 +433,8 @@ public class ProfileActivity extends AppCompatActivity {
                 ArrayAdapter<String> adapterExercise = new ArrayAdapter<String>(ProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, answers);
                 adapterExercise.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 exercise.setAdapter(adapterExercise);
-                if (data.child("exercise").getValue() != null) {
-                    String compareValueExercise = data.child("exercise").getValue().toString();
+                if (data.child("interests/exercise").getValue() != null) {
+                    String compareValueExercise = data.child("interests/exercise").getValue().toString();
                     System.out.println("compareValueExercise: " + compareValueExercise);
                     if (compareValueExercise != null) {
                         int spinnerPosition = adapterExercise.getPosition(compareValueExercise);
@@ -414,8 +445,8 @@ public class ProfileActivity extends AppCompatActivity {
                 ArrayAdapter<String> adapterMovies = new ArrayAdapter<String>(ProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, answers);
                 adapterMovies.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 movies.setAdapter(adapterMovies);
-                if (data.child("movies").getValue() != null) {
-                    String compareValueMovies = data.child("movies").getValue().toString();
+                if (data.child("interests/movies").getValue() != null) {
+                    String compareValueMovies = data.child("interests/movies").getValue().toString();
                     System.out.println("compareValueMovies: " + compareValueMovies);
                     if (compareValueMovies != null) {
                         int spinnerPosition = adapterMovies.getPosition(compareValueMovies);
@@ -520,101 +551,94 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void loadFriends()
     {
-
-        // get email
         DatabaseHandler.getValue("users", "email", currentUser.getEmail(), new DataSnapshotCallback() {
-
-            View data = findViewById(R.id.friends_box);
-
-
-            View editable_data = findViewById(R.id.edit_friends_box);
-
-
-
             @Override
             public void onCallback(DataSnapshot data) {
-                if (data != null) {
-                    Object friendsData = data.child("friends").getValue();
-
-                    Map<String, String> friendsList;
-
-                    if (friendsData == null) {
-                        friendsList = new HashMap<>(); // Create an empty dictionary
-                        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "friends", friendsList);
-                    } else {
-                        // Assuming friendsData is in a format that can be converted to a Map<String, String>
-                        friendsList = (Map<String, String>) friendsData;
-                    }
-
-                    System.out.println(friendsList);
-
-                    ConstraintLayout parentLayout = findViewById(R.id.friends_box);
-                    LinearLayout childLayout = findViewById(R.id.friends_lin_box);
-
-                    ConstraintLayout parentLayout2 = findViewById(R.id.edit_friends_box);
-                    LinearLayout childLayout2 = findViewById(R.id.friends_lin_box_2);
-
-                    for (int i = 0; i < friendsList.size(); i++) {
-                        Map.Entry<String, String> entry = (Map.Entry<String, String>) friendsList.entrySet().toArray()[i];
-                        String friendName = entry.getKey();
-                        String friendEmail = entry.getValue();
-
-                        // Create a new instance of the layout for each friend
-                        View dynamicLayout = getLayoutInflater().inflate(R.layout.dynamic_button_no_x, null);
-                        View dynamicLayout2 = getLayoutInflater().inflate(R.layout.dynamic_button, null);
-
-                        // Set Button text
-                        Button nameButton = dynamicLayout.findViewById(R.id.nameButton);
-                        nameButton.setText(friendName);
-
-                        Button nameButton2 = dynamicLayout2.findViewById(R.id.nameButton);
-                        nameButton2.setText(friendName);
-
-                        // Assign unique IDs to the buttons
-                        nameButton.setId(View.generateViewId());
-                        nameButton2.setId(View.generateViewId());
-
-                        // Add the dynamic layout to the parent layout
-                        childLayout.addView(dynamicLayout);
-                        childLayout2.addView(dynamicLayout2);
-
-                        // Store the buttons in a data structure for later access
-                        // Example: List<Button> buttonList = new ArrayList<>();
-                        // buttonList.add(nameButton);
-                        // buttonList.add(nameButton2);
-
-                        ImageButton x = dynamicLayout2.findViewById(R.id.crossButton);
-
-                        x.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                                System.out.print("Clickable clicked");
-                                // Handle button click
-                                String friendName = nameButton2.getText().toString();
-
-                                // Assuming friendsList is a Map<String, String>
-                                friendsList.remove(friendName);
-
-                                // Remove the button from the UI
-                                childLayout2.removeView(v);
-
-                                // remove from database
-                                DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "friends", friendsList);                            }
-                        });
-                    }
-
-
-
+                if (data == null) {
                     return;
+                }
+                // get arraylist of friends
+                ArrayList<String> tempFriends = new ArrayList<>();
+                for (DataSnapshot friend : data.child("friends").getChildren()) {
+                    tempFriends.add(friend.getValue(String.class));
+                }
+
+                // display friends
+                ConstraintLayout friendsBox = findViewById(R.id.friends_box);
+                LinearLayout friendsLinBox = friendsBox.findViewById(R.id.friends_lin_box);
+
+                // display edit friends
+                ConstraintLayout editFriendsBox = findViewById(R.id.edit_friends_box);
+                LinearLayout editFriendsLinBox = editFriendsBox.findViewById(R.id.edit_friends_lin_box);
+
+
+                LayoutInflater inflater = LayoutInflater.from(ProfileActivity.this);
+                // inflate friends box and edit friends box
+                friendsLinBox.removeAllViews();
+                editFriendsLinBox.removeAllViews();
+                for (int i = 0; i < tempFriends.size(); i++) {
+                    String tempParticipantEmail = tempFriends.get(i);
+
+                    // create name button with no x
+                    View tempNoXView = inflater.inflate(R.layout.dynamic_button_no_x, null);
+                    Button tempNoXButton = tempNoXView.findViewById(R.id.nameButton);
+                    tempNoXButton.setText(tempParticipantEmail);
+
+                    // create name button with x
+                    View tempXView = inflater.inflate(R.layout.dynamic_button, null);
+                    Button tempXButton = tempXView.findViewById(R.id.nameButton);
+                    tempXButton.setText(tempParticipantEmail);
+
+                    // add x functionality
+                    ImageButton x = tempXView.findViewById(R.id.crossButton);
+                    x.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String friendName = tempXButton.getText().toString();
+
+                            // remove friend from user
+                            currentUser.removeFriend(friendName);
+                            DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "friends", currentUser.getFriends());
+
+                            // Remove the button from the UI
+                            editFriendsLinBox.removeView(tempXView);
+                        }
+                    });
+
+                    // Assign unique IDs to the buttons
+                    tempNoXButton.setId(View.generateViewId());
+                    tempXButton.setId(View.generateViewId());
+
+                    // add name button to linear layout
+                    friendsLinBox.addView(tempNoXView);
+                    editFriendsLinBox.addView(tempXView);
                 }
 
             }
 
         });
 
+    }
 
+    private void trySendInvitationEmail() {
+        // check that user exists already
+        DatabaseHandler.getUser(enter_friend_email.getText().toString() + "@usc.edu", new UserCallback() {
+            @Override
+            public void onCallback(User data) {
+                if (data != null) {
+                    // user exists
+                    System.out.println("User exists");
+                    Toast.makeText(ProfileActivity.this, "User already has a registered account! Click the plus icon to follow them instead!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
+                // user does not exist
+                System.out.println("User does not exist");
+                Toast.makeText(ProfileActivity.this, "Invitation email successfully sent to " + enter_friend_email.getText().toString() + "!", Toast.LENGTH_SHORT).show();
+                sendInvitationEmail();
+                enter_friend_email.setText("");
+            }
+        });
     }
 
     private void sendInvitationEmail() {
@@ -633,6 +657,31 @@ public class ProfileActivity extends AppCompatActivity {
         // toast
         Toast.makeText(this, "Invitation sent!", Toast.LENGTH_SHORT).show();
 
+    }
+
+    private void tryAddFriend() {
+        // check that user exists already
+        DatabaseHandler.getUser(enter_friend_email.getText().toString() + "@usc.edu", new UserCallback() {
+            @Override
+            public void onCallback(User data) {
+                if (data == null) {
+                    // user does not exist
+                    System.out.println("User does not exist");
+                    Toast.makeText(ProfileActivity.this, "User does not have a registered account! Click the mail icon to invite them instead!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // user exists
+                System.out.println("User exists");
+                addFriend(data.getEmail());
+                Toast.makeText(ProfileActivity.this, "Successfully followed " + data.getEmail() + "!", Toast.LENGTH_SHORT).show();
+                enter_friend_email.setText("");
+            }
+        });
+    }
+
+    private void addFriend(String email) {
+        DatabaseHandler.pushNewFriend(currentUser.getEmail(), email);
     }
 
     private void loadRecommendedFriends() {
