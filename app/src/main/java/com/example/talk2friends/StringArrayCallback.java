@@ -4,6 +4,6 @@ import com.google.firebase.database.DataSnapshot;
 
 import java.util.ArrayList;
 
-public interface InterestsCallback{
-    void onCallback(ArrayList<Meeting> interests);
+public interface StringArrayCallback{
+    void onCallback(ArrayList<String> interests);
 }

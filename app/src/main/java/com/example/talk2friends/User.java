@@ -36,6 +36,14 @@ public class User {
         this.type = tempType;
         this.friends = tempFriends;
         this.interests = tempInterests;
+        if (this.interests.isEmpty()) {
+            this.interests = new ArrayList<>();
+            this.interests.add("yes");
+            this.interests.add("yes");
+            this.interests.add("yes");
+            this.interests.add("yes");
+            this.interests.add("yes");
+        }
         this.meetings = tempMeetings;
         this.key = tempKey;
     }

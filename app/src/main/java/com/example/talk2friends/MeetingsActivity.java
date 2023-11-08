@@ -349,6 +349,15 @@ public class MeetingsActivity extends AppCompatActivity {
     }
 
     private void rsvpToMeeting(int i) {
+        // check if user is already in meeting
+        ArrayList<String> participants = meetings.get(i).getParticipants();
+        for (int j = 0; j < participants.size(); j++) {
+            if (participants.get(j).equals(currentUser.getEmail())) {
+                Toast toast = Toast.makeText(this, "You are already RSVP'd!", Toast.LENGTH_SHORT);
+                toast.show();
+                return;
+            }
+        }
         // add user to meeting
         DatabaseHandler.pushNewValue("meetings/" + meetings.get(i).getKey() + "/participants", currentUser.getEmail());
         // add meeting to user
