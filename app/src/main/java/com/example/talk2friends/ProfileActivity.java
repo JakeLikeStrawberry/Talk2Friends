@@ -19,6 +19,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.GenericTypeIndicator;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -302,7 +303,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void loadRecommendedFriends() {
-        ArrayList<String> recommendedFriends = recommendFriends(currentUser);
+        ArrayList<String> recommendedFriends = recommendFriends();
 
         String firstRecommendedFriend = recommendedFriends.isEmpty() ? "" : recommendedFriends.get(0);
         Button recFriendText = recommend_friends_box.findViewById(R.id.recFriend);
@@ -786,10 +787,9 @@ public class ProfileActivity extends AppCompatActivity {
         DatabaseHandler.pushNewFriend(currentUser.getEmail(), email);
     }
 
-
-    private ArrayList<String> recommendFriends(User user) {
-        ArrayList<String> myInterests = user.getInterests();
-        ArrayList<String> recommendedFriends = new ArrayList<>();
+    private ArrayList<String> recommendFriends() {
+        ArrayList<String> myInterests = currentUser.getInterests();
+        ArrayList<String> recommendedFriends = new ArrayList<String>();
 
         // TODO: get all users from database
         ArrayList<User> allUsers = new ArrayList<User>();
@@ -797,44 +797,90 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onCallback(ArrayList<User> users) {
                 allUsers.addAll(users);
+                System.out.println("All Users in Database: " + allUsers);
+                ArrayList<Integer> numSharedInterests = new ArrayList<Integer>();
+
+                for (int i = 0; i < allUsers.size(); i++) {
+                    Integer num = 0;
+                    // formatted: e.g., ["yes", "no", "yes", "no", "no"]
+                    ArrayList<String> tempInterests = myInterests;
+                    ArrayList<String> otherInterests = allUsers.get(i).getInterests();
+                    System.out.println("temp Interests: " + tempInterests);
+                    System.out.println("other interests: " + otherInterests);
+                    for (int j = 0; j < tempInterests.size(); j++) {
+                        if (tempInterests.get(j).equals(otherInterests.get(j))){
+                            num++;
+                        }
+                    }
+                    numSharedInterests.add(num);
+                }
+
+                // TODO: find top x users with most shared interests
+                int x = 5;
+                if (allUsers.size() < x) {
+                    x = allUsers.size();
+                }
+                for (int i = 0; i < x; i++) {
+                    for (int j = 0; j < numSharedInterests.size(); j++) {
+                        // if not myself
+                        if (allUsers.get(j).getEmail() != currentUser.getEmail()) {
+                            // get the max compatibility user
+                            if (numSharedInterests.get(j) == Collections.max(numSharedInterests)) {
+                                recommendedFriends.add(allUsers.get(j).getEmail());
+
+                                // remove from searching pool
+                                allUsers.remove(allUsers.get(j));
+                                numSharedInterests.remove(numSharedInterests.get(j));
+
+                                // move on to next iteration
+                                break;
+                            }
+                        }
+
+                    }
+                }
             }
         });
-
-        System.out.println("All Users in Database: " + allUsers);
-
-//        int numUsers = 0;
-//        int numSharedInterests = 0;
-//        int maxSharedInterests = 0;
-//
-//        for (int i = 0; i < numUsers; i++) {
-//            ArrayList<String> tempInterests = myInterests;
-//            tempInterests.retainAll(allUsers.get(i).getInterests());
-//
-//            numSharedInterests = tempInterests.size();
-//
-//            if (numSharedInterests > maxSharedInterests) {
-//                maxSharedInterests = numSharedInterests;
-//                recommendedFriend = allUsers.get(i).getEmail();
-//            }
-//        }
-
-        allUsers.sort((user1, user2) -> {
-            ArrayList<String> interests1 = new ArrayList<>(user1.getInterests());
-            ArrayList<String> interests2 = new ArrayList<>(user2.getInterests());
-            interests1.retainAll(myInterests);
-            interests2.retainAll(myInterests);
-            return Integer.compare(interests2.size(), interests1.size());
-        });
-
-        for (int i = 0; i < Math.min(3, allUsers.size()); i++) {
-            recommendedFriends.add(allUsers.get(i).getEmail());
-        }
-
+        System.out.println("Recommended Friends: " + recommendedFriends);
         return recommendedFriends;
     }
+
+//    private ArrayList<String> recommendFriends(User user) {
+//        ArrayList<String> myInterests = user.getInterests();
+//        ArrayList<String> recommendedFriends = new ArrayList<>();
+//
+//        // TODO: get all users from database
+//        ArrayList<User> allUsers = new ArrayList<User>();
+//        DatabaseHandler.getUsers(new UsersCallback() {
+//            @Override
+//            public void onCallback(ArrayList<User> users) {
+//                allUsers.addAll(users);
+//                System.out.println("All Users in Database: " + allUsers);
+//
+//                allUsers.sort((user1, user2) -> {
+//                    ArrayList<String> interests1 = new ArrayList<>(user1.getInterests());
+//                    ArrayList<String> interests2 = new ArrayList<>(user2.getInterests());
+//                    interests1.retainAll(myInterests);
+//                    interests2.retainAll(myInterests);
+//                    return Integer.compare(interests2.size(), interests1.size());
+//                });
+//
+//                for (int i = 0; i < Math.min(3, allUsers.size()); i++) {
+//                    recommendedFriends.add(allUsers.get(i).getEmail());
+//                }
+//
+//            }
+//        });
+//
+//        //System.out.println("All Users in Database: " + allUsers);
+//        return recommendedFriends;
+//
+//
+//    }
 
 
 
 
 
 }
+
