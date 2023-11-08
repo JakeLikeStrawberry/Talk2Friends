@@ -2,6 +2,7 @@ package com.example.talk2friends;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -616,8 +617,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-    private void loadFriends()
-    {
+
+    private void loadFriends() {
         DatabaseHandler.getValue("users", "email", currentUser.getEmail(), new DataSnapshotCallback() {
             @Override
             public void onCallback(DataSnapshot data) {
@@ -638,54 +639,67 @@ public class ProfileActivity extends AppCompatActivity {
                 ConstraintLayout editFriendsBox = findViewById(R.id.edit_friends_box);
                 LinearLayout editFriendsLinBox = editFriendsBox.findViewById(R.id.edit_friends_lin_box);
 
-
                 LayoutInflater inflater = LayoutInflater.from(ProfileActivity.this);
                 // inflate friends box and edit friends box
                 friendsLinBox.removeAllViews();
                 editFriendsLinBox.removeAllViews();
                 for (int i = 0; i < tempFriends.size(); i++) {
-                    String tempParticipantEmail = tempFriends.get(i);
+                    final String tempParticipantEmail = tempFriends.get(i);
 
-                    // create name button with no x
-                    View tempNoXView = inflater.inflate(R.layout.dynamic_button_no_x, null);
-                    Button tempNoXButton = tempNoXView.findViewById(R.id.nameButton);
-                    tempNoXButton.setText(tempParticipantEmail);
-
-                    // create name button with x
-                    View tempXView = inflater.inflate(R.layout.dynamic_button, null);
-                    Button tempXButton = tempXView.findViewById(R.id.nameButton);
-                    tempXButton.setText(tempParticipantEmail);
-
-                    // add x functionality
-                    ImageButton x = tempXView.findViewById(R.id.crossButton);
-                    x.setOnClickListener(new View.OnClickListener() {
+                    // Fetch the affiliation for the friend
+                    DatabaseHandler.getValue("users", "email", tempParticipantEmail, new DataSnapshotCallback() {
                         @Override
-                        public void onClick(View v) {
-                            String friendName = tempXButton.getText().toString();
+                        public void onCallback(DataSnapshot friendData) {
+                            if (friendData != null) {
+                                String friendType = friendData.child("type").getValue(String.class);
 
-                            // remove friend from user
-                            currentUser.removeFriend(friendName);
-                            DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "friends", currentUser.getFriends());
+                                // create name button with no x
+                                View tempNoXView = inflater.inflate(R.layout.dynamic_button_no_x, null);
+                                Button tempNoXButton = tempNoXView.findViewById(R.id.nameButton);
+                                tempNoXButton.setText(tempParticipantEmail);
+//
+                                // Check if the friend should have a purple background
+                                if ("international student".equals(friendType)) {
+                                    // Set the text color to purple
+                                    tempNoXButton.setTextColor(ContextCompat.getColor(ProfileActivity.this, android.R.color.holo_purple));
+                                }
 
-                            // Remove the button from the UI
-                            editFriendsLinBox.removeView(tempXView);
+                                // create name button with x
+                                View tempXView = inflater.inflate(R.layout.dynamic_button, null);
+                                Button tempXButton = tempXView.findViewById(R.id.nameButton);
+                                tempXButton.setText(tempParticipantEmail);
+
+                                // add x functionality
+                                ImageButton x = tempXView.findViewById(R.id.crossButton);
+                                x.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        String friendName = tempXButton.getText().toString();
+
+                                        // remove friend from user
+                                        currentUser.removeFriend(friendName);
+                                        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "friends", currentUser.getFriends());
+
+                                        // Remove the button from the UI
+                                        editFriendsLinBox.removeView(tempXView);
+                                    }
+                                });
+
+                                // Assign unique IDs to the buttons
+                                tempNoXButton.setId(View.generateViewId());
+                                tempXButton.setId(View.generateViewId());
+
+                                // add name button to linear layout
+                                friendsLinBox.addView(tempNoXView);
+                                editFriendsLinBox.addView(tempXView);
+                            }
                         }
                     });
-
-                    // Assign unique IDs to the buttons
-                    tempNoXButton.setId(View.generateViewId());
-                    tempXButton.setId(View.generateViewId());
-
-                    // add name button to linear layout
-                    friendsLinBox.addView(tempNoXView);
-                    editFriendsLinBox.addView(tempXView);
                 }
-
             }
-
         });
-
     }
+
 
     private void loadMeetings()
     {
@@ -777,6 +791,8 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
 
 

@@ -2,6 +2,7 @@ package com.example.talk2friends;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.media.Image;
@@ -17,6 +18,8 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
 
 import java.util.ArrayList;
 
@@ -252,12 +255,26 @@ public class MeetingsActivity extends AppCompatActivity {
             Button tempNameText = (Button) tempNameButton.findViewById(R.id.nameButton);
             tempNameText.setText(tempParticipantEmail);
 
+            // Fetch the affiliation for the participant
+            DatabaseHandler.getValue("users", "email", tempParticipantEmail, new DataSnapshotCallback() {
+                @Override
+                public void onCallback(DataSnapshot userData) {
+                    if (userData != null) {
+                        String participantType = userData.child("type").getValue(String.class);
+
+                        // Check if the participant should have a purple text color
+                        if ("international student".equals(participantType)) {
+                            tempNameText.setTextColor(ContextCompat.getColor(MeetingsActivity.this, android.R.color.holo_purple));
+                        }
+                    }
+                }
+            });
+
             // add name button to linear layout
             tempParticipantsLinearLayout.addView(tempNameButton);
         }
 
         return tempMeetingBox;
-
     }
 
     private View makeRSVPBox(LayoutInflater inflater, Meeting tempMeeting, int i) {
@@ -305,10 +322,7 @@ public class MeetingsActivity extends AppCompatActivity {
                 loadMeetings();
             }
         });
-
-
         return tempMeetingBox;
-
     }
 
 
