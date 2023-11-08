@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -42,6 +43,9 @@ public class ValidationCodeActivity extends AppCompatActivity {
         // input fields for every validation number
         // TODO: automatically change lowercase input to uppercase! (or accept both; case-insensitive)
         validationInputField = (EditText) findViewById(R.id.validationInput);
+
+        // tell user that validation code has been sent to email
+        Toast.makeText(ValidationCodeActivity.this, "Validation code sent to email! Please check your email and input the code!", Toast.LENGTH_SHORT).show();
 
         // get previously inputted username and password
         username = getIntent().getStringExtra("username");

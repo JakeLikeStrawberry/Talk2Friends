@@ -147,7 +147,8 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 loadPersonal();
                 loadFriends();
-                // TODO: loadMeetings();
+                loadMeetings();
+                loadRecommendedFriends();
             }
         });
 
@@ -243,6 +244,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 toggleEditAddInterests();
                 saveInterests();
+                loadRecommendedFriends();
             }
         });
 
@@ -303,19 +305,35 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void loadRecommendedFriends() {
-        ArrayList<String> recommendedFriends = recommendFriends();
+        recommendFriends(new StringArrayCallback() {
+            @Override
+            public void onCallback(ArrayList<String> recommendedFriends) {
+                // inflate
+                LinearLayout rec_friends_lin_box = recommend_friends_box.findViewById(R.id.rec_friends_lin_box);
+                rec_friends_lin_box.removeAllViews();
+                LayoutInflater inflater = LayoutInflater.from(ProfileActivity.this);
+                for (int i = 0; i < recommendedFriends.size(); i++) {
+                    // create name button with no x
+                    View tempView = inflater.inflate(R.layout.name_button, null);
+                    Button tempButton = tempView.findViewById(R.id.nameButton);
+                    tempButton.setText(recommendedFriends.get(i));
 
-        String firstRecommendedFriend = recommendedFriends.isEmpty() ? "" : recommendedFriends.get(0);
-        Button recFriendText = recommend_friends_box.findViewById(R.id.recFriend);
-        recFriendText.setText(firstRecommendedFriend);
+                    tempButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            // maybe do something
+                            // prefill email in the search bar
+                            String justUsername = tempButton.getText().toString().substring(0, tempButton.getText().toString().indexOf("@"));
+                            enter_friend_email.setText(justUsername);
+                            Toast.makeText(ProfileActivity.this, "Click the follow button to follow recommended friend: " + tempButton.getText().toString() + "!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    rec_friends_lin_box.addView(tempView);
+                }
+            }
+        });
 
-        String secondRecommendedFriend = recommendedFriends.isEmpty() ? "" : recommendedFriends.get(1);
-        Button recFriendText2 = recommend_friends_box.findViewById(R.id.recFriend2);
-        recFriendText2.setText(secondRecommendedFriend);
 
-        String thirdRecommendedFriend = recommendedFriends.isEmpty() ? "" : recommendedFriends.get(2);
-        Button recFriendText3 = recommend_friends_box.findViewById(R.id.recFriend3);
-        recFriendText3.setText(thirdRecommendedFriend);
 
     }
 
@@ -763,6 +781,21 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     private void tryAddFriend() {
+        // update local copy of user
+        DatabaseHandler.getUser(currentUser.getEmail(), new UserCallback() {
+            @Override
+            public void onCallback(User data) {
+                currentUser = data;
+            }
+        });
+
+        // check user not adding themselves
+        String tempString = enter_friend_email.getText().toString() + "@usc.edu";
+        if (tempString.equals(currentUser.getEmail())) {
+            Toast.makeText(ProfileActivity.this, "Sorry, but you can't add yourself!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         // check that user exists already
         DatabaseHandler.getUser(enter_friend_email.getText().toString() + "@usc.edu", new UserCallback() {
             @Override
@@ -776,9 +809,16 @@ public class ProfileActivity extends AppCompatActivity {
 
                 // user exists
                 System.out.println("User exists");
-                addFriend(data.getEmail());
-                Toast.makeText(ProfileActivity.this, "Successfully followed " + data.getEmail() + "!", Toast.LENGTH_SHORT).show();
-                enter_friend_email.setText("");
+                System.out.println("cur friends: " + currentUser.getFriends());
+                System.out.println("email to friend: " + data.getEmail());
+                if (currentUser.getFriends().contains(data.getEmail())) {
+                    System.out.println("Already friends with " + data.getEmail());
+                    Toast.makeText(ProfileActivity.this, "You're already following " + data.getEmail() + "!", Toast.LENGTH_SHORT).show();
+                } else {
+                    addFriend(data.getEmail());
+                    Toast.makeText(ProfileActivity.this, "Successfully followed " + data.getEmail() + "!", Toast.LENGTH_SHORT).show();
+                    enter_friend_email.setText("");
+                }
             }
         });
     }
@@ -787,7 +827,8 @@ public class ProfileActivity extends AppCompatActivity {
         DatabaseHandler.pushNewFriend(currentUser.getEmail(), email);
     }
 
-    private ArrayList<String> recommendFriends() {
+
+    private void recommendFriends(StringArrayCallback stringArrayCallback) {
         ArrayList<String> myInterests = currentUser.getInterests();
         ArrayList<String> recommendedFriends = new ArrayList<String>();
 
@@ -797,7 +838,15 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onCallback(ArrayList<User> users) {
                 allUsers.addAll(users);
-                System.out.println("All Users in Database: " + allUsers);
+                // remove myself
+                for (int i = 0; i < allUsers.size(); i++) {
+                    if (allUsers.get(i).getEmail().equals(currentUser.getEmail())) {
+                        allUsers.remove(i);
+                        break;
+                    }
+                }
+
+                System.out.println("All Users in Database (except me): " + allUsers);
                 ArrayList<Integer> numSharedInterests = new ArrayList<Integer>();
 
                 for (int i = 0; i < allUsers.size(); i++) {
@@ -810,77 +859,44 @@ public class ProfileActivity extends AppCompatActivity {
                     for (int j = 0; j < tempInterests.size(); j++) {
                         if (tempInterests.get(j).equals(otherInterests.get(j))){
                             num++;
+                            System.out.println("num: " + num + " for user " + allUsers.get(i).getEmail());
                         }
                     }
                     numSharedInterests.add(num);
                 }
 
                 // TODO: find top x users with most shared interests
-                int x = 5;
+                int x = 3;
                 if (allUsers.size() < x) {
                     x = allUsers.size();
                 }
                 for (int i = 0; i < x; i++) {
                     for (int j = 0; j < numSharedInterests.size(); j++) {
-                        // if not myself
-                        if (allUsers.get(j).getEmail() != currentUser.getEmail()) {
-                            // get the max compatibility user
-                            if (numSharedInterests.get(j) == Collections.max(numSharedInterests)) {
-                                recommendedFriends.add(allUsers.get(j).getEmail());
+                        // get the max compatibility user
+                        System.out.println("numSharedInterests.get(j): " + numSharedInterests.get(j));
+                        System.out.println("max shared interests: " + Collections.max(numSharedInterests));
+                        if (numSharedInterests.get(j) == Collections.max(numSharedInterests)) {
+                            recommendedFriends.add(allUsers.get(j).getEmail());
 
-                                // remove from searching pool
-                                allUsers.remove(allUsers.get(j));
-                                numSharedInterests.remove(numSharedInterests.get(j));
+                            // remove from searching pool
+                            allUsers.remove(allUsers.get(j));
+                            numSharedInterests.remove(numSharedInterests.get(j));
 
-                                // move on to next iteration
-                                break;
-                            }
+                            // move on to next iteration
+                            break;
                         }
 
                     }
                 }
+
+                System.out.println("Recommended Friends: " + recommendedFriends);
+                stringArrayCallback.onCallback(recommendedFriends);
             }
         });
-        System.out.println("Recommended Friends: " + recommendedFriends);
-        return recommendedFriends;
     }
-
-//    private ArrayList<String> recommendFriends(User user) {
-//        ArrayList<String> myInterests = user.getInterests();
-//        ArrayList<String> recommendedFriends = new ArrayList<>();
-//
-//        // TODO: get all users from database
-//        ArrayList<User> allUsers = new ArrayList<User>();
-//        DatabaseHandler.getUsers(new UsersCallback() {
-//            @Override
-//            public void onCallback(ArrayList<User> users) {
-//                allUsers.addAll(users);
-//                System.out.println("All Users in Database: " + allUsers);
-//
-//                allUsers.sort((user1, user2) -> {
-//                    ArrayList<String> interests1 = new ArrayList<>(user1.getInterests());
-//                    ArrayList<String> interests2 = new ArrayList<>(user2.getInterests());
-//                    interests1.retainAll(myInterests);
-//                    interests2.retainAll(myInterests);
-//                    return Integer.compare(interests2.size(), interests1.size());
-//                });
-//
-//                for (int i = 0; i < Math.min(3, allUsers.size()); i++) {
-//                    recommendedFriends.add(allUsers.get(i).getEmail());
-//                }
-//
-//            }
-//        });
-//
-//        //System.out.println("All Users in Database: " + allUsers);
-//        return recommendedFriends;
-//
-//
-//    }
 
 
 
 
 
 }
-

@@ -86,8 +86,10 @@ public class DatabaseHandler {
                     tempFriends.add(friend.getValue(String.class));
                 }
                 ArrayList<String> tempInterests = new ArrayList<>();
+                System.out.println("user interests: ");
                 for (DataSnapshot interest : data.child("interests").getChildren()) {
                     tempInterests.add(interest.getValue(String.class));
+                    System.out.println(interest.getValue(String.class));
                 }
                 ArrayList<Meeting> tempMeetings = new ArrayList<>();
                 for (DataSnapshot meeting : data.child("meetings").getChildren()) {
@@ -115,15 +117,6 @@ public class DatabaseHandler {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ArrayList<User> users = new ArrayList<>();
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    //    private String email = "";
-                    //    private String password = "";
-                    //    private String name = "";
-                    //    private String age = "";
-                    //    private String affiliation = "";
-                    //    private String type = "";
-                    //    private ArrayList<String> friendsList = new ArrayList<String>();
-                    //    private ArrayList<String> interests = new ArrayList<>();
-                    //    private String key = "";
                     String tempEmail = data.child("email").getValue(String.class);
                     String tempPassword = data.child("password").getValue(String.class);
                     String tempName = data.child("name").getValue(String.class);
@@ -146,6 +139,8 @@ public class DatabaseHandler {
 
                     User tempUser = new User(tempEmail, tempPassword, tempName, tempAge, tempAffiliation, tempType, tempFriends, tempInterests, tempMeetings, tempKey);
                     users.add(tempUser);
+
+                    System.out.println("user email: " + tempUser.getEmail());
                 }
 
                 callback.onCallback(users);

@@ -121,7 +121,6 @@ public class MeetingsActivity extends AppCompatActivity {
     // save meeting to database
     private boolean saveMeeting() {
         if (nameField.getText().toString().equals("") || topicField.getText().toString().equals("") || timeField.getText().toString().equals("") || locationField.getText().toString().equals("")) {
-            // TODO: display error message in UI saying that all fields must be filled
             return false;
         }
         Meeting newMeeting = new Meeting(nameField.getText().toString(), topicField.getText().toString(), timeField.getText().toString(), locationField.getText().toString(), currentUser.getEmail());
@@ -350,6 +349,15 @@ public class MeetingsActivity extends AppCompatActivity {
     }
 
     private void rsvpToMeeting(int i) {
+        // check if user is already in meeting
+        ArrayList<String> participants = meetings.get(i).getParticipants();
+        for (int j = 0; j < participants.size(); j++) {
+            if (participants.get(j).equals(currentUser.getEmail())) {
+                Toast toast = Toast.makeText(this, "You are already RSVP'd!", Toast.LENGTH_SHORT);
+                toast.show();
+                return;
+            }
+        }
         // add user to meeting
         DatabaseHandler.pushNewValue("meetings/" + meetings.get(i).getKey() + "/participants", currentUser.getEmail());
         // add meeting to user
