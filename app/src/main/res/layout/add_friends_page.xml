@@ -176,18 +176,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/likes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:gravity="center"
-                android:text="likes"
-                android:textColor="@color/white"
-                android:textSize="15dp"
-                app:backgroundTint="@null"></TextView>
         </LinearLayout>
-
 
 
         <LinearLayout
