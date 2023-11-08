@@ -121,10 +121,15 @@ public class MeetingsActivity extends AppCompatActivity {
     // save meeting to database
     private boolean saveMeeting() {
         if (nameField.getText().toString().equals("") || topicField.getText().toString().equals("") || timeField.getText().toString().equals("") || locationField.getText().toString().equals("")) {
+            // TODO: display error message in UI saying that all fields must be filled
             return false;
         }
-        DatabaseHandler.pushNewValue("meetings", new Meeting(nameField.getText().toString(), topicField.getText().toString(), timeField.getText().toString(), locationField.getText().toString(), currentUser.getEmail()));
-        Toast toast = Toast.makeText(this, "Successfully saved meeting!", Toast.LENGTH_SHORT);
+        Meeting newMeeting = new Meeting(nameField.getText().toString(), topicField.getText().toString(), timeField.getText().toString(), locationField.getText().toString(), currentUser.getEmail());
+        // add meeting to user
+        DatabaseHandler.pushNewValue("users/" + currentUser.getKey() + "/meetings", newMeeting);
+        // add meeting to meetings
+        DatabaseHandler.pushNewValue("meetings", newMeeting);
+        Toast toast = Toast.makeText(this, "Successfully saved and RSVPed to meeting!", Toast.LENGTH_SHORT);
         toast.show();
 
         return true;

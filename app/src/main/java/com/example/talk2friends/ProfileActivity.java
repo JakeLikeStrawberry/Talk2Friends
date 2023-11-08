@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.GenericTypeIndicator;
 
 import java.util.ArrayList;
 
@@ -702,20 +703,32 @@ public class ProfileActivity extends AppCompatActivity {
                             String meetingName = tempXButton.getText().toString();
 
                             // remove meeting from user
-                            System.out.println("All previous meetings: " );
                             for (int j = 0; j < tempMeetings.size(); j++) {
-                                System.out.println(tempMeetings.get(j).getName());
                                 if (tempMeetings.get(j).getName().equals(meetingName)) {
                                     currentUser.removeMeeting(tempMeetings.get(j).getName());
+                                    break;
                                 }
                             }
-
-                            System.out.println("All updated meetings: " );
-                            for (int j = 0; j < currentUser.getMeetings().size(); j++) {
-                                System.out.println(currentUser.getMeetings().get(j).getName());
-                            }
-
                             DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "meetings", currentUser.getMeetings());
+
+                            // remove user from meeting
+                            DatabaseHandler.getValue("meetings", "name", meetingName, new DataSnapshotCallback() {
+                                @Override
+                                public void onCallback(DataSnapshot data) {
+                                    if (data == null) {
+                                        return;
+                                    }
+                                    ArrayList<String> tempMeetingParticipants = new ArrayList<>();
+                                    for (DataSnapshot participant : data.child("participants").getChildren()) {
+                                        if (participant.getValue(String.class).equals(currentUser.getEmail())) {
+                                            continue;
+                                        } else {
+                                            tempMeetingParticipants.add(participant.getValue(String.class));
+                                        }
+                                    }
+                                    DatabaseHandler.updateValue("meetings", "name", meetingName, "participants", tempMeetingParticipants);
+                                }
+                            });
 
                             // Remove the button from the UI
                             editRsvpLinBox.removeView(tempXView);
