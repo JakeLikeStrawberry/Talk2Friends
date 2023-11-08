@@ -198,7 +198,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <Button
                 android:id="@+id/recFriend"
@@ -211,11 +212,45 @@
                 android:insetBottom="0dp"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
-                android:text="jake"
+                android:text=""
                 android:textAllCaps="false"
                 android:textSize="15dp"
                 app:backgroundTint="@null"
                 tools:ignore="TouchTargetSizeCheck" />
+            <Button
+                android:id="@+id/recFriend2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/linear_gradient_background"
+                android:gravity="center"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:text=""
+                android:textAllCaps="false"
+                android:textSize="15dp"
+                app:backgroundTint="@null"
+                tools:ignore="TouchTargetSizeCheck" />
+            <Button
+                android:id="@+id/recFriend3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/linear_gradient_background"
+                android:gravity="center"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:text=""
+                android:textAllCaps="false"
+                android:textSize="15dp"
+                app:backgroundTint="@null"
+                tools:ignore="TouchTargetSizeCheck" />
+
+
 
         </LinearLayout>
 
