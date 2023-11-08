@@ -663,7 +663,7 @@ public class ProfileActivity extends AppCompatActivity {
                 if (data == null) {
                     return;
                 }
-                // get arraylist of meetings
+                // get arraylist of user's meetings in database
                 ArrayList<Meeting> tempMeetings = new ArrayList<>();
                 for (DataSnapshot meeting : data.child("meetings").getChildren()) {
                     tempMeetings.add(meeting.getValue(Meeting.class));
@@ -702,12 +702,19 @@ public class ProfileActivity extends AppCompatActivity {
                             String meetingName = tempXButton.getText().toString();
 
                             // remove meeting from user
+                            System.out.println("All previous meetings: " );
                             for (int j = 0; j < tempMeetings.size(); j++) {
+                                System.out.println(tempMeetings.get(j).getName());
                                 if (tempMeetings.get(j).getName().equals(meetingName)) {
-                                    currentUser.removeMeeting(tempMeetings.get(j));
-                                    break;
+                                    currentUser.removeMeeting(tempMeetings.get(j).getName());
                                 }
                             }
+
+                            System.out.println("All updated meetings: " );
+                            for (int j = 0; j < currentUser.getMeetings().size(); j++) {
+                                System.out.println(currentUser.getMeetings().get(j).getName());
+                            }
+
                             DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "meetings", currentUser.getMeetings());
 
                             // Remove the button from the UI

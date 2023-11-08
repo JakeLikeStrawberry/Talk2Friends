@@ -82,8 +82,12 @@ public class User {
         this.meetings.add(meeting);
     }
 
-    public void removeMeeting(Meeting meeting) {
-        this.meetings.remove(meeting);
+    public void removeMeeting(String meetingName) {
+        for (int i = 0; i < this.meetings.size(); i++) {
+            if (this.meetings.get(i).getName().equals(meetingName)) {
+                this.meetings.remove(i);
+            }
+        }
     }
 
 }
