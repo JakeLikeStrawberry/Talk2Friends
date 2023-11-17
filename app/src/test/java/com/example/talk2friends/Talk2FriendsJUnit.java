@@ -14,6 +14,7 @@ public class Talk2FriendsJUnit {
     public static void main(String[] args) {
         // run all tests
         System.out.println("Running all tests...");
+
         System.out.println("Running Login tests...");
         System.out.println("Running Sign Up tests...");
         System.out.println("Running Validation tests...");
