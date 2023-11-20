@@ -27,6 +27,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     // current User
     private User currentUser;
+    private boolean isTestMode = false;
 
     // topbar
     private ImageButton profileButton;
@@ -81,19 +82,37 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+
+
         // get logged in user
         String tempEmail = getIntent().getStringExtra("email");
+        if (getIntent().hasExtra("isTestMode")) {
+            isTestMode = getIntent().getBooleanExtra("isTestMode", false);
+        }
+        System.out.println("Hi I made it here in the activity");
+
         DatabaseHandler.getUser(tempEmail, new UserCallback() {
             @Override
             public void onCallback(User user) {
+                System.out.println("Before assigning user");
                 currentUser = user;
-                System.out.println("Current user: " + currentUser.getEmail() + ", " + currentUser.getPassword());
-                loadPersonal();
-                loadFriends();
-                System.out.println("loading rec friends");
-                loadRecommendedFriends();
-                loadMeetings();
+                System.out.println("Woah I made it this far");
+                if(isTestMode){
+                    System.out.println("went into true");
+                    loadPersonal();
+                }
+                else{
+                    System.out.println("Went into else");
+                    //currentUser.setEmail("testUser@usc.edu");
+                    //System.out.println("Current user: " + currentUser.getEmail() + ", " + currentUser.getPassword());
+                    loadPersonal();
+                    loadFriends();
+                    System.out.println("loading rec friends");
+                    loadRecommendedFriends();
+                    loadMeetings();
+                }
             }
+
         });
 
         // top bar
