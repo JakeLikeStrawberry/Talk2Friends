@@ -71,11 +71,8 @@ public class SignUpActivity extends AppCompatActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // check that it's a USC email!
-                if (!emailInputField.getText().toString().contains("@usc.edu")) {
-                    // display error message
-                    System.out.println("Not a USC email!");
-                    incorrectSignUpText.setText(getString(R.string.IncorrectSignUpUSCEmail));
+                // check for errors
+                if (!SignUpUtils.checkSignUpErrors(emailInputField.getText().toString(), passwordInputField.getText().toString(), incorrectSignUpText)) {
                     return;
                 }
 
@@ -107,35 +104,31 @@ public class SignUpActivity extends AppCompatActivity {
     private void initiateSignUp() {
         System.out.println("Your email: " + emailInputField.getText().toString() + " has not been registered before! Go ahead and register!");
 
-        hash = SignUpUtils.checkSignUpErrors(passwordInputField.getText().toString(), incorrectSignUpText);
-        if (!hash.equals("")) {
-            // no errors
-            // send email
-            mEmail = emailInputField.getText().toString();
-            mSubject = getString(R.string.SignUpEmailSubject);
-            mMessage = getString(R.string.SignUpEmailMessage);
+        hash = Utils.getHash(passwordInputField.getText().toString());
+        // no errors
+        // send email
+        mEmail = emailInputField.getText().toString();
+        mSubject = getString(R.string.SignUpEmailSubject);
+        mMessage = getString(R.string.SignUpEmailMessage);
 
-            // append validation code
-            // generate validation code and return after confirming that it's unique in database
-            SignUpUtils.getUniqueValidationCode(new Callback() {
-                @Override
-                public void onCallback(String value) {
-                    // append unique validation code
-                    mMessage += value;
-                    mMessage += "\n";
+        // append validation code
+        // generate validation code and return after confirming that it's unique in database
+        SignUpUtils.getUniqueValidationCode(new Callback() {
+            @Override
+            public void onCallback(String value) {
+                // append unique validation code
+                mMessage += value;
+                mMessage += "\n";
 
-                    // send email
-                    JavaMailAPI javaMailAPI = new JavaMailAPI(SignUpActivity.this, mEmail, mSubject, mMessage);
-                    javaMailAPI.execute();
+                // send email
+                JavaMailAPI javaMailAPI = new JavaMailAPI(SignUpActivity.this, mEmail, mSubject, mMessage);
+                javaMailAPI.execute();
 
-                    // switch to validation code activity
-                    Utils.switchActivityValidationCode(SignUpActivity.this, emailInputField.getText().toString(), hash, value);
-                }
-            }, new CustomFirebaseClient());
-        } else {
-            // yes errors
-            return;
-        }
+                // switch to validation code activity
+                Utils.switchActivityValidationCode(SignUpActivity.this, emailInputField.getText().toString(), hash, value);
+            }
+        }, new CustomFirebaseClient());
+
 
     }
 

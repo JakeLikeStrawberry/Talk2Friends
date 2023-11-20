@@ -57,24 +57,66 @@ public class SignUpUtils   {
 
 //    public static final  String OUR_EMAIL = "310codingchameleons@gmail.com";
 
-    public static String checkSignUpErrors(String password, TextView errorText) {
+    public static boolean checkSignUpErrors(String email, String password, TextView errorText) {
         // Error with hash
         String hash = Utils.getHash(password);
         if (hash.equals("")) {
             System.out.println("Error: unable to create hash!");
             errorText.setText("Please add a password!\\nPlease try again.");
-            return "";
+            return false;
         }
 
         // Error with empty password
         if (password.equals("")) {
             System.out.println("Error: password cannot be empty!");
             errorText.setText("Please add a password!\\nPlease try again.");
-            return "";
+            return false;
+        }
+
+        // Error with empty email
+        if (email.equals("")) {
+            System.out.println("Error: email cannot be empty!");
+            errorText.setText("Please add an email!\\nPlease try again.");
+            return false;
+        }
+
+        // if email ends in "@usc.edu"
+        if (!email.endsWith("@usc.edu")) {
+            System.out.println("Error: email must end in @usc.edu!");
+            errorText.setText("Please add a valid USC email!\\nPlease try again.");
+            return false;
+        }
+
+        // Error with empty username
+        if (email.equals("@usc.edu")) {
+            System.out.println("Error: email cannot be empty!");
+            errorText.setText("Please add an email!\\nPlease try again.");
+            return false;
+        }
+
+        // Error with password length > 30
+        if (password.length() > 30) {
+            System.out.println("Error: password is too long!");
+            errorText.setText("Password is too long (> 31)!\\nPlease try again.");
+            return false;
+        }
+
+        // Error with password length < 6
+        if (password.length() < 6) {
+            System.out.println("Error: password is too short!");
+            errorText.setText("Password is too short (< 6)!\\nPlease try again.");
+            return false;
+        }
+
+        // Error with email length > 64 + 8
+        if (email.length() > 64 + 8) {
+            System.out.println("Error: email is too long!");
+            errorText.setText("Email is too long (> 72)!\\nPlease try again.");
+            return false;
         }
 
         System.out.println("No signup errors found.");
-        return hash;
+        return true;
     }
 
     public static String generateValidationCode() {
