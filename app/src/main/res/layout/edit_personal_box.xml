@@ -90,7 +90,8 @@
                     android:textSize="15dp"
                     android:paddingLeft="8dp"
                     android:paddingBottom="2dp"
-                    android:background="@drawable/rounded_inputfield"/>
+                    android:background="@drawable/rounded_inputfield"
+                    android:inputType="number"/>
             </TableRow>
 
             <TableRow

@@ -5,6 +5,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -87,7 +88,6 @@ public class ProfileActivity extends AppCompatActivity {
             public void onCallback(User user) {
                 currentUser = user;
                 System.out.println("Current user: " + currentUser.getEmail() + ", " + currentUser.getPassword());
-
                 loadPersonal();
                 loadFriends();
                 System.out.println("loading rec friends");
@@ -911,6 +911,9 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    public void setCurrentUser(User user) {
+        this.currentUser = user;
+    }
 
 
 
