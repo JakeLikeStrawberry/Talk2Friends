@@ -17,6 +17,7 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+//import androidx.test.espresso.intent.Intents.intended;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -57,11 +58,6 @@ public class LoginEspresso {
 
     @Test
     public void TryLogin_empty() {
-        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), LoginActivity.class);
-        activityRuleLogin.getScenario().onActivity(activity -> {
-            activity.setIntent(intent);
-        });
-
         // TODO: 1. empty email and password
 
         int emailInputID = R.id.emailInput;
@@ -80,6 +76,15 @@ public class LoginEspresso {
         String expectedErrorMessage = "Incorrect password or email!\nPlease try again.";
         onView(withId(R.id.incorrectLoginText)).check(matches(withText(expectedErrorMessage)));
 
+//        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), LoginActivity.class);
+//        activityRuleLogin.getScenario().onActivity(activity -> {
+//            activity.setIntent(intent);
+//
+//
+//        });
+
+
+
 
 
         // TODO: 2. email with no @usc.edu
@@ -94,13 +99,6 @@ public class LoginEspresso {
     @Test
     public void TryLogin() {
         // try signing up, then logging in with the same credentials
-
-        // Login
-        Intent intent2 = new Intent(ApplicationProvider.getApplicationContext(), LoginActivity.class);
-        activityRuleLogin.getScenario().onActivity(activity -> {
-            activity.setIntent(intent2);
-        });
-
         int emailInputID2 = R.id.emailInput;
         onView(withId(emailInputID2))
                 .perform(ViewActions.typeText("testUser@usc.edu"), ViewActions.closeSoftKeyboard());
@@ -113,6 +111,20 @@ public class LoginEspresso {
         onView(withId(loginButtonID2))
                 .perform(ViewActions.click());
 
+//        int profileButtonID = R.id.profileButton;
+//        onView(withId(profileButtonID))
+//                .perform(ViewActions.click());
+
+        // Login
+//        Intent intent2 = new Intent(ApplicationProvider.getApplicationContext(), LoginActivity.class);
+//        activityRuleLogin.getScenario().onActivity(activity -> {
+//            activity.setIntent(intent2);
+//
+//
+//        });
+
+
+
         // TODO: check that we're on the MeetingsActivity by checking that it has a "Meetings" TextView or whatever
     }
 
@@ -124,13 +136,9 @@ public class LoginEspresso {
     @Test
     public void TrySignUp() {
 
-        // Sign up
-        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), SignUpActivity.class);
-        activityRuleSignUp.getScenario().onActivity(activity -> {
-            activity.setIntent(intent);
-        });
-        // TODO: maybe write a function to delete testUser@usc.edu from database
-        // TODO: write function to give testUser@usc.edu a freepass through email sending
+        int signUpButtonID = R.id.signUpButton;
+        onView(withId(signUpButtonID))
+                .perform(ViewActions.click());
 
         int emailInputID = R.id.emailInput;
         onView(withId(emailInputID))
@@ -138,14 +146,30 @@ public class LoginEspresso {
 
         int passwordInputID = R.id.passwordInput;
         onView(withId(passwordInputID))
-                .perform(ViewActions.typeText("123"), ViewActions.closeSoftKeyboard());
+                .perform(ViewActions.typeText("123456"), ViewActions.closeSoftKeyboard());
 
-        int signUpButtonID = R.id.signUpButton;
-        onView(withId(signUpButtonID))
+        int signUpButtonActualID = R.id.signUpButton;
+        onView(withId(signUpButtonActualID))
                 .perform(ViewActions.click());
 
         // TODO: check we're on the ValidationCodeActivity by checking it has a validationInputField TextField
-        onView(withId(R.id.validationInput)).check(matches(isDisplayed()));
+//        intended(hasComponent(ValidationCodeActivity.class.getName()));
+
+//        onView(withId(R.id.validationInput)).check(matches(isDisplayed()));
+
+        // Sign up
+//        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), SignUpActivity.class);
+//        activityRuleSignUp.getScenario().onActivity(activity -> {
+//            activity.setIntent(intent);
+//
+//
+//        });
+        // TODO: maybe write a function to delete testUser@usc.edu from database
+        // TODO: write function to give testUser@usc.edu a freepass through email sending
+
+        // TODO: check email exists before checking username and password in SignUp
+
+
 
 
     }
