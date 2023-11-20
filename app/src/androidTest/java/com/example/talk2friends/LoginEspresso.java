@@ -2,6 +2,11 @@ package com.example.talk2friends;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intended;
+import androidx.test.espresso.intent.Intents;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -11,19 +16,25 @@ import android.content.Intent;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
+import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
+import androidx.test.espresso.intent.Intents;
+import androidx.test.espresso.intent.matcher.IntentMatchers;
+import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-//import androidx.test.espresso.intent.Intents.intended;
+
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static org.junit.Assert.*;
+
+import junit.framework.AssertionFailedError;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -41,12 +52,19 @@ public class LoginEspresso {
     public ActivityScenarioRule<SignUpActivity> activityRuleSignUp =
             new ActivityScenarioRule<>(SignUpActivity.class);
 
+    @Rule
+    public IntentsTestRule<LoginActivity> mLoginActivityActivityTestRule =
+            new IntentsTestRule<>(LoginActivity.class);
+
     public void main(String[] args) {
+        Intents.init();
 
         TryLogin_empty();
         TrySignUp();
         TrySignUpAgain();
         TryLogin();
+
+        Intents.release();
     }
 
     @Test
@@ -76,17 +94,6 @@ public class LoginEspresso {
         String expectedErrorMessage = "Incorrect password or email!\nPlease try again.";
         onView(withId(R.id.incorrectLoginText)).check(matches(withText(expectedErrorMessage)));
 
-//        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), LoginActivity.class);
-//        activityRuleLogin.getScenario().onActivity(activity -> {
-//            activity.setIntent(intent);
-//
-//
-//        });
-
-
-
-
-
         // TODO: 2. email with no @usc.edu
 
         // TODO: 3. email with @usc.edu
@@ -98,6 +105,8 @@ public class LoginEspresso {
 
     @Test
     public void TryLogin() {
+
+
         // try signing up, then logging in with the same credentials
         int emailInputID2 = R.id.emailInput;
         onView(withId(emailInputID2))
@@ -111,26 +120,23 @@ public class LoginEspresso {
         onView(withId(loginButtonID2))
                 .perform(ViewActions.click());
 
-//        int profileButtonID = R.id.profileButton;
-//        onView(withId(profileButtonID))
-//                .perform(ViewActions.click());
-
-        // Login
-//        Intent intent2 = new Intent(ApplicationProvider.getApplicationContext(), LoginActivity.class);
-//        activityRuleLogin.getScenario().onActivity(activity -> {
-//            activity.setIntent(intent2);
-//
-//
-//        });
+        try {
+//            onView(withId(R.id.meetingsTitle)).check(matches(isDisplayed()));
+            // TODO: check that we're on the MeetingsActivity by checking that it has a "Meetings" TextView or whatever
+            intended(hasComponent(MeetingsActivity.class.getName()));
+        } catch (AssertionFailedError e) {
+            System.out.println("Login failed: " + e.getMessage());
+            assert(false);
+        }
 
 
 
-        // TODO: check that we're on the MeetingsActivity by checking that it has a "Meetings" TextView or whatever
     }
 
     @Test
     public void TrySignUpAgain() {
-        // TODO: try signing up twice with same email
+        // TODO: try signing up again with existing email "testUser@usc.edu"
+
     }
 
     @Test
