@@ -41,6 +41,7 @@ import org.junit.runner.RunWith;
             trySearchFriendsPage();
             tryAddInterestsPage();
 
+
         }
 
 //        @Test
