@@ -100,70 +100,15 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
 
-    private String generateValidationCode() {
-        // generate 4-character alphanumeric code to send
-            // 48 ~ 57: ASCII digits
-            // 65 ~ 90: ASCII uppercase letters
-        String code = "";
-        for (int i = 0; i < 4; i++) {
-            int random = (int) (Math.random() * 36);
-            if (random < 10) {
-                // random is a digit
-                code += (char) (random + 48);
-            } else {
-                // random is a letter
-                code += (char) (random + 55);
-            }
-        }
 
-        return code;
-    }
 
-    private void getUniqueValidationCode(Callback callback) {
 
-        // check if code is already in database\
-        // from: https://stackoverflow.com/questions/47847694/how-to-return-datasnapshot-value-as-a-result-of-a-method/47853774
-            // implement this method to call asynchronously
-        // for checking if code is already in database
-        database = FirebaseDatabase.getInstance("https://talk2friends-78719-default-rtdb.firebaseio.com/");
-        codesRef = database.getReference("codes");
-        codesRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                System.out.println("hihihi");
-                String code = generateValidationCode();
-                for(DataSnapshot data: dataSnapshot.getChildren()){
-                    if (data.child("code").exists()) {
-                        while (data.child("code").getValue().toString().equals(code)) {
-                            System.out.println("Generated code already in database! Creating new code...");
-                            code = generateValidationCode();
-                        }
-                        callback.onCallback(code);
-
-                        // add code instance to database
-                        codesRef.push().setValue(code);
-                        return;
-                    }
-                }
-                System.out.println("datasnapshot child code does not exist! Initializing for the first time...");
-                callback.onCallback(code);
-
-                // add code instance to database
-                codesRef.push().setValue(code);
-                return;
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
 
     private void initiateSignUp() {
         System.out.println("Your email: " + emailInputField.getText().toString() + " has not been registered before! Go ahead and register!");
 
-        if (checkSignUpErrors()) {
+        hash = SignUpUtils.checkSignUpErrors(passwordInputField.getText().toString(), incorrectSignUpText);
+        if (!hash.equals("")) {
             // no errors
             // send email
             mEmail = emailInputField.getText().toString();
@@ -172,7 +117,7 @@ public class SignUpActivity extends AppCompatActivity {
 
             // append validation code
             // generate validation code and return after confirming that it's unique in database
-            getUniqueValidationCode(new Callback() {
+            SignUpUtils.getUniqueValidationCode(new Callback() {
                 @Override
                 public void onCallback(String value) {
                     // append unique validation code
@@ -186,7 +131,7 @@ public class SignUpActivity extends AppCompatActivity {
                     // switch to validation code activity
                     Utils.switchActivityValidationCode(SignUpActivity.this, emailInputField.getText().toString(), hash, value);
                 }
-            });
+            }, new CustomFirebaseClient());
         } else {
             // yes errors
             return;
@@ -194,25 +139,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
-    private boolean checkSignUpErrors() {
-        // Error with hash
-        hash = Utils.getHash(passwordInputField.getText().toString());
-        if (hash.equals("")) {
-            System.out.println("Error: unable to create hash!");
-            incorrectSignUpText.setText(getString(R.string.IncorrectSignUpPassword));
-            return false;
-        }
 
-        // Error with empty password
-        if (passwordInputField.getText().toString().equals("")) {
-            System.out.println("Error: password cannot be empty!");
-            incorrectSignUpText.setText(getString(R.string.IncorrectSignUpPassword));
-            return false;
-        }
-
-        System.out.println("No signup errors found.");
-        return true;
-    }
 
     @Override
     public void onDestroy() {
