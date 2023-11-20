@@ -91,6 +91,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
         System.out.println("Hi I made it here in the activity");
 
+
         DatabaseHandler.getUser(tempEmail, new UserCallback() {
             @Override
             public void onCallback(User user) {

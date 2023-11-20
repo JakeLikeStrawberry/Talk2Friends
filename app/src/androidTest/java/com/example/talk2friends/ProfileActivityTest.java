@@ -39,6 +39,7 @@ import org.junit.runner.RunWith;
                 activity.setCurrentUser(testUser); // Set the test user directly in the activity
                 Log.d("ProfileActivityTest", "Intent extra 'email': " + activity.getIntent().getStringExtra("email"));
 
+
                 // Rest of your test code for age field validation using Espresso
                 String nonNumericText = "abc";
                 String expectedErrorMessage = "Only numbers are allowed";
