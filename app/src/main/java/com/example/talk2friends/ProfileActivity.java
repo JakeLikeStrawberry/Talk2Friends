@@ -121,9 +121,9 @@ public class ProfileActivity extends AppCompatActivity {
         meetingsButton = (ImageButton) findViewById(R.id.includeSharedBackground).findViewById(R.id.meetingsButton);
 
         // edit buttons
-        editButton_personal = (ImageButton) findViewById(R.id.personal_box).findViewById(R.id.editButton);
-        editButton_friends = (ImageButton) findViewById(R.id.friends_box).findViewById(R.id.editButton);
-        editButton_meetings = (ImageButton) findViewById(R.id.meetings_box).findViewById(R.id.editButton);
+        editButton_personal = (ImageButton) findViewById(R.id.personal_box).findViewById(R.id.editButton1);
+        editButton_friends = (ImageButton) findViewById(R.id.friends_box).findViewById(R.id.editButton2);
+        editButton_meetings = (ImageButton) findViewById(R.id.meetings_box).findViewById(R.id.editButton3);
 
         //search button for friends
         searchButton_friends = (ImageButton) findViewById(R.id.friends_box).findViewById(R.id.searchButton);
