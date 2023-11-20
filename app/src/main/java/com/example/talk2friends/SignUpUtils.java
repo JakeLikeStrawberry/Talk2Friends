@@ -10,6 +10,48 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.sql.Array;
+import java.util.ArrayList;
+
+interface OnReceiveCodes {
+    void onReceiveCodes(ArrayList<String> code);
+}
+
+interface ICustomFirebaseClient {
+    public void getCodes(OnReceiveCodes onReceiveCodes);
+    public void saveCode(String code);
+}
+
+class CustomFirebaseClient implements ICustomFirebaseClient {
+    FirebaseDatabase database = FirebaseDatabase.getInstance("https://talk2friends-78719-default-rtdb.firebaseio.com/");
+    DatabaseReference codesRef = database.getReference("codes");
+
+    public void getCodes(OnReceiveCodes onReceiveCodes) {
+        codesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<String> codes = new ArrayList<String>();
+                for(DataSnapshot data: dataSnapshot.getChildren()){
+                    if (data.child("code").exists()) {
+                        codes.add(data.child("code").getValue().toString());
+                    }
+                }
+                onReceiveCodes.onReceiveCodes(codes);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void saveCode(String code) {
+        codesRef.push().setValue(code);
+    }
+}
+
+
 
 public class SignUpUtils   {
 
@@ -54,44 +96,21 @@ public class SignUpUtils   {
         return code;
     }
 
-    public static void getUniqueValidationCode(Callback callback) {
-
-        // check if code is already in database\
-        // from: https://stackoverflow.com/questions/47847694/how-to-return-datasnapshot-value-as-a-result-of-a-method/47853774
-        // implement this method to call asynchronously
-        // for checking if code is already in database
-        FirebaseDatabase database = FirebaseDatabase.getInstance("https://talk2friends-78719-default-rtdb.firebaseio.com/");
-        DatabaseReference codesRef = database.getReference("codes");
-        codesRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                System.out.println("hihihi");
-                String code = generateValidationCode();
-                for(DataSnapshot data: dataSnapshot.getChildren()){
-                    if (data.child("code").exists()) {
-                        while (data.child("code").getValue().toString().equals(code)) {
-                            System.out.println("Generated code already in database! Creating new code...");
-                            code = generateValidationCode();
-                        }
-                        callback.onCallback(code);
-
-                        // add code instance to database
-                        codesRef.push().setValue(code);
-                        return;
-                    }
-                }
-                System.out.println("datasnapshot child code does not exist! Initializing for the first time...");
-                callback.onCallback(code);
-
-                // add code instance to database
-                codesRef.push().setValue(code);
-                return;
+    public static void getUniqueValidationCode(Callback callback, ICustomFirebaseClient customFirebaseClient) {
+        customFirebaseClient.getCodes((codes) -> {
+            // check if code is already in database\
+            // from: https://stackoverflow.com/questions/47847694/how-to-return-datasnapshot-value-as-a-result-of-a-method/47853774
+            // implement this method to call asynchronously
+            // for checking if code is already in database
+            String newCode = generateValidationCode();
+            for (String code : codes) {
+             if (code.equals(newCode)) {
+                 newCode = generateValidationCode();
+             }
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
+            customFirebaseClient.saveCode(newCode);
+            callback.onCallback(newCode);
+            return;
         });
     }
 

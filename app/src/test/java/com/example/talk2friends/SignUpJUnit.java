@@ -25,6 +25,27 @@ import org.mockito.junit.MockitoJUnitRunner;
 import android.app.Activity;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+
+class TestFirebaseClient implements ICustomFirebaseClient {
+    public ArrayList<String> codes = new ArrayList<String>();
+    public void getCodes(OnReceiveCodes onReceiveCodes) {
+        onReceiveCodes.onReceiveCodes(new ArrayList<String>());
+    }
+
+    public void saveCode(String code) {
+        codes.add(code);
+    }
+}
+
 /**
  * Example local unit test, which will execute on the development machine (host).
  *
@@ -51,7 +72,8 @@ public class SignUpJUnit {
         // test if generateValidationCode() function...
         // test if getUniqueValidationCode() function...
 
-
+        TestFirebaseClient client = new TestFirebaseClient();
+        client.codes.add("1234");
         SignUpUtils.getUniqueValidationCode(new Callback() {
             @Override
             public void onCallback(String value) {
@@ -69,12 +91,11 @@ public class SignUpJUnit {
                 // TODO: 4. is a string?
                 assertEquals(true, value instanceof String);
 
+                // TODO: 5. is saved to Client
+                assertEquals(true, client.codes.contains(value));
+                assertEquals(true, !value.equals("1234"));
             }
-        });
-
-
-
-
+        }, client);
 
     }
 

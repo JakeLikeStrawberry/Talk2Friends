@@ -131,7 +131,7 @@ public class SignUpActivity extends AppCompatActivity {
                     // switch to validation code activity
                     Utils.switchActivityValidationCode(SignUpActivity.this, emailInputField.getText().toString(), hash, value);
                 }
-            });
+            }, new CustomFirebaseClient());
         } else {
             // yes errors
             return;
