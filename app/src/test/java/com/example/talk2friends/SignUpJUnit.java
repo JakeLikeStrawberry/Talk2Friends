@@ -4,40 +4,96 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+//import org.mockito.kotlin.doReturn;
+//import org.mockito.kotlin.mock;
+
+//import org.mockito.Mockito;
+//import org.mockito.invocation.InvocationOnMock;
+//import org.mockito.stubbing.Answer;
+//import org.powermock.api.mockito.PowerMockito;
+//import org.powermock.core.classloader.annotations.PrepareForTest;
+//import org.powermock.modules.junit4.PowerMockRunner;
+//
+//import static org.mockito.Matchers.any;
+//import static org.mockito.Matchers.anyString;
+//import static org.mockito.Mockito.doAnswer;
+//import static org.mockito.Mockito.when;
+
+import android.app.Activity;
+import android.util.Log;
+
 /**
  * Example local unit test, which will execute on the development machine (host).
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
+//@RunWith(PowerMockRunner.class)
+//@PowerMockRunnerDelegate(JUnit4.class)
+//@PrepareForTest({ FirebaseDatabase.class})
+@RunWith(MockitoJUnitRunner.class)
 public class SignUpJUnit {
 
     public static void main(String[] args) {
-        // run all signup tests
-        System.out.println("Running SignUp tests...");
+        // run all login tests
+        System.out.println("Running Login tests...");
 
-        LoginJUnit loginJUnit = new LoginJUnit();
+        SignUpJUnit signUpJUnit = new SignUpJUnit();
+
+        signUpJUnit.TryValidationCode();
+    }
+
+    @Test
+    public void TryValidationCode() {
+
+        // test if generateValidationCode() function...
+        // test if getUniqueValidationCode() function...
+
+
+        SignUpUtils.getUniqueValidationCode(new Callback() {
+            @Override
+            public void onCallback(String value) {
+                System.out.println("getUniqueValidationCode(): " + value);
+
+                // TODO: 1. returns a 4 digit code
+                assertEquals(4, value.length());
+
+                // TODO: 2. returns alphanumeric
+                assertEquals(true, value.matches("[A-Z0-9]+"));
+
+                // TODO: 3. is all uppercase
+                assertEquals(true, value.equals(value.toUpperCase()));
+
+                // TODO: 4. is a string?
+                assertEquals(true, value instanceof String);
+
+            }
+        });
+
+
+
+
 
     }
 
     @Test
-    public void TryLogin() {
-        // test if tryLogin() function works with...
+    public void TryCheckSignUpErrors() {
+        // test if checkSignUpErrors() function...
+        // TODO: change
 
-        // TODO: 1. empty email and password
+        // TODO: 1. returns false for empty password
 
-        // TODO: 2. email with no @usc.edu
+        // TODO: 2. returns false for empty email
 
-        // TODO: 3. email with @usc.edu
+        // TODO: 3. returns false for emoji in email?
 
-        // TODO: 4. random string that is not an email
-    }
+        // TODO: 4. returns false for emoji in password?
 
-    @Test
-    public void ValidateLogin() {
-        // test if validateLogin() function works with...
+        // TODO: 5. limits password length to 30 characters
 
-        // TODO: 1. empty email and password
+        // TODO: 6. limits email length to 64 + 8 characters, including @usc.edu
 
-        // TODO: 2. if database is empty
     }
 }
