@@ -65,16 +65,17 @@ public class SignUpJUnit {
 
         SignUpJUnit signUpJUnit = new SignUpJUnit();
 
+        ValidationCode();
+        CheckSignUpErrors();
+    }
+
+    public static void ValidationCode() {
+        SignUpJUnit signUpJUnit = new SignUpJUnit();
         signUpJUnit.ValidationCode_length();
         signUpJUnit.ValidationCode_alphanumeric();
         signUpJUnit.ValidationCode_uppercase();
         signUpJUnit.ValidationCode_string();
         signUpJUnit.ValidationCode_saved();
-
-        signUpJUnit.CheckSignUpErrors_emailLength();
-        signUpJUnit.CheckSignUpErrors_emptyEmail();
-        signUpJUnit.CheckSignUpErrors_emptyPassword();
-        signUpJUnit.CheckSignUpErrors_passwordLength();
     }
 
 
@@ -164,6 +165,17 @@ public class SignUpJUnit {
 
     }
 
+
+    public static void CheckSignUpErrors() {
+        SignUpJUnit signUpJUnit = new SignUpJUnit();
+        signUpJUnit.CheckSignUpErrors_emptyPassword();
+        signUpJUnit.CheckSignUpErrors_emptyEmail();
+        signUpJUnit.CheckSignUpErrors_passwordLength();
+        signUpJUnit.CheckSignUpErrors_emailLength();
+        signUpJUnit.CheckSignUpErrors_USCEmail();
+        signUpJUnit.CheckSignUpErrors_emailUsername();
+    }
+
     @Test
     public void CheckSignUpErrors_emptyPassword() {
         // test if checkSignUpErrors() function...
@@ -183,27 +195,81 @@ public class SignUpJUnit {
     @Test
     public void CheckSignUpErrors_passwordLength() {
         // test if checkSignUpErrors() function...
-        // TODO: 5. limits password length to 30 characters
+        // TODO: 3. limits password length to 30 characters (input 31 chars)
+        // limits password > 6 chars
         TextView view = Mockito.mock(TextView.class);
-        assertEquals(false, SignUpUtils.checkSignUpErrors("", "123", view));
+
+        // input 31 chars
+        String password = "";
+        for (int i = 0; i < 31; i++) {
+            password += "a";
+        }
+        assertEquals(false, SignUpUtils.checkSignUpErrors("mdjun@usc.edu", password, view));
+
+        // input 30 chars
+        String password2 = "";
+        for (int i = 0; i < 30; i++) {
+            password2 += "a";
+        }
+        assertEquals(true, SignUpUtils.checkSignUpErrors("mdjun@usc.edu", password2, view));
+
+        // input 6 chars
+        String password3 = "";
+        for (int i = 0; i < 6; i++) {
+            password3 += "a";
+        }
+        assertEquals(true, SignUpUtils.checkSignUpErrors("mdjun@usc.edu", password3, view));
+
+        // input 5 chars
+        String password4 = "";
+        for (int i = 0; i < 5; i++) {
+            password4 += "a";
+        }
+        assertEquals(false, SignUpUtils.checkSignUpErrors("mdjun@usc.edu", password4, view));
     }
 
     @Test
     public void CheckSignUpErrors_emailLength() {
         // test if checkSignUpErrors() function...
-        // TODO: change
+        // TODO: 4. limits email length to 64 + 8 characters, including @usc.edu
+        TextView view = Mockito.mock(TextView.class);
 
-        // TODO: 1. returns false for empty password
+        // input 65 + 8 chars
+        String email2 = "";
+        for (int i = 0; i < 65; i++) {
+            email2 += "a";
+        }
+        email2 += "@usc.edu";
+        assertEquals(false, SignUpUtils.checkSignUpErrors(email2, "123456", view));
 
-        // TODO: 2. returns false for empty email
+        // input 64 + 8 chars
+        String email = "";
+        for (int i = 0; i < 64; i++) {
+            email += "a";
+        }
+        email += "@usc.edu";
+        assertEquals(true, SignUpUtils.checkSignUpErrors(email, "123456", view));
+    }
 
-        // TODO: 3. returns false for emoji in email?
+    @Test
+    public void CheckSignUpErrors_USCEmail() {
+        // test if checkSignUpErrors() function...
+        // TODO: 4. limits email length to 64 + 8 characters, including @usc.edu
+        TextView view = Mockito.mock(TextView.class);
 
-        // TODO: 4. returns false for emoji in password?
+        assertEquals(true, SignUpUtils.checkSignUpErrors("asdf@usc.edu", "123456", view));
 
-        // TODO: 5. limits password length to 30 characters
+        assertEquals(false, SignUpUtils.checkSignUpErrors("asdf@gmail.com", "123456", view));
+    }
 
-        // TODO: 6. limits email length to 64 + 8 characters, including @usc.edu
+    @Test
+    public void CheckSignUpErrors_emailUsername() {
+        // test if checkSignUpErrors() function...
+        // TODO: 4. limits email length to 64 + 8 characters, including @usc.edu
+        TextView view = Mockito.mock(TextView.class);
 
+        assertEquals(true, SignUpUtils.checkSignUpErrors("asdf@usc.edu", "123456", view));
+
+        assertEquals(false, SignUpUtils.checkSignUpErrors("@usc.edu", "123456", view));
     }
 }

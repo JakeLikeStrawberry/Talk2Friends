@@ -79,10 +79,39 @@ public class SignUpUtils   {
             errorText.setText("Please add an email!\\nPlease try again.");
             return false;
         }
+
         // if email ends in "@usc.edu"
-        if (!email.substring(email.length() - 8).equals("@usc.edu")) {
+        if (!email.endsWith("@usc.edu")) {
             System.out.println("Error: email must end in @usc.edu!");
             errorText.setText("Please add a valid USC email!\\nPlease try again.");
+            return false;
+        }
+
+        // Error with empty username
+        if (email.equals("@usc.edu")) {
+            System.out.println("Error: email cannot be empty!");
+            errorText.setText("Please add an email!\\nPlease try again.");
+            return false;
+        }
+
+        // Error with password length > 30
+        if (password.length() > 30) {
+            System.out.println("Error: password is too long!");
+            errorText.setText("Password is too long (> 31)!\\nPlease try again.");
+            return false;
+        }
+
+        // Error with password length < 6
+        if (password.length() < 6) {
+            System.out.println("Error: password is too short!");
+            errorText.setText("Password is too short (< 6)!\\nPlease try again.");
+            return false;
+        }
+
+        // Error with email length > 64 + 8
+        if (email.length() > 64 + 8) {
+            System.out.println("Error: email is too long!");
+            errorText.setText("Email is too long (> 72)!\\nPlease try again.");
             return false;
         }
 
