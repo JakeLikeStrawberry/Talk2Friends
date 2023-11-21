@@ -23,14 +23,6 @@ import com.google.firebase.database.GenericTypeIndicator;
 import java.util.ArrayList;
 import java.util.Collections;
 
-interface OnReceiveCodes_Profile {
-    void onReceiveCodes(ArrayList<String> code);
-}
-
-interface ICustomFirebaseClient_Profile {
-    public void getCodes(OnReceiveCodes onReceiveCodes);
-    public void saveCode(String code);
-}
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -451,10 +443,11 @@ public class ProfileActivity extends AppCompatActivity {
         System.out.println("newType: " + newType);
 
         // update values in database
-        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "name", newName);
-        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "age", newAge);
-        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "affiliation", newAffiliation);
-        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "type", newType);
+        CustomFirebaseClient_Update client = new CustomFirebaseClient_Update();
+        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "name", newName, client);
+        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "age", newAge, client);
+        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "affiliation", newAffiliation, client);
+        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "type", newType, client);
     }
 
     private void saveInterests() {
@@ -477,11 +470,12 @@ public class ProfileActivity extends AppCompatActivity {
         String newMovies = movies.getSelectedItem().toString();
 
         // update values in database
-        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "interests/sports", newSports);
-        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "interests/music", newMusic);
-        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "interests/reading", newReading);
-        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "interests/exercise", newExercise);
-        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "interests/movies", newMovies);
+        CustomFirebaseClient_Update client = new CustomFirebaseClient_Update();
+        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "interests/sports", newSports, client);
+        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "interests/music", newMusic, client);
+        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "interests/reading", newReading, client);
+        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "interests/exercise", newExercise, client);
+        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "interests/movies", newMovies, client);
     }
 
     private void loadInterests(){
@@ -707,7 +701,8 @@ public class ProfileActivity extends AppCompatActivity {
 
                                         // remove friend from user
                                         currentUser.removeFriend(friendName);
-                                        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "friends", currentUser.getFriends());
+                                        CustomFirebaseClient_Update client = new CustomFirebaseClient_Update();
+                                        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "friends", currentUser.getFriends(), client);
 
                                         // Remove the button from the UI
                                         editFriendsLinBox.removeView(tempXView);
@@ -783,7 +778,8 @@ public class ProfileActivity extends AppCompatActivity {
                                     break;
                                 }
                             }
-                            DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "meetings", currentUser.getMeetings());
+                            CustomFirebaseClient_Update client = new CustomFirebaseClient_Update();
+                            DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "meetings", currentUser.getMeetings(), client);
 
                             // remove user from meeting
                             DatabaseHandler.getValue("meetings", "name", meetingName, new DataSnapshotCallback() {
@@ -800,7 +796,8 @@ public class ProfileActivity extends AppCompatActivity {
                                             tempMeetingParticipants.add(participant.getValue(String.class));
                                         }
                                     }
-                                    DatabaseHandler.updateValue("meetings", "name", meetingName, "participants", tempMeetingParticipants);
+                                    CustomFirebaseClient_Update client = new CustomFirebaseClient_Update();
+                                    DatabaseHandler.updateValue("meetings", "name", meetingName, "participants", tempMeetingParticipants, client);
                                 }
                             });
 

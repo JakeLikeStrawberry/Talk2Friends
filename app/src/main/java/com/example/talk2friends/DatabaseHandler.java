@@ -11,6 +11,101 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+interface OnReceiveMeetings {
+    void onReceiveMeetings(ArrayList<Meeting> meetings);
+}
+
+interface ICustomFirebaseClient_Meetings {
+    public void getMeetings(OnReceiveMeetings onReceiveMeetings);
+    public void saveMeeting(Meeting meeting);
+}
+
+interface ICustomFirebaseClient_Update {
+    public <T> void saveValue(String firstLayer, String thirdLayer, String matchValue, String targetField, T newValue);
+}
+
+class CustomFirebaseClient_Meetings implements ICustomFirebaseClient_Meetings {
+    // get meetings from database
+    FirebaseDatabase database = FirebaseDatabase.getInstance(Utils.FIREBASE_URL);
+    DatabaseReference firstLayerRef = database.getReference("meetings");
+
+    public void getMeetings(OnReceiveMeetings onReceiveMeetings) {
+
+        firstLayerRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                GenericTypeIndicator<ArrayList<Meeting>> t = new GenericTypeIndicator<ArrayList<Meeting>>() {
+                };
+                ArrayList<Meeting> meetings = new ArrayList<>();
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    //    private String name = "";
+                    //    private String topic = "";
+                    //    private String time = "";
+                    //    private String location = "";
+                    //    private ArrayList<String> participants = new ArrayList<String>();
+                    //    private String key = "";
+                    String tempName = data.child("name").getValue(String.class);
+                    String tempTopic = data.child("topic").getValue(String.class);
+                    String tempTime = data.child("time").getValue(String.class);
+                    String tempLocation = data.child("location").getValue(String.class);
+                    String tempKey = data.child("key").getValue(String.class);
+                    ArrayList<String> tempParticipants = new ArrayList<>();
+                    for (DataSnapshot participant : data.child("participants").getChildren()) {
+                        tempParticipants.add(participant.getValue(String.class));
+                    }
+
+                    Meeting tempMeeting = new Meeting(tempName, tempTopic, tempTime, tempLocation, tempParticipants, tempKey);
+                    meetings.add(tempMeeting);
+                }
+
+//                callback.onCallback(meetings);
+                onReceiveMeetings.onReceiveMeetings(meetings);
+                return;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+//    public void saveCode(String code) {
+//        codesRef.push().setValue(code);
+//    }
+    public void saveMeeting(Meeting meeting) {
+        firstLayerRef.push().setValue(meeting);
+    }
+}
+
+class CustomFirebaseClient_Update implements ICustomFirebaseClient_Update {
+    public <T> void saveValue(String firstLayer, String thirdLayer, String matchValue, String targetField, T newValue) {
+        // push to database
+        FirebaseDatabase database = FirebaseDatabase.getInstance(Utils.FIREBASE_URL);
+        DatabaseReference firstLayerRef = database.getReference(firstLayer);
+
+        firstLayerRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    if (data.child(thirdLayer).exists()) {
+                        if (data.child(thirdLayer).getValue().toString().equals(matchValue)) {
+                            data.child(targetField).getRef().setValue(newValue);
+                            return;
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+}
+
+
 public class DatabaseHandler {
 
     /**
@@ -233,7 +328,8 @@ public class DatabaseHandler {
                 user.addFriend(friendEmail);
 
                 // push to database
-                DatabaseHandler.updateValue("users", "email", user.getEmail(), "friends", user.getFriends());
+                CustomFirebaseClient_Update client = new CustomFirebaseClient_Update();
+                DatabaseHandler.updateValue("users", "email", user.getEmail(), "friends", user.getFriends(), client);
             }
         });
 
@@ -249,71 +345,14 @@ public class DatabaseHandler {
      * @param targetField the third layer of firebase path to change to newValue (e.g., "age")
      * @param newValue    the new value to update targetField to
      */
-    public static <T> void updateValue(String firstLayer, String thirdLayer, String matchValue, String targetField, T newValue) {
-        // push to database
-        FirebaseDatabase database = FirebaseDatabase.getInstance(Utils.FIREBASE_URL);
-        DatabaseReference firstLayerRef = database.getReference(firstLayer);
-        firstLayerRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    if (data.child(thirdLayer).exists()) {
-                        if (data.child(thirdLayer).getValue().toString().equals(matchValue)) {
-                            data.child(targetField).getRef().setValue(newValue);
-                            return;
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+    public static <T> void updateValue(String firstLayer, String thirdLayer, String matchValue, String targetField, T newValue, ICustomFirebaseClient_Update client) {
+        client.saveValue(firstLayer, thirdLayer, matchValue, targetField, newValue);
     }
 
-    public static void getMeetings(MeetingsCallback callback) {
-        // get meetings from database
-        FirebaseDatabase database = FirebaseDatabase.getInstance(Utils.FIREBASE_URL);
-        DatabaseReference firstLayerRef = database.getReference("meetings");
-        firstLayerRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                GenericTypeIndicator<ArrayList<Meeting>> t = new GenericTypeIndicator<ArrayList<Meeting>>() {
-                };
-                ArrayList<Meeting> meetings = new ArrayList<>();
-                for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    //    private String name = "";
-                    //    private String topic = "";
-                    //    private String time = "";
-                    //    private String location = "";
-                    //    private ArrayList<String> participants = new ArrayList<String>();
-                    //    private String key = "";
-                    String tempName = data.child("name").getValue(String.class);
-                    String tempTopic = data.child("topic").getValue(String.class);
-                    String tempTime = data.child("time").getValue(String.class);
-                    String tempLocation = data.child("location").getValue(String.class);
-                    String tempKey = data.child("key").getValue(String.class);
-                    ArrayList<String> tempParticipants = new ArrayList<>();
-                    for (DataSnapshot participant : data.child("participants").getChildren()) {
-                        tempParticipants.add(participant.getValue(String.class));
-                    }
-
-                    Meeting tempMeeting = new Meeting(tempName, tempTopic, tempTime, tempLocation, tempParticipants, tempKey);
-                    meetings.add(tempMeeting);
-                }
-
-                callback.onCallback(meetings);
-                return;
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+    public static void getMeetings(MeetingsCallback callback, ICustomFirebaseClient_Meetings client) {
+        client.getMeetings((meetings -> {
+            callback.onCallback(meetings);
+        }));
     }
 
 }
