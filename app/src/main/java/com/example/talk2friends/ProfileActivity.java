@@ -23,6 +23,15 @@ import com.google.firebase.database.GenericTypeIndicator;
 import java.util.ArrayList;
 import java.util.Collections;
 
+interface OnReceiveCodes_Profile {
+    void onReceiveCodes(ArrayList<String> code);
+}
+
+interface ICustomFirebaseClient_Profile {
+    public void getCodes(OnReceiveCodes onReceiveCodes);
+    public void saveCode(String code);
+}
+
 public class ProfileActivity extends AppCompatActivity {
 
     // current User

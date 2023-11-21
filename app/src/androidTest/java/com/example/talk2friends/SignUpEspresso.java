@@ -186,7 +186,7 @@ public class SignUpEspresso {
     public void TryLogin_NonEmail() {
         // TODO: 2. email string that is not an email (no @)
 
-        DoSignUp("testUser.gmail.com", "123456");
+        DoSignUp("testUser.usc.edu", "123456");
 
         // expected error text
         String expectedErrorMessage = "Please add a valid USC email!\\nPlease try again.";
