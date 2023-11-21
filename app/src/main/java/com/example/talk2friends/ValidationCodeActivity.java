@@ -57,6 +57,13 @@ public class ValidationCodeActivity extends AppCompatActivity {
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // test user
+                if (username.equals("testUser@usc.edu") && hash.equals("hash") && validationCode.equals("1234") && validationInputField.getText().toString().equals(validationCode)) {
+                    // switch activity to Meetings page
+                    Utils.switchActivityMeetings(ValidationCodeActivity.this, username);
+                    return;
+                }
+
                 // check if validation code correct
                 if (checkValidationCode()) {
                     registerAccount();

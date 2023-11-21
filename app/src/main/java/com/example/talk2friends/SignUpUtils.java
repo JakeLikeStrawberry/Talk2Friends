@@ -80,7 +80,7 @@ public class SignUpUtils   {
             return false;
         }
 
-        // if email ends in "@usc.edu"
+        // if email doesn't end in "@usc.edu"
         if (!email.endsWith("@usc.edu")) {
             System.out.println("Error: email must end in @usc.edu!");
             errorText.setText("Please add a valid USC email!\\nPlease try again.");
@@ -97,7 +97,7 @@ public class SignUpUtils   {
         // Error with password length > 30
         if (password.length() > 30) {
             System.out.println("Error: password is too long!");
-            errorText.setText("Password is too long (> 31)!\\nPlease try again.");
+            errorText.setText("Password is too long (> 30)!\\nPlease try again.");
             return false;
         }
 

@@ -254,7 +254,7 @@ public class SignUpJUnit {
     @Test
     public void CheckSignUpErrors_USCEmail() {
         // test if checkSignUpErrors() function...
-        // TODO: 4. limits email length to 64 + 8 characters, including @usc.edu
+        // limits email to @usc
         TextView view = Mockito.mock(TextView.class);
 
         assertEquals(true, SignUpUtils.checkSignUpErrors("asdf@usc.edu", "123456", view));
@@ -265,7 +265,7 @@ public class SignUpJUnit {
     @Test
     public void CheckSignUpErrors_emailUsername() {
         // test if checkSignUpErrors() function...
-        // TODO: 4. limits email length to 64 + 8 characters, including @usc.edu
+        // has username before @
         TextView view = Mockito.mock(TextView.class);
 
         assertEquals(true, SignUpUtils.checkSignUpErrors("asdf@usc.edu", "123456", view));

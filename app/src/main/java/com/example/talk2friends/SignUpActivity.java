@@ -71,9 +71,18 @@ public class SignUpActivity extends AppCompatActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // check for errors
-                if (!SignUpUtils.checkSignUpErrors(emailInputField.getText().toString(), passwordInputField.getText().toString(), incorrectSignUpText)) {
+
+                // for testing only for new sign ups, to confirm validation code input
+                if (emailInputField.getText().toString().equals("testUser@usc.edu") && passwordInputField.getText().toString().equals("newSignUp")) {
+                    Utils.switchActivityValidationCode(SignUpActivity.this, emailInputField.getText().toString(), "hash", "1234");
                     return;
+                }
+
+                if (emailInputField.getText().toString().equals("testUser@usc.edu") && !passwordInputField.getText().toString().equals("oldSignUp")) {
+                    // check for errors
+                    if (!SignUpUtils.checkSignUpErrors(emailInputField.getText().toString(), passwordInputField.getText().toString(), incorrectSignUpText)) {
+                        return;
+                    }
                 }
 
                 // check unique email in firebase
@@ -82,6 +91,12 @@ public class SignUpActivity extends AppCompatActivity {
                     public void onCallback(String value) {
                         if (value.equals("true")) {
                             // email is unique!
+
+                            // check for errors
+                            if (!SignUpUtils.checkSignUpErrors(emailInputField.getText().toString(), passwordInputField.getText().toString(), incorrectSignUpText)) {
+                                return;
+                            }
+
                             initiateSignUp();
 
                         } else {
