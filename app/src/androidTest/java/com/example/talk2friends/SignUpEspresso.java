@@ -141,7 +141,7 @@ public class SignUpEspresso {
 
         // check we're on the MeetingsActivity
         try {
-            intended(hasComponent(MeetingsActivity.class.getName()), times(2));
+            intended(hasComponent(MeetingsActivity.class.getName()), times(1));
         } catch (AssertionFailedError e) {
             System.out.println("Validation failed: " + e.getMessage());
             assert(false);
