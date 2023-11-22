@@ -13,6 +13,7 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
+import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -82,6 +83,7 @@ import org.junit.runner.RunWith;
 
         @Test
         public void tryLoadingProfile(){
+            Intents.init();
             //simulate login
             LoginEspresso esp = new LoginEspresso();
             esp.TryLogin();
@@ -98,6 +100,7 @@ import org.junit.runner.RunWith;
 
         @Test
         public void tryOpeningEditPersonal() {
+            Intents.init();
             LoginEspresso esp = new LoginEspresso();
             esp.TryLogin();
 
@@ -155,6 +158,7 @@ import org.junit.runner.RunWith;
 
         @Test
         public void tryOpeningEditFriends() {
+            Intents.init();
             LoginEspresso esp = new LoginEspresso();
             esp.TryLogin();
 
@@ -174,6 +178,7 @@ import org.junit.runner.RunWith;
 
         @Test
         public void tryOpeningEditMeetings(){
+            Intents.init();
             LoginEspresso esp = new LoginEspresso();
             esp.TryLogin();
 
@@ -193,6 +198,7 @@ import org.junit.runner.RunWith;
 
         @Test
         public void trySearchFriendsPage(){
+            Intents.init();
             LoginEspresso esp = new LoginEspresso();
             esp.TryLogin();
 
@@ -213,6 +219,7 @@ import org.junit.runner.RunWith;
 
         @Test
         public void tryAddInterestsPage(){
+            Intents.init();
             LoginEspresso esp = new LoginEspresso();
             esp.TryLogin();
 
