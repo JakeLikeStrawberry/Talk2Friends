@@ -18,18 +18,21 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-class TestFirebaseClientProfile implements ICustomFirebaseClient_Profile {
-    public ArrayList<String> codes = new ArrayList<String>();
-    public void getCodes(OnReceiveCodes onReceiveCodes) {
-        onReceiveCodes.onReceiveCodes(new ArrayList<String>());
-    }
-
-    public void saveCode(String code) {
-        codes.add(code);
-    }
-}
+//class TestFirebaseClientProfile implements ICustomFirebaseClient_Profile {
+//    public ArrayList<String> users = new ArrayList<String>();
+//    public void getUsers(OnReceiveUsers onReceiveUsers) {
+//        onReceiveUsers.onReceiveUsers(new ArrayList<String>());
+//    }
+//
+//    public void getRecommendedFriends(ArrayList<String> recFriends) {
+//        for (String user : users) {
+//            recFriends.add(user);
+//        }
+//    }
+//}
 
 public class ProfileJUnit {
 

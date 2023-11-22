@@ -144,6 +144,7 @@ public class MeetingsActivity extends AppCompatActivity {
 
     private void loadMeetings() {
         // load/refresh meetings displayed in scrollView
+        CustomFirebaseClient_Meetings client = new CustomFirebaseClient_Meetings();
         DatabaseHandler.getMeetings(new MeetingsCallback() {
             @Override
             public void onCallback(ArrayList<Meeting> data) {
@@ -165,7 +166,7 @@ public class MeetingsActivity extends AppCompatActivity {
 
                 System.out.println("Successfully (re)loaded meetings.");
             }
-        });
+        }, client);
     }
 
     private View makeCreateBox(LayoutInflater inflater) {
