@@ -81,6 +81,7 @@ import org.junit.runner.RunWith;
 
         // Add more test methods as needed
 
+
         @Test
         public void tryLoadingProfile(){
             Intents.init();
