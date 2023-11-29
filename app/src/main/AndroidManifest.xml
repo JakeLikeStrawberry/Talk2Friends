@@ -17,6 +17,9 @@
         android:theme="@style/Theme.Talk2Friends"
         tools:targetApi="31">
         <activity
+            android:name=".RequiredProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".MeetingsActivity"
             android:exported="false" />
         <activity
