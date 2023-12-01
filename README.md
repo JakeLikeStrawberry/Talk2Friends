@@ -16,5 +16,6 @@ Steps to Run Program:
 
 
 ## Project 2.5 -- Sprint Improvements
-1. Required Profile Information
+1. Required Profile Information:
+
 After initial registration and email validation, first-time users are directed to a page where they need to fill out all their personal information fields (name, age, affiliation, type) before they can proceed to the typical Meetings page.
