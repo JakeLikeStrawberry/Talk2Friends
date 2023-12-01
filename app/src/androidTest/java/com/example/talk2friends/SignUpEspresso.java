@@ -156,7 +156,7 @@ public class SignUpEspresso {
         DoSignUp("", "123456");
 
         // expected error text
-        String expectedErrorMessage = "Please add an email!\\nPlease try again.";
+        String expectedErrorMessage = "Please add an email!\nPlease try again.";
         onView(withId(R.id.incorrectSignUpText)).check(matches(withText(expectedErrorMessage)));
     }
 
@@ -167,7 +167,7 @@ public class SignUpEspresso {
         DoSignUp("testUser@usc.edu", "");
 
         // expected error text
-        String expectedErrorMessage = "Please add a password!\\nPlease try again.";
+        String expectedErrorMessage = "Please add a password!\nPlease try again.";
         onView(withId(R.id.incorrectSignUpText)).check(matches(withText(expectedErrorMessage)));
     }
 
@@ -178,7 +178,7 @@ public class SignUpEspresso {
         DoSignUp("testUser@gmail.com", "123456");
 
         // expected error text
-        String expectedErrorMessage = "Please add a valid USC email!\\nPlease try again.";
+        String expectedErrorMessage = "Please add a valid USC email!\nPlease try again.";
         onView(withId(R.id.incorrectSignUpText)).check(matches(withText(expectedErrorMessage)));
     }
 
@@ -189,7 +189,7 @@ public class SignUpEspresso {
         DoSignUp("testUser.usc.edu", "123456");
 
         // expected error text
-        String expectedErrorMessage = "Please add a valid USC email!\\nPlease try again.";
+        String expectedErrorMessage = "Please add a valid USC email!\nPlease try again.";
         onView(withId(R.id.incorrectSignUpText)).check(matches(withText(expectedErrorMessage)));
     }
 
@@ -200,7 +200,7 @@ public class SignUpEspresso {
         DoSignUp("@usc.edu", "123456");
 
         // expected error text
-        String expectedErrorMessage = "Please add an email!\\nPlease try again.";
+        String expectedErrorMessage = "Please add an email!\nPlease try again.";
         onView(withId(R.id.incorrectSignUpText)).check(matches(withText(expectedErrorMessage)));
     }
 
@@ -211,7 +211,7 @@ public class SignUpEspresso {
         DoSignUp("testUser@usc.edu", "123456789_123456789_123456789_1");
 
         // expected error text
-        String expectedErrorMessage = "Password is too long (> 30)!\\nPlease try again.";
+        String expectedErrorMessage = "Password is too long (> 30)!\nPlease try again.";
         onView(withId(R.id.incorrectSignUpText)).check(matches(withText(expectedErrorMessage)));
     }
 
@@ -222,7 +222,7 @@ public class SignUpEspresso {
         DoSignUp("testUser@usc.edu", "12345");
 
         // expected error text
-        String expectedErrorMessage = "Password is too short (< 6)!\\nPlease try again.";
+        String expectedErrorMessage = "Password is too short (< 6)!\nPlease try again.";
         onView(withId(R.id.incorrectSignUpText)).check(matches(withText(expectedErrorMessage)));
     }
 
@@ -239,7 +239,7 @@ public class SignUpEspresso {
         DoSignUp(email, "123456");
 
         // expected error text
-        String expectedErrorMessage = "Email is too long (> 72)!\\nPlease try again.";
+        String expectedErrorMessage = "Email is too long (> 72)!\nPlease try again.";
         onView(withId(R.id.incorrectSignUpText)).check(matches(withText(expectedErrorMessage)));
     }
 
