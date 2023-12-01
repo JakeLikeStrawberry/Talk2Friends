@@ -335,10 +335,25 @@ public class ProfileActivity extends AppCompatActivity {
                 rec_friends_lin_box.removeAllViews();
                 LayoutInflater inflater = LayoutInflater.from(ProfileActivity.this);
                 for (int i = 0; i < recommendedFriends.size(); i++) {
+                    // Fetch the affiliation for the participant
+                    String tempParticipantEmail = recommendedFriends.get(i);
                     // create name button with no x
                     View tempView = inflater.inflate(R.layout.name_button, null);
                     Button tempButton = tempView.findViewById(R.id.nameButton);
                     tempButton.setText(recommendedFriends.get(i));
+                    DatabaseHandler.getValue("users", "email", tempParticipantEmail, new DataSnapshotCallback() {
+                        @Override
+                        public void onCallback(DataSnapshot userData) {
+                            if (userData != null) {
+                                String participantType = userData.child("type").getValue(String.class);
+
+                                // Check if the participant should have a purple text color
+                                if ("international student".equals(participantType)) {
+                                    tempButton.setTextColor(ContextCompat.getColor(ProfileActivity.this, android.R.color.holo_purple));
+                                }
+                            }
+                        }
+                    });
 
                     tempButton.setOnClickListener(new View.OnClickListener() {
                         @Override
