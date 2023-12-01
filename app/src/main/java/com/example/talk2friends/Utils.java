@@ -78,6 +78,16 @@ public class Utils {
         context.startActivity(intent);
     }
 
+    public static void switchActivityRequiredProfile(Context context, String email) {
+        // print to console
+        System.out.println("Switching activity to RequiredProfile...");
+
+        // switch activity to RequiredProfileActivity
+        Intent intent = new Intent(context, RequiredProfileActivity.class);
+        intent.putExtra("email", email);
+        context.startActivity(intent);
+    }
+
 
 }
 

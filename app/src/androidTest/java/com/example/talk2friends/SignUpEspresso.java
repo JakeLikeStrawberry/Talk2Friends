@@ -139,9 +139,9 @@ public class SignUpEspresso {
         onView(withId(submitButtonID))
                 .perform(ViewActions.click());
 
-        // check we're on the MeetingsActivity
+        // check we're on the Required
         try {
-            intended(hasComponent(MeetingsActivity.class.getName()), times(1));
+            intended(hasComponent(RequiredProfileActivity.class.getName()), times(1));
         } catch (AssertionFailedError e) {
             System.out.println("Validation failed: " + e.getMessage());
             assert(false);

@@ -1,33 +1,22 @@
 package com.example.talk2friends;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.GenericTypeIndicator;
-
-import java.util.ArrayList;
-import java.util.Collections;
 
 
 public class RequiredProfileActivity extends AppCompatActivity {
 
     // current User
-    private User currentUser;
+    private String email = "";
     private boolean isTestMode = false;
 
     // topbar
@@ -90,7 +79,11 @@ public class RequiredProfileActivity extends AppCompatActivity {
         }
         System.out.println("Hi I made it here in the activity");
 
-        // TODO: load user from SignUpActivity
+        // load user from ValidationCodeActivity
+        email = getIntent().getStringExtra("email");
+
+
+
 //        DatabaseHandler.getUser(tempEmail, new UserCallback() {
 //            @Override
 //            public void onCallback(User user) {
@@ -116,10 +109,8 @@ public class RequiredProfileActivity extends AppCompatActivity {
 //        });
 
         //add interests
-        add_interests_button = (Button) findViewById(R.id.add_friends_page).findViewById(R.id.addInterests);
 
         // edit personal
-        transparentGray = (TextView) findViewById(R.id.transparentGray);
         edit_personal_box = (View) findViewById(R.id.edit_personal_box);
         edit_personal_saveButton = (ImageButton) findViewById(R.id.edit_personal_box).findViewById(R.id.saveButton);
         edit_personal_name = (EditText) findViewById(R.id.edit_personal_box).findViewById(R.id.nameField);
@@ -127,14 +118,17 @@ public class RequiredProfileActivity extends AppCompatActivity {
         edit_personal_affiliation = (EditText) findViewById(R.id.edit_personal_box).findViewById(R.id.affiliationField);
         edit_personal_typeDropdown = (Spinner) findViewById(R.id.edit_personal_box).findViewById(R.id.typeDropdown);
 
-        //add interests
-        add_interests_box = (View) findViewById(R.id.add_interests_box);
-        sports_dropdown = (Spinner) findViewById(R.id.add_interests_box).findViewById(R.id.sportsDropdown);
-        music_dropdown = (Spinner) findViewById(R.id.add_interests_box).findViewById(R.id.musicDropdown);
-        reading_dropdown = (Spinner) findViewById(R.id.add_interests_box).findViewById(R.id.readingDropdown);
-        exercise_dropdown = (Spinner) findViewById(R.id.add_interests_box).findViewById(R.id.exerciseDropdown);
-        movies_dropdown = (Spinner) findViewById(R.id.add_interests_box).findViewById(R.id.moviesDropdown);
-        add_interests_saveButton = (ImageButton) findViewById(R.id.add_interests_box).findViewById(R.id.saveButton);
+        TextView edit_personal_email = (TextView) findViewById(R.id.edit_personal_box).findViewById(R.id.emailField);
+        edit_personal_email.setText(email);
+
+//        //add interests
+//        add_interests_box = (View) findViewById(R.id.add_interests_box);
+//        sports_dropdown = (Spinner) findViewById(R.id.add_interests_box).findViewById(R.id.sportsDropdown);
+//        music_dropdown = (Spinner) findViewById(R.id.add_interests_box).findViewById(R.id.musicDropdown);
+//        reading_dropdown = (Spinner) findViewById(R.id.add_interests_box).findViewById(R.id.readingDropdown);
+//        exercise_dropdown = (Spinner) findViewById(R.id.add_interests_box).findViewById(R.id.exerciseDropdown);
+//        movies_dropdown = (Spinner) findViewById(R.id.add_interests_box).findViewById(R.id.moviesDropdown);
+//        add_interests_saveButton = (ImageButton) findViewById(R.id.add_interests_box).findViewById(R.id.saveButton);
 
         edit_personal_saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,14 +143,14 @@ public class RequiredProfileActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, types);
         edit_personal_typeDropdown.setAdapter(adapter);
 
-        // set more dropdown items
-        String[] answers = new String[]{"yes", "no"};
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, answers);
-        sports_dropdown.setAdapter(adapter2);
-        music_dropdown.setAdapter(adapter2);
-        reading_dropdown.setAdapter(adapter2);
-        exercise_dropdown.setAdapter(adapter2);
-        movies_dropdown.setAdapter(adapter2);
+//        // set more dropdown items
+//        String[] answers = new String[]{"yes", "no"};
+//        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, answers);
+//        sports_dropdown.setAdapter(adapter2);
+//        music_dropdown.setAdapter(adapter2);
+//        reading_dropdown.setAdapter(adapter2);
+//        exercise_dropdown.setAdapter(adapter2);
+//        movies_dropdown.setAdapter(adapter2);
 
     }
 
@@ -179,12 +173,82 @@ public class RequiredProfileActivity extends AppCompatActivity {
 
         System.out.println("newType: " + newType);
 
+        // check if new values are valid
+        // asdf
+        if (newName.equals("")) {
+            Toast.makeText(RequiredProfileActivity.this, "Please enter a name", Toast.LENGTH_SHORT).show();
+
+            TextView edit_personal_email = (TextView) edit_personal_box.findViewById(R.id.incorrectRequiredText);
+            edit_personal_email.setText("Please enter all required fields");
+            return;
+        }
+        if (newAge.equals("")) {
+            Toast.makeText(RequiredProfileActivity.this, "Please enter an age", Toast.LENGTH_SHORT).show();
+            TextView edit_personal_email = (TextView) edit_personal_box.findViewById(R.id.incorrectRequiredText);
+            edit_personal_email.setText("Please enter all required fields");
+            return;
+        }
+        if (newAffiliation.equals("")) {
+            Toast.makeText(RequiredProfileActivity.this, "Please enter an affiliation", Toast.LENGTH_SHORT).show();
+            TextView edit_personal_email = (TextView) edit_personal_box.findViewById(R.id.incorrectRequiredText);
+            edit_personal_email.setText("Please enter all required fields");
+            return;
+        }
+        if (newType.equals("")) {
+            Toast.makeText(RequiredProfileActivity.this, "Please select a type", Toast.LENGTH_SHORT).show();
+            TextView edit_personal_email = (TextView) edit_personal_box.findViewById(R.id.incorrectRequiredText);
+            edit_personal_email.setText("Please enter all required fields");
+            return;
+        }
+
+//        // get the dropdowns view
+//        View editable_data_interests = findViewById(R.id.add_interests_box);
+//        Spinner sports = editable_data_interests.findViewById(R.id.sportsDropdown);
+//        Spinner music = editable_data_interests.findViewById(R.id.musicDropdown);
+//        Spinner reading = editable_data_interests.findViewById(R.id.readingDropdown);
+//        Spinner exercise = editable_data_interests.findViewById(R.id.exerciseDropdown);
+//        Spinner movies = editable_data_interests.findViewById(R.id.moviesDropdown);
+//
+//        // get new values
+//        String newSports = sports.getSelectedItem().toString();
+//        String newMusic = music.getSelectedItem().toString();
+//        String newReading = reading.getSelectedItem().toString();
+//        String newExercise = exercise.getSelectedItem().toString();
+//        String newMovies = movies.getSelectedItem().toString();
+//
+//        // check values
+//        if (newSports.equals("")) {
+//            Toast.makeText(RequiredProfileActivity.this, "Please select a value for sports", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        if (newMusic.equals("")) {
+//            Toast.makeText(RequiredProfileActivity.this, "Please select a value for music", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        if (newReading.equals("")) {
+//            Toast.makeText(RequiredProfileActivity.this, "Please select a value for reading", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        if (newExercise.equals("")) {
+//            Toast.makeText(RequiredProfileActivity.this, "Please select a value for exercise", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        if (newMovies.equals("")) {
+//            Toast.makeText(RequiredProfileActivity.this, "Please select a value for movies", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+
+
         // update values in database
+//        saveInterests();
         CustomFirebaseClient_Update client = new CustomFirebaseClient_Update();
-        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "name", newName, client);
-        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "age", newAge, client);
-        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "affiliation", newAffiliation, client);
-        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "type", newType, client);
+        DatabaseHandler.updateValue("users", "email", email, "name", newName, client);
+        DatabaseHandler.updateValue("users", "email", email, "age", newAge, client);
+        DatabaseHandler.updateValue("users", "email", email, "affiliation", newAffiliation, client);
+        DatabaseHandler.updateValue("users", "email", email, "type", newType, client);
+
+        // switch activity to Meetings page
+        Utils.switchActivityMeetings(RequiredProfileActivity.this, email);
     }
 
     private void saveInterests() {
@@ -208,11 +272,11 @@ public class RequiredProfileActivity extends AppCompatActivity {
 
         // update values in database
         CustomFirebaseClient_Update client = new CustomFirebaseClient_Update();
-        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "interests/sports", newSports, client);
-        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "interests/music", newMusic, client);
-        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "interests/reading", newReading, client);
-        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "interests/exercise", newExercise, client);
-        DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "interests/movies", newMovies, client);
+        DatabaseHandler.updateValue("users", "email", email, "interests/sports", newSports, client);
+        DatabaseHandler.updateValue("users", "email", email, "interests/music", newMusic, client);
+        DatabaseHandler.updateValue("users", "email", email, "interests/reading", newReading, client);
+        DatabaseHandler.updateValue("users", "email", email, "interests/exercise", newExercise, client);
+        DatabaseHandler.updateValue("users", "email", email, "interests/movies", newMovies, client);
     }
 
 

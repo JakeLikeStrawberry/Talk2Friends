@@ -59,8 +59,10 @@ public class ValidationCodeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // test user
                 if (username.equals("testUser@usc.edu") && hash.equals("hash") && validationCode.equals("1234") && validationInputField.getText().toString().equals(validationCode)) {
-                    // switch activity to Meetings page
-                    Utils.switchActivityMeetings(ValidationCodeActivity.this, username);
+//                    // switch activity to Meetings page
+//                    Utils.switchActivityMeetings(ValidationCodeActivity.this, username);
+                    // switch activity to RequiredProfileActivity page
+                    Utils.switchActivityRequiredProfile(ValidationCodeActivity.this, username);
                     return;
                 }
 
@@ -68,8 +70,10 @@ public class ValidationCodeActivity extends AppCompatActivity {
                 if (checkValidationCode()) {
                     registerAccount();
 
-                    // switch activity to Meetings page
-                    Utils.switchActivityMeetings(ValidationCodeActivity.this, currentUser.getEmail());
+//                    // switch activity to Meetings page
+//                    Utils.switchActivityMeetings(ValidationCodeActivity.this, currentUser.getEmail());
+                    // switch activity to RequiredProfileActivity page
+                    Utils.switchActivityRequiredProfile(ValidationCodeActivity.this, currentUser.getEmail());
                 } else {
                     // TODO: change color in UI to red
                     // TODO: add back button UI to go back to login / signUp

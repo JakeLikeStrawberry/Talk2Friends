@@ -7,6 +7,7 @@
     android:background="@drawable/radial_gradient_background">
 
     <LinearLayout
+        android:id="@+id/edit_personal_box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/box_linear_gradient_background"
@@ -51,7 +52,7 @@
                     android:layout_width="115dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="name"
+                    android:text="name *"
                     android:textColor="@color/white"
                     android:textSize="15dp" />
 
@@ -60,7 +61,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Sirius Black"
+                    android:hint="Sirius Black"
                     android:textColor="@color/black"
                     android:textSize="15dp"
                     android:paddingLeft="8dp"
@@ -78,7 +79,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="age"
+                    android:text="age *"
                     android:textColor="@color/white"
                     android:textSize="15dp" />
 
@@ -87,7 +88,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="1024 years"
+                    android:hint="1024"
                     android:textColor="@color/black"
                     android:textSize="15dp"
                     android:paddingLeft="8dp"
@@ -106,7 +107,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="affiliation"
+                    android:text="affiliation *"
                     android:textColor="@color/white"
                     android:textSize="15dp" />
 
@@ -115,7 +116,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Viterbi"
+                    android:hint="Viterbi"
                     android:textColor="@color/black"
                     android:textSize="15dp"
                     android:paddingLeft="8dp"
@@ -133,7 +134,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="type"
+                    android:text="type *"
                     android:textColor="@color/white"
                     android:textSize="15dp" />
 
@@ -178,11 +179,11 @@
         </TableLayout>
 
         <TextView
-            android:id="@+id/incorrectLoginText"
+            android:id="@+id/incorrectRequiredText"
             android:layout_width="match_parent"
             android:layout_height="38dp"
             android:gravity="center"
-            android:text="Please fill in all fields"
+            android:text=""
             android:textColor="@color/orange"
             android:textSize="12sp" />
 
