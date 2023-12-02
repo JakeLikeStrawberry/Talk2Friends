@@ -724,13 +724,17 @@ public class ProfileActivity extends AppCompatActivity {
                                     public void onClick(View v) {
                                         String friendName = tempXButton.getText().toString();
 
+                                        System.out.println(tempParticipantEmail);
                                         // remove friend from user
-                                        currentUser.removeFriend(friendName);
+                                        currentUser.removeFriend(tempParticipantEmail);
                                         CustomFirebaseClient_Update client = new CustomFirebaseClient_Update();
                                         DatabaseHandler.updateValue("users", "email", currentUser.getEmail(), "friends", currentUser.getFriends(), client);
 
                                         // Remove the button from the UI
                                         editFriendsLinBox.removeView(tempXView);
+                                        friendsLinBox.removeView(tempNoXView);
+
+
                                     }
                                 });
 
@@ -885,6 +889,7 @@ public class ProfileActivity extends AppCompatActivity {
                     addFriend(data.getEmail());
                     Toast.makeText(ProfileActivity.this, "Successfully followed " + data.getEmail() + "!", Toast.LENGTH_SHORT).show();
                     enter_friend_email.setText("");
+
                 }
             }
         });
