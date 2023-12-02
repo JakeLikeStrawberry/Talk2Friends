@@ -19,3 +19,9 @@ Steps to Run Program:
 1. Required Profile Information:
 
 After initial registration and email validation, first-time users are directed to a page where they need to fill out all their personal information fields (name, age, affiliation, type) before they can proceed to the typical Meetings page.
+
+2. User input is limited for their information such as name and affiliation so that it will not register over a certain length to prevent any potential user misuse
+
+3. Users in meetings and friends lists are now shown by their names and not their emails
+
+4. The recommended friends page now highlights users with purple that are international students
