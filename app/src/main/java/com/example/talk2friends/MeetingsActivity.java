@@ -262,7 +262,9 @@ public class MeetingsActivity extends AppCompatActivity {
                 public void onCallback(DataSnapshot userData) {
                     if (userData != null) {
                         String participantType = userData.child("type").getValue(String.class);
+                        String participantName = userData.child("name").getValue(String.class);
 
+                        tempNameText.setText(participantName);
                         // Check if the participant should have a purple text color
                         if ("international student".equals(participantType)) {
                             tempNameText.setTextColor(ContextCompat.getColor(MeetingsActivity.this, android.R.color.holo_purple));
@@ -294,12 +296,33 @@ public class MeetingsActivity extends AppCompatActivity {
         ArrayList<String> participants = tempMeeting.getParticipants();
         LinearLayout tempParticipantsLinearLayout = (LinearLayout) tempMeetingBox.findViewById(R.id.participantsLinearLayout);
         tempParticipantsLinearLayout.removeAllViews();
+
+
+
+
+
         for (int j = 0; j < participants.size(); j++) {
             // create name button
             View tempNameButton = inflater.inflate(R.layout.name_button, null);
             String tempParticipantEmail = participants.get(j);
             Button tempNameText = (Button) tempNameButton.findViewById(R.id.nameButton);
             tempNameText.setText(tempParticipantEmail);
+
+            DatabaseHandler.getValue("users", "email", tempParticipantEmail, new DataSnapshotCallback() {
+                @Override
+                public void onCallback(DataSnapshot userData) {
+                    if (userData != null) {
+                        String participantType = userData.child("type").getValue(String.class);
+                        String participantName = userData.child("name").getValue(String.class);
+
+                        tempNameText.setText(participantName);
+                        // Check if the participant should have a purple text color
+                        if ("international student".equals(participantType)) {
+                            tempNameText.setTextColor(ContextCompat.getColor(MeetingsActivity.this, android.R.color.holo_purple));
+                        }
+                    }
+                }
+            });
 
             // add name button to linear layout
             tempParticipantsLinearLayout.addView(tempNameButton);
@@ -312,6 +335,7 @@ public class MeetingsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // add user to meeting
                 rsvpToMeeting(i);
+
 
                 // delete rsvp box if rsvp button clicked
                 deleteAllPopBoxes();

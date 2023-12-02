@@ -337,15 +337,18 @@ public class ProfileActivity extends AppCompatActivity {
                 for (int i = 0; i < recommendedFriends.size(); i++) {
                     // Fetch the affiliation for the participant
                     String tempParticipantEmail = recommendedFriends.get(i);
+                    String tempParticipantName = "";
                     // create name button with no x
                     View tempView = inflater.inflate(R.layout.name_button, null);
                     Button tempButton = tempView.findViewById(R.id.nameButton);
                     tempButton.setText(recommendedFriends.get(i));
+                    String temp_email = recommendedFriends.get(i);
                     DatabaseHandler.getValue("users", "email", tempParticipantEmail, new DataSnapshotCallback() {
                         @Override
                         public void onCallback(DataSnapshot userData) {
                             if (userData != null) {
                                 String participantType = userData.child("type").getValue(String.class);
+                                tempButton.setText(userData.child("name").getValue(String.class));
 
                                 // Check if the participant should have a purple text color
                                 if ("international student".equals(participantType)) {
@@ -360,7 +363,7 @@ public class ProfileActivity extends AppCompatActivity {
                         public void onClick(View view) {
                             // maybe do something
                             // prefill email in the search bar
-                            String justUsername = tempButton.getText().toString().substring(0, tempButton.getText().toString().indexOf("@"));
+                            String justUsername = temp_email.substring(0, temp_email.indexOf("@"));
                             enter_friend_email.setText(justUsername);
                             Toast.makeText(ProfileActivity.this, "Click the follow button to follow recommended friend: " + tempButton.getText().toString() + "!", Toast.LENGTH_SHORT).show();
                         }
@@ -595,10 +598,16 @@ public class ProfileActivity extends AppCompatActivity {
             public void onCallback(DataSnapshot data) {
                 if (data != null) {
                     name.setText("Data recieved");
+                    Object nameValue = "";
+                    Object affiliationValue = "";
+                    Object ageValue = 18; // base level of 18 years old
                     // set name equal to the user name
-                    Object nameValue = data.child("name").getValue();
-                    Object ageValue = data.child("age").getValue();
-                    Object affiliationValue = data.child("affiliation").getValue();
+                    if(data.child("name").getValue().toString().length() <= 16)
+                        nameValue = data.child("name").getValue();
+                    if(new Integer(data.child("age").getValue().toString()) > 16 && new Integer(data.child("age").getValue().toString()) < 110)
+                        ageValue = data.child("age").getValue();
+                    if(data.child("affiliation").getValue().toString().length() <= 24)
+                        affiliationValue = data.child("affiliation").getValue();
                     Object typeValue = data.child("type").getValue();
 
                     // set name
@@ -690,11 +699,12 @@ public class ProfileActivity extends AppCompatActivity {
                         public void onCallback(DataSnapshot friendData) {
                             if (friendData != null) {
                                 String friendType = friendData.child("type").getValue(String.class);
+                                String friendName = friendData.child("name").getValue(String.class);
 
                                 // create name button with no x
                                 View tempNoXView = inflater.inflate(R.layout.dynamic_button_no_x, null);
                                 Button tempNoXButton = tempNoXView.findViewById(R.id.nameButton);
-                                tempNoXButton.setText(tempParticipantEmail);
+                                tempNoXButton.setText(friendName);
 //
                                 // Check if the friend should have a purple background
                                 if ("international student".equals(friendType)) {
@@ -705,7 +715,7 @@ public class ProfileActivity extends AppCompatActivity {
                                 // create name button with x
                                 View tempXView = inflater.inflate(R.layout.dynamic_button, null);
                                 Button tempXButton = tempXView.findViewById(R.id.nameButton);
-                                tempXButton.setText(tempParticipantEmail);
+                                tempXButton.setText(friendName);
 
                                 // add x functionality
                                 ImageButton x = tempXView.findViewById(R.id.crossButton);
